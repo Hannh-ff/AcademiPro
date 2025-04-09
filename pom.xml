@@ -136,7 +136,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
@@ -170,7 +169,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.center.academipro/com.center.academipro.HelloApplication</mainClass>
+                            <mainClass>com.center.academipro/com.center.academipro.Main</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
