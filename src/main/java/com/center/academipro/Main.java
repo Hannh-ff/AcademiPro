@@ -10,8 +10,7 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/center/academipro/LoginView.fxml"));
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/cinema/starplex/staff/select-payment-method.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         //css
@@ -28,6 +27,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+
+        launch(args);
     }
 }

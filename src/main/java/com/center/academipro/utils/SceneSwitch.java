@@ -34,7 +34,7 @@ public class SceneSwitch {
             stage.setScene(scene);
             stage.setFullScreenExitHint("");
 
-            if (fxmlFile.equals("LoginView.fxml")) {
+            if (fxmlFile.equals("login-view.fxml")) {
                 stage.setMaximized(false);
                 stage.setFullScreen(false);
             } else {
