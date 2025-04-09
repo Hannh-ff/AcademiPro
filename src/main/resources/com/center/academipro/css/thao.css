@@ -1,0 +1,29 @@
+.white-bg{
+    -fx-background-color:#fff;
+}
+.radius{
+    -fx-background-radius:8px;
+}
+.shadow{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0, 0, 0);
+}
+.main-bg{
+    -fx-background-color: linear-gradient(to bottom right, #0a3d91, #0b2e6f);
+}
+.btn{
+    -fx-background-color:linear-gradient(to bottom right,#0abfa4,#00d079);
+    -fx-font-family: Arial;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+.nav-btn{
+    -fx-background-color:transparent;
+    -fx-cursor: hand;
+    -fx-border-with:.8px;
+    -fx-text-fill:#fff;
+    -fx-border-color: #fff;
+}
+.nav-btn:hover{
+    -fx-background-color: #3c7dd9;
+    -fx-border-color: #3c7dd9;
+}
