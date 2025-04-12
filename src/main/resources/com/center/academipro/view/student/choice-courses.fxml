@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.image.Image?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" spacing="20" alignment="TOP_CENTER" style="-fx-padding: 20; -fx-background-color: linear-gradient(to bottom right, #f6f6f6, #e8e8e8);">
+
+    <!-- Search Bar -->
+    <VBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10; -fx-background-color: white; -fx-background-radius: 10;">
+        <Label text="Courses List" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <ImageView fitHeight="20" fitWidth="20">
+                <image>
+<!--                    <Image url="" />-->
+                </image>
+            </ImageView>
+            <TextField promptText="What do you want" style="-fx-pref-width: 300;" />
+        </HBox>
+    </VBox>
+
+    <!-- Course Card -->
+    <VBox spacing="15">
+
+        <!-- Course 1 -->
+        <HBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+            <ImageView fitWidth="80" fitHeight="80">
+                <image>
+<!--                    <Image url="" />-->
+                </image>
+            </ImageView>
+
+            <VBox alignment="CENTER_LEFT" spacing="5">
+                <Label text="Business Management" style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+                <Label text="Follow these easy and simple step" style="-fx-text-fill: gray;" />
+
+                <HBox spacing="10">
+                    <HBox spacing="5" alignment="CENTER">
+                        <Label text="10" style="-fx-background-color: #ff7f50; -fx-text-fill: white; -fx-padding: 4 8 4 8; -fx-background-radius: 5;" />
+                        <Label text="Enrolled" style="-fx-text-fill: gray;" />
+                    </HBox>
+                </HBox>
+            </VBox>
+
+            <VBox alignment="TOP_RIGHT" spacing="5" style="-fx-padding: 0 0 0 20;">
+                <Label text="jjj" style="-fx-text-fill: orange; -fx-font-weight: bold;" />
+                <Button text="Enroll Now ➜" style="-fx-background-color: #3a86ff; -fx-text-fill: white; -fx-background-radius: 5;" />
+            </VBox>
+        </HBox>
+
+        <!-- Course 2 (copy & modify above) -->
+        <HBox spacing="15" style="-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 10; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 4);">
+            <ImageView fitWidth="80" fitHeight="80">
+                <image>
+<!--                    <Image url="" />-->
+                </image>
+            </ImageView>
+
+            <VBox alignment="CENTER_LEFT" spacing="5">
+                <Label text="Digital Marketing  Promote." style="-fx-font-weight: bold; -fx-font-size: 14px;" />
+                <Label text="Follow these easy and simple step" style="-fx-text-fill: gray;" />
+
+                <HBox spacing="10">
+                    <HBox spacing="5" alignment="CENTER">
+                        <Label text="15" style="-fx-background-color: #ff7f50; -fx-text-fill: white; -fx-padding: 4 8 4 8; -fx-background-radius: 5;" />
+                        <Label text="Enrolled" style="-fx-text-fill: gray;" />
+                    </HBox>
+                </HBox>
+            </VBox>
+
+            <VBox alignment="TOP_RIGHT" spacing="5" style="-fx-padding: 0 0 0 20;">
+                <Label text="kkk" style="-fx-text-fill: orange; -fx-font-weight: bold;" />
+                <Button text="Enroll Now ➜" style="-fx-background-color: #3a86ff; -fx-text-fill: white; -fx-background-radius: 5;" />
+            </VBox>
+        </HBox>
+
+    </VBox>
+</VBox>
+
