@@ -21,7 +21,7 @@ public class MenuBarController {
         btnPayment.setOnAction(e -> loadPage("payment.fxml"));
         btnStudent.setOnAction(e -> loadPage("student.fxml"));
         btnClass.setOnAction(e -> loadPage("student.fxml"));
-        
+
         loadPage("dashboard.fxml");
     }
     private void loadPage(String fxmlFile) {
