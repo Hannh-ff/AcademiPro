@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<VBox xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.center.academipro.controller.AttendanceHistoryController"
+      prefHeight="400.0" prefWidth="600.0"
+      spacing="15.0" >
+
+    <padding>
+        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+    </padding>
+
+    <HBox spacing="10">
+        <Label text="Chọn lớp học"/>
+        <ComboBox fx:id="classCombox" prefWidth="200"/>
+        <Label text="Chọn ngày: "/>
+        <DatePicker fx:id="datePicker"/>
+        <Button fx:id="viewButton" text="Xem lịch sử"/>
+    </HBox>
+
+    <TableView fx:id="studentTableView" prefHeight="300">
+        <columns>
+            <TableColumn fx:id="studentNameColumn" text="Họ tên sinh viên" prefWidth="300"/>
+            <TableColumn fx:id="statusColumn" text="Trạng thái" prefWidth="200"/>
+        </columns>
+    </TableView>
+
+
+    <HBox spacing="10">
+        <Label text="Lọc theo trạng thái:"/>
+        <ComboBox fx:id="statusFilterComboBox" prefWidth="150"/>
+        <Button text="Trang trước" fx:id="prevPageButton"/>
+        <Label fx:id="pageLabel" text="Trang 1"/>
+        <Button text="Trang sau" fx:id="nextPageButton"/>
+    </HBox>
+
+</VBox>
+
