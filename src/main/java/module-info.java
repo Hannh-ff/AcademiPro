@@ -9,4 +9,6 @@ module com.center.academipro {
 
     exports com.center.academipro;
     exports com.center.academipro.controller;
+    exports com.center.academipro.controller.course;
+    opens com.center.academipro.controller.course to javafx.fxml;
 }
