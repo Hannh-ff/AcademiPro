@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.cell.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.center.academipro.controller.AttendanceController"
+      prefHeight="400.0" prefWidth="600.0"
+      spacing="15.0" >
+
+    <padding>
+        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+    </padding>
+
+    <HBox spacing="10">
+        <Label text="Chọn lớp học"/>
+        <ComboBox fx:id="classCombox" prefWidth="200"/>
+        <Label text="Chọn ngày: "/>
+        <DatePicker fx:id="datePicker"/>
+    </HBox>
+
+    <TableView fx:id="studentTableView" prefHeight="300">
+        <columns>
+            <TableColumn fx:id="studentNameColumn" text="Họ tên sinh viên" prefWidth="300"/>
+            <TableColumn fx:id="presentColumn" text="Có mặt" prefWidth="100"/>
+            <TableColumn fx:id="absentColumn" text="Vắng mặt" prefWidth="100"/>
+        </columns>
+    </TableView>
+
+
+    <HBox alignment="CENTER">
+        <Button fx:id="saveButton" text="Lưu điểm danh" prefWidth="150"/>
+    </HBox>
+</VBox>
