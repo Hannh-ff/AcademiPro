@@ -1,7 +1,12 @@
 package com.center.academipro.utils;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,8 +20,8 @@ public class SceneSwitch {
      * @param stage    The stage to switch the scene for.
      * @param fxmlFile The name of the FXML file to load.
      */
-    public static void switchTo(Stage stage, String fxmlFile){
-        if (stage == null){
+    public static void switchTo(Stage stage, String fxmlFile) {
+        if (stage == null) {
             throw new IllegalArgumentException("Stage cannot be null.");
         }
 
@@ -63,6 +68,24 @@ public class SceneSwitch {
         } catch (IOException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static void backToView(ActionEvent actionEvent, String fxmlFile) {
+        try {
+            FXMLLoader loader = new FXMLLoader(SceneSwitch.class.getResource("/com/center/academipro/" + fxmlFile));
+            Parent seatView = loader.load();
+
+            AnchorPane root = (AnchorPane) ((Button) actionEvent.getSource()).getScene().getRoot();
+            BorderPane mainPane = (BorderPane) root.lookup("#mainBorderPane");
+
+            if (mainPane != null) {
+                mainPane.setCenter(seatView);
+            } else {
+                System.err.println("BorderPane with ID 'mainBorderPane' not found");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

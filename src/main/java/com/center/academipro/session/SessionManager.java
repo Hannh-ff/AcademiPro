@@ -5,7 +5,8 @@ public class SessionManager {
     private String username;
     private int userId;
 
-    private SessionManager() {}
+    private SessionManager() {
+    }
 
     public static SessionManager getInstance() {
         if (instance == null) {

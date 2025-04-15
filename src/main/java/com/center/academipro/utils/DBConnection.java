@@ -10,7 +10,7 @@ public class DBConnection {
     private static final String PASSWORD = "";
 
     // Phương thức để lấy kết nối
-    public Connection getConn() {
+    public static Connection getConn() {
         try {
             Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
             return conn; // Trả về kết nối mới mỗi lần gọi
