@@ -2,7 +2,7 @@ module com.center.academipro {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    requires java.desktop;
+    requires jdk.security.auth;
 
     opens com.center.academipro to javafx.fxml;
     opens com.center.academipro.view to javafx.fxml;
@@ -15,4 +15,6 @@ module com.center.academipro {
     exports com.center.academipro.controller;
     exports com.center.academipro.controller.course;
     opens com.center.academipro.controller.course to javafx.fxml;
+    exports com.center.academipro.controller.admin;
+    opens com.center.academipro.controller.admin to javafx.fxml;
 }

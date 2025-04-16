@@ -85,4 +85,9 @@ public class Course {
     public void setPrice(double price) {
         this.price.set(price);
     }
+
+    @Override
+    public String toString() {
+        return this.getCourseName();
+    }
 }
