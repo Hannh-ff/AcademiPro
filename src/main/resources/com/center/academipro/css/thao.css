@@ -31,6 +31,20 @@
     -fx-font-size: 14px;
     -fx-cursor: hand;
 }
+.btn-delete{
+    -fx-background-color: linear-gradient(to bottom right, #ff1e56, #ff4b2b);
+    -fx-text-fill:#fff;
+    -fx-font-family: Arial;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
+.btn-update{
+    -fx-background-color: linear-gradient(to bottom right, #a18cd1, #fbc2eb);
+    -fx-text-fill:#fff;
+    -fx-font-family: Arial;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+}
 .nav-btn{
     -fx-background-color:transparent;
     -fx-cursor: hand;
