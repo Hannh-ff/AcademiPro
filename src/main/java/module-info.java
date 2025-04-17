@@ -8,13 +8,18 @@ module com.center.academipro {
     opens com.center.academipro.view to javafx.fxml;
     opens com.center.academipro.controller to javafx.fxml; // Thêm dòng này ✅
     opens com.center.academipro.controller.student to javafx.fxml;
+    opens com.center.academipro.controller.admin.courseManagement to javafx.fxml;
+//    opens com.center.academipro.controller.admin to javafx.fxml;
+    opens com.center.academipro.controller.admin.teacherManagement to javafx.fxml;
+    opens com.center.academipro.controller.teacher to javafx.fxml;
+    opens com.center.academipro.controller.admin.studentManagement to javafx.fxml;
 
 
 
     exports com.center.academipro;
     exports com.center.academipro.controller;
-    exports com.center.academipro.controller.course;
-    opens com.center.academipro.controller.course to javafx.fxml;
-    exports com.center.academipro.controller.admin;
-    opens com.center.academipro.controller.admin to javafx.fxml;
+    exports com.center.academipro.controller.admin.courseManagement;
+    exports com.center.academipro.controller.admin.studentManagement;
+    exports com.center.academipro.controller.admin.teacherManagement;
+    exports com.center.academipro.controller.teacher;
 }

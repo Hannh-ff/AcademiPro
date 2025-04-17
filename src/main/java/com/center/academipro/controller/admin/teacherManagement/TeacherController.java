@@ -1,8 +1,7 @@
-package com.center.academipro.controller.admin;
+package com.center.academipro.controller.admin.teacherManagement;
 
 import com.center.academipro.models.Teacher;
 import com.center.academipro.utils.DBConnection;
-import com.sun.security.auth.callback.TextCallbackHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -182,7 +181,7 @@ public class TeacherController {
     }
     public void changeSceneAdd(){
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/add-new-teacher.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/teacherManagement/add-new-teacher.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Stage stage = (Stage) tableView_Teacher.getScene().getWindow();

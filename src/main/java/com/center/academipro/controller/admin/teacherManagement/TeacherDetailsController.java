@@ -1,9 +1,11 @@
-package com.center.academipro.controller.admin;
+package com.center.academipro.controller.admin.teacherManagement;
 
 import com.center.academipro.dao.CourseDAO;
 import com.center.academipro.models.Course;
 import com.center.academipro.models.Teacher;
 import com.center.academipro.utils.DBConnection;
+import com.center.academipro.utils.SceneSwitch;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -37,6 +39,7 @@ public class TeacherDetailsController implements Initializable {
     private PreparedStatement prepare;
     private int selectedTeacherId;
     private CourseDAO courseDAO = new CourseDAO();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         courseListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -44,10 +47,12 @@ public class TeacherDetailsController implements Initializable {
         List<Course> courseList = courseDAO.getAllCourse();
         courseListView.getItems().addAll(courseList);
     }
-    public TeacherDetailsController(){
-        connect= new DBConnection().getConn();
+
+    public TeacherDetailsController() {
+        connect = new DBConnection().getConn();
     }
-    public void setTeacher(Teacher teacher){
+
+    public void setTeacher(Teacher teacher) {
         selectedTeacherId = teacher.getTeacherId();
         fullName.setText(teacher.getFullName());
         username.setText(teacher.getUser());
@@ -65,6 +70,7 @@ public class TeacherDetailsController implements Initializable {
             }
         }
     }
+
     public boolean addTeacher() {
         String insertUserSQL = "INSERT INTO users (full_name, username, email) VALUES (?, ?, ?)";
         String insertTeacherSQL = "INSERT INTO teachers (user_id, phone, birthday) VALUES (?, ?, ?)";
@@ -80,13 +86,13 @@ public class TeacherDetailsController implements Initializable {
             LocalDate birthdayVal = birthday.getValue();
 
             if (birthdayVal == null || birthdayVal.isAfter(LocalDate.now())) {
-                showAlert("Ngày sinh không hợp lệ.",Alert.AlertType.ERROR);
+                showAlert("Ngày sinh không hợp lệ.", Alert.AlertType.ERROR);
                 return false;
             }
 
             List<Course> selectedCourses = courseListView.getSelectionModel().getSelectedItems();
             if (selectedCourses == null || selectedCourses.isEmpty()) {
-                showAlert("Vui lòng chọn ít nhất một khóa học.",Alert.AlertType.ERROR);
+                showAlert("Vui lòng chọn ít nhất một khóa học.", Alert.AlertType.ERROR);
                 return false;
             }
 
@@ -95,15 +101,16 @@ public class TeacherDetailsController implements Initializable {
             insertTeacherCourses(conn, insertTeacherCourseSQL, teacherId, selectedCourses);
 
             conn.commit();
-            showAlert("Thêm giáo viên thành công!",Alert.AlertType.INFORMATION);
+            showAlert("Thêm giáo viên thành công!", Alert.AlertType.INFORMATION);
             return true;
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert("Thêm giáo viên thất bại. ",Alert.AlertType.ERROR);
+            showAlert("Thêm giáo viên thất bại. ", Alert.AlertType.ERROR);
             return false;
         }
     }
+
     public boolean updateTeacher() {
         String updateUserSQL = "UPDATE users SET full_name = ?, username = ?, email = ? WHERE id = ?";
         String updateTeacherSQL = "UPDATE teachers SET phone = ?, birthday = ? WHERE teacher_id = ?";
@@ -152,7 +159,8 @@ public class TeacherDetailsController implements Initializable {
             return false;
         }
     }
-    public void clearTeacher(){
+
+    public void clearTeacher() {
         fullName.clear();
         username.clear();
         email.clear();
@@ -247,4 +255,10 @@ public class TeacherDetailsController implements Initializable {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+    public void handleCancel(ActionEvent actionEvent) {
+        SceneSwitch.backToView(actionEvent, "view/admin/teacherManagement/teacher-view.fxml");
+    }
+
+
 }

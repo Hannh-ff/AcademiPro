@@ -1,6 +1,7 @@
 CREATE TABLE teachers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNIQUE NOT NULL,
-    subject VARCHAR(255) NOT NULL,
+    birthday DATETIME,
+    phone VARCHAR(20),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
