@@ -72,7 +72,7 @@ public class LoginController {
                     // chuyển đến giao diện giáo viên
                     System.out.println("Login successful with role: Teacher");
                     Stage currentStage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                    SceneSwitch.switchTo(currentStage2, "");
+                    SceneSwitch.switchTo(currentStage2, "view/teacher/attendance-view.fxml");
                     break;
                 case "Student":
                     // chuyển đến giao diện học viên

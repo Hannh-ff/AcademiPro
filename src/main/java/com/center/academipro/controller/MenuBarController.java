@@ -45,14 +45,14 @@ public class MenuBarController {
     }
 
     public void teacherScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView("view/admin/teacher-view.fxml");
+        FXMLLoader loader = SceneSwitch.loadView("view/admin/teacherManagement/teacher-view.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
     }
 
     public void courseScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView("view/course/course-management.fxml");
+        FXMLLoader loader = SceneSwitch.loadView("view/admin/courseManagement/course-management.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
