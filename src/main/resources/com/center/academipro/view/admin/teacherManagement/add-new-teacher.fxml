@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="450.0" prefWidth="600.0" stylesheets="@../../../css/thao.css"
             xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.center.academipro.controller.admin.teacherManagement.TeacherDetailsController">
+            fx:controller="com.center.academipro.controller.admin.teacherManagement.AddTeacherController">
     <children>
         <AnchorPane layoutX="21.0" layoutY="21.0" prefHeight="231.0" prefWidth="558.0">
             <styleClass>
@@ -81,13 +81,13 @@
                     </font>
                 </Label>
                 <Separator layoutY="31.0" prefHeight="9.0" prefWidth="231.0"/>
-                <Button layoutX="19.0" layoutY="51.0" mnemonicParsing="false" onAction="#addTeacher" prefHeight="37.0"
+                <Button fx:id="btnSave" onAction="#addTeacher" layoutX="19.0" layoutY="51.0" mnemonicParsing="false"  prefHeight="37.0"
                         prefWidth="75.0" styleClass="btn-add" text="Save"/>
-                <Button layoutX="131.0" layoutY="51.0" mnemonicParsing="false" onAction="#clearTeacher"
+                <Button fx:id="btnClear" onAction="#clearTeacher" layoutX="131.0" layoutY="51.0" mnemonicParsing="false"
                         prefHeight="37.0" prefWidth="75.0" styleClass="btn-clear" text="Clear"/>
             </children>
         </AnchorPane>
-        <Button layoutX="355.0" layoutY="398.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="37.0" prefWidth="222.0"
+        <Button fx:id="btnCancel"  layoutX="355.0" layoutY="398.0" mnemonicParsing="false"  prefHeight="37.0" prefWidth="222.0"
                 styleClass="btn-delete" text="Cancel"/>
     </children>
 </AnchorPane>

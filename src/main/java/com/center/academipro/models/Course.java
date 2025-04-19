@@ -4,11 +4,11 @@ import javafx.beans.property.*;
 
 public class Course {
 
-    private final IntegerProperty id;
-    private final StringProperty courseName;
-    private final StringProperty description;
-    private final StringProperty image;
-    private final DoubleProperty price;
+    private  IntegerProperty id;
+    private  StringProperty courseName;
+    private  StringProperty description;
+    private  StringProperty image;
+    private  DoubleProperty price;
 
     public Course() {
         this.id = new SimpleIntegerProperty();
@@ -24,6 +24,11 @@ public class Course {
         this.description = new SimpleStringProperty(description);
         this.image = new SimpleStringProperty(image);
         this.price = new SimpleDoubleProperty(price);
+    }
+
+    public Course(int id, String name) {
+        this.id = new SimpleIntegerProperty(id) ;
+        this.courseName = new SimpleStringProperty(name);
     }
 
     public IntegerProperty idProperty() {

@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="450.0" prefWidth="600.0" stylesheets="@../../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.admin.teacherManagement.EditTeacherController">
+<AnchorPane prefHeight="450.0" prefWidth="600.0" stylesheets="@../../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.admin.studentManagement.AddStudentController">
     <children>
         <AnchorPane layoutX="21.0" layoutY="21.0" prefHeight="231.0" prefWidth="558.0">
             <styleClass>
@@ -49,6 +49,12 @@
                     </font>
                 </Label>
                 <TextField fx:id="phone" layoutX="360.0" layoutY="107.0" prefHeight="29.0" prefWidth="161.0" />
+            <Label layoutX="315.0" layoutY="147.0" text="Class :">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <TextField fx:id="phone1" layoutX="360.0" layoutY="177.0" prefHeight="29.0" prefWidth="161.0" />
             </children>
         </AnchorPane>
         <AnchorPane layoutX="21.0" layoutY="272.0" prefHeight="165.0" prefWidth="307.0">
@@ -79,10 +85,10 @@
                     </font>
                 </Label>
                 <Separator layoutY="31.0" prefHeight="9.0" prefWidth="231.0" />
-                <Button onAction="#updateTeacher" layoutX="19.0" layoutY="51.0" mnemonicParsing="false"  prefHeight="37.0" prefWidth="75.0" styleClass="btn-update" text="Update" />
-                <Button layoutX="131.0" layoutY="51.0" mnemonicParsing="false"  prefHeight="37.0" prefWidth="75.0" styleClass="btn-clear" text="Clear" />
+                <Button fx:id="btnSave" layoutX="19.0" layoutY="51.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="75.0" styleClass="btn-add" text="Save" />
+                <Button fx:id="btnClear" layoutX="131.0" layoutY="51.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="75.0" styleClass="btn-clear" text="Clear" />
             </children>
         </AnchorPane>
-        <Button layoutX="355.0" layoutY="398.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="222.0" styleClass="btn-delete" text="Cancel" />
+        <Button fx:id="btnCancel" layoutX="355.0" layoutY="398.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="222.0" styleClass="btn-delete" text="Cancel" />
     </children>
 </AnchorPane>
