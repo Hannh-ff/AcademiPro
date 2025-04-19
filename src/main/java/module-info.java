@@ -3,6 +3,7 @@ module com.center.academipro {
     requires javafx.fxml;
     requires java.sql;
     requires jdk.security.auth;
+    requires mysql.connector.j;
 
     opens com.center.academipro to javafx.fxml;
     opens com.center.academipro.view to javafx.fxml;
