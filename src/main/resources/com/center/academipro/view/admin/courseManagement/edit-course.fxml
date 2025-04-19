@@ -5,10 +5,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../css/thao.css"
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../../../css/thao.css"
             xmlns="http://javafx.com/javafx/23.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.center.academipro.controller.course.EditCourseController">
+            fx:controller="com.center.academipro.controller.admin.courseManagement.EditCourseController">
 
     <children>
         <!-- Nút Import ảnh -->

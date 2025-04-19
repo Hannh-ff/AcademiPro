@@ -1,4 +1,4 @@
-package com.center.academipro.controller.course;
+package com.center.academipro.controller.admin.courseManagement;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -67,7 +67,7 @@ public class CourseController {
     @FXML
     private void addCourse() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/course/add-new-course.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/courseManagement/add-new-course.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Stage stage = (Stage) tableCourse.getScene().getWindow();
@@ -93,7 +93,7 @@ public class CourseController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/course/edit-course.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/courseManagement/edit-course.fxml"));
             Parent root = loader.load();
 
             EditCourseController controller = loader.getController();

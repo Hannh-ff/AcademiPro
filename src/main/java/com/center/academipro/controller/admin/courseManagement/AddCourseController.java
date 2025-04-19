@@ -1,4 +1,4 @@
-package com.center.academipro.controller.course;
+package com.center.academipro.controller.admin.courseManagement;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

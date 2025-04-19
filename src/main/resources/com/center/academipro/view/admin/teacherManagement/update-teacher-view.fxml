@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="450.0" prefWidth="600.0" stylesheets="@../../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.admin.teacherManagement.EditTeacherController">
+    <children>
+        <AnchorPane layoutX="21.0" layoutY="21.0" prefHeight="231.0" prefWidth="558.0">
+            <styleClass>
+                <String fx:value="white-bg" />
+                <String fx:value="shadow" />
+                <String fx:value="radius" />
+            </styleClass>
+            <children>
+                <Label layoutX="25.0" layoutY="12.0" text="Full Name :">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="fullName" layoutX="73.0" layoutY="33.0" prefHeight="29.0" prefWidth="161.0" />
+                <Label layoutX="28.0" layoutY="77.0" text="Username:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="username" layoutX="73.0" layoutY="107.0" prefHeight="29.0" prefWidth="161.0" />
+                <Label layoutX="28.0" layoutY="148.0" text="Email:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="email" layoutX="73.0" layoutY="177.0" prefHeight="29.0" prefWidth="161.0" />
+                <Label layoutX="315.0" layoutY="12.0" text="Brithday:">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <DatePicker fx:id="birthday" layoutX="360.0" layoutY="35.0" prefHeight="25.0" prefWidth="161.0" />
+                <Label layoutX="315.0" layoutY="77.0" text="Phone :">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="phone" layoutX="360.0" layoutY="107.0" prefHeight="29.0" prefWidth="161.0" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="21.0" layoutY="272.0" prefHeight="165.0" prefWidth="307.0">
+            <styleClass>
+                <String fx:value="white-bg" />
+                <String fx:value="shadow" />
+                <String fx:value="radius" />
+            </styleClass>
+            <children>
+                <ListView fx:id="courseListView" layoutX="20.0" layoutY="31.0" prefHeight="123.0" prefWidth="267.0" />
+                <Label layoutX="20.0" layoutY="3.0" text="Course :">
+                    <font>
+                        <Font name="System Bold" size="15.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="350.0" layoutY="272.0" prefHeight="109.0" prefWidth="231.0">
+            <styleClass>
+                <String fx:value="white-bg" />
+                <String fx:value="shadow" />
+                <String fx:value="radius" />
+            </styleClass>
+            <children>
+                <Label layoutX="8.0" layoutY="4.0" text="Publish">
+                    <font>
+                        <Font name="System Bold" size="14.0" />
+                    </font>
+                </Label>
+                <Separator layoutY="31.0" prefHeight="9.0" prefWidth="231.0" />
+                <Button onAction="#updateTeacher" layoutX="19.0" layoutY="51.0" mnemonicParsing="false"  prefHeight="37.0" prefWidth="75.0" styleClass="btn-update" text="Update" />
+                <Button layoutX="131.0" layoutY="51.0" mnemonicParsing="false"  prefHeight="37.0" prefWidth="75.0" styleClass="btn-clear" text="Clear" />
+            </children>
+        </AnchorPane>
+        <Button layoutX="355.0" layoutY="398.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="222.0" styleClass="btn-delete" text="Cancel" />
+    </children>
+</AnchorPane>

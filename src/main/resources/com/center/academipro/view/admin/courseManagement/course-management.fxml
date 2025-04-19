@@ -6,7 +6,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.center.academipro.controller.course.CourseController"
+            fx:controller="com.center.academipro.controller.admin.courseManagement.CourseController"
             prefWidth="700" prefHeight="500"
             style="-fx-background-color: #f4f6f9;">
 
