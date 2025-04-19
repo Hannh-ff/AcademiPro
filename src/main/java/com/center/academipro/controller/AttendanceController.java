@@ -65,8 +65,6 @@ public class AttendanceController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        studentTableView.setItems(attendanceList);
     }
 
     private void saveAttendance() {
