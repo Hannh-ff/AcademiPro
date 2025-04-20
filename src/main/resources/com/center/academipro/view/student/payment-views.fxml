@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+    <VBox xmlns="http://javafx.com/javafx/23.0.1"
+          xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="com.center.academipro.controller.PaymentController"
+          spacing="15.0" alignment="TOP_CENTER"  >
+    <Label text="Thanh toán học phí" style="-fx-font-size: 18px;"/>
+
+    <TableView fx:id="enrollmentTable" prefWidth="500">
+        <columns>
+            <TableColumn fx:id="courseNameColumn" text="Khóa học" prefWidth="300"/>
+            <TableColumn fx:id="statusColumn" text="Trạng thái" prefWidth="200"/>
+        </columns>
+    </TableView>
+
+    <Button fx:id="payButton" text="Thanh toán" onAction="#handlePayment" prefWidth="150"/>
+</VBox>
