@@ -66,19 +66,19 @@ public class LoginController {
                     // chuyển đến giao diện admin
                     System.out.println("Login successful with role: Admin");
                     Stage currentStage1 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                    SceneSwitch.switchTo(currentStage1, "view/admin/adminMainForm.fxml");
+                    SceneSwitch.switchTo(currentStage1, "view/admin/menu-bar-view.fxml");
                     break;
                 case "Teacher":
                     // chuyển đến giao diện giáo viên
                     System.out.println("Login successful with role: Teacher");
                     Stage currentStage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                    SceneSwitch.switchTo(currentStage2, "");
+                    SceneSwitch.switchTo(currentStage2, "view/teacher/attendance-view.fxml");
                     break;
                 case "Student":
                     // chuyển đến giao diện học viên
                     System.out.println("Login successful with role: Student");
                     Stage currentStage3 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                    SceneSwitch.switchTo(currentStage3, "");
+                    SceneSwitch.switchTo(currentStage3, "view/student/list-courses.fxml");
                     break;
                 default:
                     System.out.println("Role not recognized");

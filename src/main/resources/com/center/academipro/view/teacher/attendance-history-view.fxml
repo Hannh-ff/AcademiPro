@@ -5,7 +5,7 @@
 <?import javafx.geometry.Insets?>
 <VBox xmlns="http://javafx.com/javafx/23.0.1"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.center.academipro.controller.AttendanceHistoryController"
+      fx:controller="com.center.academipro.controller.teacher.AttendanceHistoryController"
       prefHeight="400.0" prefWidth="600.0"
       spacing="15.0" >
 
