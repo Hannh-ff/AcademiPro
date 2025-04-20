@@ -59,7 +59,7 @@ public class MenuBarController {
     }
 
     public void classScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView(""); // Thêm đường dẫn đến file FXML của class
+        FXMLLoader loader = SceneSwitch.loadView("view/admin/classManagement/class-management.fxml"); // Thêm đường dẫn đến file FXML của class
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
