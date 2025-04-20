@@ -14,6 +14,9 @@ module com.center.academipro {
     opens com.center.academipro.controller.admin.teacherManagement to javafx.fxml;
     opens com.center.academipro.controller.teacher to javafx.fxml;
     opens com.center.academipro.controller.admin.studentManagement to javafx.fxml;
+    opens com.center.academipro.controller.admin.classManagement to javafx.fxml;
+
+
 
 
 
@@ -23,4 +26,5 @@ module com.center.academipro {
     exports com.center.academipro.controller.admin.studentManagement;
     exports com.center.academipro.controller.admin.teacherManagement;
     exports com.center.academipro.controller.teacher;
+    exports com.center.academipro.controller.admin.classManagement to javafx.fxml;
 }
