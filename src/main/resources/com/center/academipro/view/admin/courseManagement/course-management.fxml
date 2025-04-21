@@ -1,44 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.center.academipro.controller.admin.courseManagement.CourseController"
-            prefWidth="700" prefHeight="500"
-            style="-fx-background-color: #f4f6f9;">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="500" prefWidth="700" style="-fx-background-color: #f4f6f9;" stylesheets="@../../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.admin.courseManagement.CourseController">
 
     <top>
-        <Label text="📚 Course Management"
-               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"
-               BorderPane.alignment="CENTER">
+        <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" styleClass="main-text" text="📚 Course Management" BorderPane.alignment="CENTER">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
         </Label>
     </top>
 
     <center>
-        <VBox spacing="15" alignment="TOP_CENTER">
+        <VBox alignment="TOP_CENTER" spacing="15">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
             <!-- Buttons -->
-            <HBox spacing="15" alignment="CENTER">
-                <Button text="➕ Add" onAction="#addCourse" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
-                <Button text="Update" onAction="#updateCourse" style="-fx-background-color: #2980b9; -fx-text-fill: white;"/>
-                <Button text="Delete" onAction="#deleteCourse" style="-fx-background-color: #c0392b; -fx-text-fill: white;"/>
+            <HBox alignment="CENTER" prefHeight="33.0" prefWidth="660.0" spacing="15">
+                <Button onAction="#addCourse" prefHeight="25.0" prefWidth="73.0" styleClass="btn-add" text="➕ Add" />
+                <Button onAction="#updateCourse" prefHeight="32.0" prefWidth="75.0" styleClass="btn-update" text="Update" />
+                <Button onAction="#deleteCourse" prefHeight="25.0" prefWidth="78.0" styleClass="btn-delete" text="Delete" />
             </HBox>
             <!-- Table -->
             <TableView fx:id="tableCourse">
                 <columns>
-                    <TableColumn fx:id="colCourseId" text="ID"/>
-                    <TableColumn fx:id="colCourseName" text="Course Name"/>
-                    <TableColumn fx:id="colDescription" text="Description"/>
-                    <TableColumn fx:id="colImage" text="Image"/>
-                    <TableColumn fx:id="colPrice" text="Price"/>
+                    <TableColumn fx:id="colCourseId" text="ID" />
+                    <TableColumn fx:id="colCourseName" text="Course Name" />
+                    <TableColumn fx:id="colDescription" text="Description" />
+                    <TableColumn fx:id="colImage" text="Image" />
+                    <TableColumn fx:id="colPrice" text="Price" />
                 </columns>
             </TableView>
         </VBox>
