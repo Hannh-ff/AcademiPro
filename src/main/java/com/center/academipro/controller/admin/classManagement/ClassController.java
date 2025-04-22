@@ -1,6 +1,6 @@
-package com.center.academipro.controller.admin.courseManagement;
+package com.center.academipro.controller.admin.classManagement;
 
-import com.center.academipro.models.Course;
+import com.center.academipro.models.Class;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -16,132 +16,132 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Optional;
 
-public class CourseController {
+public class ClassController {
 
-    @FXML private TableView<Course> tableCourse;
-    @FXML private TableColumn<Course, Integer> colCourseId;
-    @FXML private TableColumn<Course, String> colCourseName;
-    @FXML private TableColumn<Course, String> colDescription;
-    @FXML private TableColumn<Course, String> colImage;
-    @FXML private TableColumn<Course, Double> colPrice;
-    @FXML private TableColumn<Course, Void> colAction;
+    @FXML private TableView<Class> tableClass;
+    @FXML private TableColumn<Class, Integer> colClassId;
+    @FXML private TableColumn<Class, String> colClassName;
+    @FXML private TableColumn<Class, String> colDescription;
+    @FXML private TableColumn<Class, String> colImage;
+    @FXML private TableColumn<Class, Double> colPrice;
+    @FXML private TableColumn<Class, Void> colAction;
 
-    private final ObservableList<Course> courseList = FXCollections.observableArrayList();
+    private final ObservableList<Class> classList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        colCourseId.setCellValueFactory(cell -> cell.getValue().idProperty().asObject());
-        colCourseName.setCellValueFactory(cell -> cell.getValue().courseNameProperty());
+        colClassId.setCellValueFactory(cell -> cell.getValue().idProperty().asObject());
+        colClassName.setCellValueFactory(cell -> cell.getValue().classNameProperty());
         colDescription.setCellValueFactory(cell -> cell.getValue().descriptionProperty());
         colImage.setCellValueFactory(cell -> cell.getValue().imageProperty());
         colPrice.setCellValueFactory(cell -> cell.getValue().priceProperty().asObject());
-        tableCourse.setItems(courseList);
-        loadCoursesFromDatabase();
+        tableClass.setItems(classList);
+        loadClassesFromDatabase();
         addActionColumn();
     }
 
-    public void reloadCourseTable() {
-        courseList.clear();
-        loadCoursesFromDatabase();
-        tableCourse.refresh();
+    public void reloadClassTable() {
+        classList.clear();
+        loadClassesFromDatabase();
+        tableClass.refresh();
     }
 
-    private void loadCoursesFromDatabase() {
-        String query = "SELECT * FROM courses";
+    private void loadClassesFromDatabase() {
+        String query = "SELECT * FROM classes";
         try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/academipro", "root", "");
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                Course course = new Course(
+                Class classItem = new Class(
                         rs.getInt("id"),
-                        rs.getString("course_name"),
+                        rs.getString("class_name"),
                         rs.getString("description"),
                         rs.getString("image"),
                         rs.getDouble("price")
                 );
-                courseList.add(course);
+                classList.add(classItem);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể tải danh sách khóa học.");
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể tải danh sách lớp học.");
         }
     }
 
     @FXML
-    private void addCourse() {
+    private void addClass() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/courseManagement/add-new-course.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/classManagement/add-new-class.fxml"));
             Parent root = loader.load();
 
-            AddCourseController controller = loader.getController();
+            AddClassController controller = loader.getController();
             controller.setParentController(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Thêm khóa học");
+            stage.setTitle("Thêm lớp học");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể mở form thêm khóa học.");
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể mở form thêm lớp học.");
         }
     }
 
     @FXML
-    private void updateCourse() {
-        Course selectedCourse = tableCourse.getSelectionModel().getSelectedItem();
+    private void updateClass() {
+        Class selectedClass = tableClass.getSelectionModel().getSelectedItem();
 
-        if (selectedCourse == null) {
-            showAlert(Alert.AlertType.WARNING, "Chưa chọn khóa học", "Vui lòng chọn một khóa học để cập nhật.");
+        if (selectedClass == null) {
+            showAlert(Alert.AlertType.WARNING, "Chưa chọn lớp", "Vui lòng chọn một lớp để cập nhật.");
             return;
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/courseManagement/edit-course.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/classManagement/edit-class.fxml"));
             Parent root = loader.load();
 
-            EditCourseController controller = loader.getController();
-            controller.setCourse(selectedCourse);
+            EditClassController controller = loader.getController();
+            controller.setClassModel(selectedClass);
             controller.setParentController(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Cập nhật khóa học");
+            stage.setTitle("Cập nhật lớp học");
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
 
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể mở form cập nhật khóa học.");
+            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể mở form cập nhật lớp học.");
         }
     }
 
     @FXML
-    private void deleteCourse() {
-        Course selectedCourse = tableCourse.getSelectionModel().getSelectedItem();
-        if (selectedCourse == null) {
-            showAlert(Alert.AlertType.WARNING, "Chưa chọn khóa học", "Vui lòng chọn một khóa học để xóa.");
+    private void deleteClass() {
+        Class selectedClass = tableClass.getSelectionModel().getSelectedItem();
+        if (selectedClass == null) {
+            showAlert(Alert.AlertType.WARNING, "Chưa chọn lớp", "Vui lòng chọn một lớp để xóa.");
             return;
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có chắc muốn xóa khóa học này?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Bạn có chắc muốn xóa lớp học này?", ButtonType.YES, ButtonType.NO);
         confirm.setTitle("Xác nhận xóa");
         Optional<ButtonType> result = confirm.showAndWait();
 
         if (result.isPresent() && result.get() == ButtonType.YES) {
             try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/academipro", "root", "");
-                 PreparedStatement stmt = conn.prepareStatement("DELETE FROM courses WHERE id = ?")) {
+                 PreparedStatement stmt = conn.prepareStatement("DELETE FROM classes WHERE id = ?")) {
 
-                stmt.setInt(1, selectedCourse.getId());
+                stmt.setInt(1, selectedClass.getId());
                 stmt.executeUpdate();
-                courseList.remove(selectedCourse);
+                classList.remove(selectedClass);
 
             } catch (SQLException e) {
                 e.printStackTrace();
-                showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể xóa khóa học.");
+                showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể xóa lớp học.");
             }
         }
     }
@@ -165,13 +165,13 @@ public class CourseController {
                 deleteBtn.setStyle("-fx-background-color: #c0392b; -fx-text-fill: white;");
 
                 editBtn.setOnAction(event -> {
-                    tableCourse.getSelectionModel().select(getIndex());
-                    updateCourse();
+                    tableClass.getSelectionModel().select(getIndex());
+                    updateClass();
                 });
 
                 deleteBtn.setOnAction(event -> {
-                    tableCourse.getSelectionModel().select(getIndex());
-                    deleteCourse();
+                    tableClass.getSelectionModel().select(getIndex());
+                    deleteClass();
                 });
             }
 
