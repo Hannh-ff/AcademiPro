@@ -31,9 +31,6 @@ public class TeacherViewController {
     @FXML private TableColumn<Teacher, String> teacherCourse;
     @FXML private TableColumn<Teacher, Void> teacherAction;
 
-//    private Connection connect;
-//    private PreparedStatement prepare;
-//    private ResultSet result;
 
     private final ObservableList<Teacher> teachersList = FXCollections.observableArrayList();
 

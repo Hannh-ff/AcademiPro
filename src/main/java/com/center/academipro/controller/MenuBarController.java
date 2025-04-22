@@ -38,7 +38,7 @@ public class MenuBarController {
 //    }
 
     public void dashboardScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView(""); // Thêm đường dẫn đến file FXML của dashboard
+        FXMLLoader loader = SceneSwitch.loadView("view/admin/adminMainForm.fxml"); // Thêm đường dẫn đến file FXML của dashboard
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
@@ -73,7 +73,7 @@ public class MenuBarController {
     }
 
     public void studentScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView(""); // Thêm đường dẫn đến file FXML của student
+        FXMLLoader loader = SceneSwitch.loadView("view/admin/studentManagement/student-view.fxml"); // Thêm đường dẫn đến file FXML của student
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
