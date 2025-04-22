@@ -24,12 +24,12 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <Button  fx:id="btnDashboard" layoutX="8.0" layoutY="150.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Dashboard" textFill="WHITE" />
-                  <Button  fx:id="btnTeacher" layoutX="8.0" layoutY="205.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Teacher" textFill="WHITE" />
-                  <Button  fx:id="btnCourse" layoutX="8.0" layoutY="259.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Course" textFill="WHITE" />
-                  <Button  fx:id="btnClass" layoutX="8.0" layoutY="314.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Class" textFill="WHITE" />
-                  <Button  fx:id="btnPayment" layoutX="9.0" layoutY="370.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Payment" textFill="WHITE" />
-                  <Button  fx:id="btnStudent" layoutX="9.0" layoutY="425.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Student" textFill="WHITE" />
+                  <Button  fx:id="btnDashboard" onAction="#dashboardScene" layoutX="8.0" layoutY="150.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Dashboard" textFill="WHITE" />
+                  <Button  fx:id="btnTeacher" onAction="#teacherScene" layoutX="8.0" layoutY="205.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Teacher" textFill="WHITE" />
+                  <Button  fx:id="btnCourse" onAction="#courseScene" layoutX="8.0" layoutY="259.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Course" textFill="WHITE" />
+                  <Button  fx:id="btnClass" onAction="#classScene" layoutX="8.0" layoutY="314.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Class" textFill="WHITE" />
+                  <Button  fx:id="btnPayment" onAction="#paymentScene" layoutX="9.0" layoutY="370.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Payment" textFill="WHITE" />
+                  <Button  fx:id="btnStudent" onAction="#studentScene" layoutX="9.0" layoutY="425.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Student" textFill="WHITE" />
                   <Line endX="100.0" layoutX="109.0" layoutY="125.0" startX="-100.0" stroke="WHITE" />
                </children>
             </AnchorPane>

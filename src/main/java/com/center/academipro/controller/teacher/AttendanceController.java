@@ -1,4 +1,4 @@
-package com.center.academipro.controller;
+package com.center.academipro.controller.teacher;
 
 import com.center.academipro.models.Attendance;
 import com.center.academipro.utils.DBConnection;
