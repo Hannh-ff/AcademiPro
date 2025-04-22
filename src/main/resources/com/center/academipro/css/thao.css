@@ -75,3 +75,9 @@
 .table-view .column-header .label{
     -fx-text-fill: #fff;
 }
+.main-color{
+    -fx-background-color: linear-gradient(to bottom right, #8fc9ff, #aee4ff);
+}
+.main-text{
+    -fx-text-fill: linear-gradient(to bottom right, #0d47a1, #1565c0);
+}
