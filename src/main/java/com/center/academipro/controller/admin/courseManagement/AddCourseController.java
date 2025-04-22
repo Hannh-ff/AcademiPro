@@ -1,116 +1,99 @@
 package com.center.academipro.controller.admin.courseManagement;
 
-import javafx.event.ActionEvent;
+import com.center.academipro.models.Course;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.List;
-import com.center.academipro.models.Course;
+
+import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class AddCourseController {
 
-    @FXML private TextField txtCourseName;
+    @FXML private TextField txtCourseName, txtPrice, txtImage;
     @FXML private TextArea txtDescription;
-    @FXML private TextField txtImage;
-    @FXML private TextField txtPrice;
     @FXML private ImageView imagePreview;
 
-    private Course course;
-    private List<Course> courseList;
+    private CourseController parentController;
 
-    public void setCourse(Course course, List<Course> courseList) {
-        this.course = course;
-        this.courseList = courseList;
-        if (course != null) {
-            txtCourseName.setText(course.getCourseName());
-            txtDescription.setText(course.getDescription());
-            txtImage.setText(course.getImage());
-            txtPrice.setText(String.valueOf(course.getPrice()));
-            loadImage(course.getImage());
+    public void setParentController(CourseController parentController) {
+        this.parentController = parentController;
+    }
+
+    @FXML
+    private void addCourse() {
+        if (!validateInput()) return;
+
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/academipro", "root", "");
+             PreparedStatement stmt = conn.prepareStatement("INSERT INTO courses (course_name, description, image, price) VALUES (?, ?, ?, ?)")) {
+
+            stmt.setString(1, txtCourseName.getText().trim());
+            stmt.setString(2, txtDescription.getText().trim());
+            stmt.setString(3, txtImage.getText().trim());
+            stmt.setDouble(4, Double.parseDouble(txtPrice.getText().trim()));
+
+            stmt.executeUpdate();
+
+            showAlert(Alert.AlertType.INFORMATION, "Khóa học đã được thêm!");
+
+            if (parentController != null) parentController.reloadCourseTable();
+
+        } catch (SQLException e) {
+            showAlert(Alert.AlertType.ERROR, "Không thể thêm khóa học: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    public void addCourse(ActionEvent actionEvent) {
-        if (course == null) {
-            course = new Course();
-        }
-
-        boolean success = fillCourseFromForm(course);
-        if (!success) return;
-
-        if (!courseList.contains(course)) {
-            courseList.add(course);
-        }
-    }
-
-    private boolean fillCourseFromForm(Course targetCourse) {
-        String name = txtCourseName.getText().trim();
-        String description = txtDescription.getText().trim();
-        String image = txtImage.getText().trim();
-        String priceText = txtPrice.getText().trim();
-
-        if (name.isEmpty() || priceText.isEmpty()) {
-            showErrorMessage("Thiếu thông tin", "Vui lòng nhập đầy đủ tên khóa học và giá.");
+    private boolean validateInput() {
+        if (txtCourseName.getText().trim().isEmpty() || txtPrice.getText().trim().isEmpty()) {
+            showAlert(Alert.AlertType.WARNING, "Vui lòng nhập tên và giá.");
             return false;
         }
 
-        double price;
         try {
-            price = Double.parseDouble(priceText);
+            Double.parseDouble(txtPrice.getText().trim());
         } catch (NumberFormatException e) {
-            showErrorMessage("Giá không hợp lệ", "Vui lòng nhập một giá hợp lệ.");
+            showAlert(Alert.AlertType.ERROR, "Giá không hợp lệ.");
             return false;
         }
 
-        targetCourse.setCourseName(name);
-        targetCourse.setDescription(description);
-        targetCourse.setImage(image);
-        targetCourse.setPrice(price);
         return true;
     }
 
-    public void importImage(ActionEvent actionEvent) {
+    @FXML
+    private void importImage() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
         File file = fileChooser.showOpenDialog(null);
-
         if (file != null) {
             txtImage.setText(file.getAbsolutePath());
             loadImage(file.getAbsolutePath());
         }
     }
 
-    private void loadImage(String imagePath) {
-        try (FileInputStream inputStream = new FileInputStream(imagePath)) {
-            Image image = new Image(inputStream);
-            imagePreview.setImage(image);
+    private void loadImage(String path) {
+        try (FileInputStream input = new FileInputStream(path)) {
+            imagePreview.setImage(new Image(input));
         } catch (IOException e) {
-            showErrorMessage("Lỗi hình ảnh", "Không thể tải hình ảnh.");
+            showAlert(Alert.AlertType.ERROR, "Không thể tải hình ảnh.");
         }
     }
 
-    private void showErrorMessage(String title, String message) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
-
-    public void clearForm(ActionEvent actionEvent) {
+    @FXML
+    private void clearForm() {
         txtCourseName.clear();
         txtDescription.clear();
         txtImage.clear();
         txtPrice.clear();
         imagePreview.setImage(null);
-        course = null;
+    }
+
+    private void showAlert(Alert.AlertType type, String msg) {
+        new Alert(type, msg, ButtonType.OK).showAndWait();
     }
 }

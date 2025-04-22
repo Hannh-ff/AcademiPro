@@ -68,9 +68,8 @@
         <!-- Nút Add -->
         <Button fx:id="btnAdd" layoutX="495.0" layoutY="332.0"
                 mnemonicParsing="false" prefHeight="44.0" prefWidth="74.0"
-                styleClass="btn-add" text="Add" onAction="#addCourse"/>
+                styleClass="btn-add" text="Add" onAction="#updateCourse"/>
 
-        <!-- Nút Clear -->
         <Button fx:id="btnClear" layoutX="405.0" layoutY="332.0"
                 mnemonicParsing="false" prefHeight="44.0" prefWidth="74.0"
                 text="Clear" styleClass="btn-add btn-clear" onAction="#clearForm"/>
