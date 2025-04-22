@@ -1,8 +1,6 @@
 package com.center.academipro.controller.admin.studentManagement;
 
-import com.center.academipro.controller.admin.teacherManagement.EditTeacherController;
 import com.center.academipro.models.Student;
-import com.center.academipro.models.Teacher;
 import com.center.academipro.utils.DBConnection;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -47,6 +45,7 @@ public class StudentViewController {
         studentCourse.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCourse()));
         studentClass.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getClassName()));
 
+        setUpActionColumn();
         loadStudent();
     }
 
@@ -123,26 +122,26 @@ public class StudentViewController {
             return;
         }
 
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/studentManagement/update-student-view.fxml"));
-//            Parent root = loader.load();
-//
-//            // Gửi dữ liệu teacher sang controller của update-teacher.fxml
-//            EditTeacherController controller = loader.getController();
-//            controller.setTeacher(teacher);
-//
-//            Stage stage = new Stage();
-//            stage.initModality(Modality.APPLICATION_MODAL);
-//            stage.setTitle("Update Teacher");
-//            stage.setScene(new Scene(root));
-//            stage.showAndWait();
-//
-//            // Sau khi đóng form update, reload lại danh sách
-//            loadStudent();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/studentManagement/update-student-view.fxml"));
+            Parent root = loader.load();
+
+            // Gửi dữ liệu teacher sang controller của update-teacher.fxml
+            EditStudentController controller = loader.getController();
+            controller.setStudent(student);
+
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Update Teacher");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+
+            // Sau khi đóng form update, reload lại danh sách
+            loadStudent();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     private void handleDelete(Student student) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
