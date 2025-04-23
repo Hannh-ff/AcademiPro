@@ -10,11 +10,7 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-<<<<<<< Updated upstream
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("com/center/academipro/view/login-view.fxml"));
-=======
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/teacher/attendance-view.fxml"));
->>>>>>> Stashed changes
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/teacher/attendance-history-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
 
         //css

@@ -4,10 +4,9 @@ import com.center.academipro.models.Attendance;
 import com.center.academipro.utils.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -21,56 +20,118 @@ public class AttendanceHistoryController {
     @FXML private TableColumn<Attendance, String> statusColumn;
     @FXML private Button viewButton;
 
+    @FXML private Button prevPageButton;
+    @FXML private Label pageLabel;
+    @FXML private Button nextPageButton;
+
+    private FilteredList<Attendance> filteredData;
+    private ObservableList<Attendance> originalData = FXCollections.observableArrayList();
+
     public void initialize() {
         loadClasses();
-        statusFilterComboBox.setItems(FXCollections.observableArrayList("All", "Present", "Absent"));
-        viewButton.setOnAction(e -> loadAttendanceHistory());
 
-        studentNameColumn.setCellValueFactory(new PropertyValueFactory<>("studentName"));
-        statusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
+        // Thiết lập combobox lọc trạng thái
+        statusFilterComboBox.setItems(FXCollections.observableArrayList(
+                "Tất cả", "Present", "Absent"
+        ));
+        statusFilterComboBox.getSelectionModel().selectFirst();
+
+        // Thiết lập binding dữ liệu
+        studentNameColumn.setCellValueFactory(cellData -> cellData.getValue().studentNameProperty());
+        statusColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
+
+        // Khởi tạo filteredData
+        filteredData = new FilteredList<>(originalData, p -> true);
+        studentTableView.setItems(filteredData);
+
+        viewButton.setOnAction(e -> loadAttendanceHistory());
+        statusFilterComboBox.setOnAction(e -> filterByStatus());
+    }
+
+    private void filterByStatus() {
+        String selectedStatus = statusFilterComboBox.getValue();
+
+        if (selectedStatus == null || "Tất cả".equals(selectedStatus)) {
+            filteredData.setPredicate(attendance -> true);
+        } else {
+            filteredData.setPredicate(attendance ->
+                    selectedStatus.equalsIgnoreCase(attendance.getStatus())
+            );
+        }
     }
 
     private void loadClasses() {
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT name FROM classes")) {
+             PreparedStatement stmt = conn.prepareStatement("SELECT class_name FROM classes")) {
+
             ResultSet rs = stmt.executeQuery();
+            ObservableList<String> classes = FXCollections.observableArrayList();
             while (rs.next()) {
-                classCombox.getItems().add(rs.getString("name"));
+                classes.add(rs.getString("class_name"));
             }
+            classCombox.setItems(classes);
+
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Lỗi", "Không thể tải danh sách lớp: " + e.getMessage());
         }
     }
 
     private void loadAttendanceHistory() {
-        ObservableList<Attendance> historyList = FXCollections.observableArrayList();
         String selectedClass = classCombox.getValue();
         LocalDate selectedDate = datePicker.getValue();
-        String statusFilter = statusFilterComboBox.getValue();
 
-        if (selectedClass == null || selectedDate == null) return;
+        if (selectedClass == null || selectedDate == null) {
+            showAlert("Cảnh báo", "Vui lòng chọn cả lớp và ngày");
+            return;
+        }
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT s.name AS student_name, a.status " +
-                             "FROM attendance a JOIN students s ON a.student_id = s.id " +
-                             "JOIN classes c ON a.class_id = c.id " +
-                             "WHERE c.name = ? AND a.attendance_date = ?")) {
-            stmt.setString(1, selectedClass);
-            stmt.setDate(2, Date.valueOf(selectedDate));
-            ResultSet rs = stmt.executeQuery();
+        originalData.clear();
 
-            while (rs.next()) {
-                String status = rs.getString("status");
-                if ("All".equals(statusFilter) || status.equalsIgnoreCase(statusFilter)) {
-                    historyList.add(new Attendance(0, 0, 0, rs.getString("student_name"), null, status));
+        try (Connection conn = DBConnection.getConnection()) {
+            int classId = getClassId(conn, selectedClass);
+            if (classId == -1) return;
+
+            String query = "SELECT s.fullname AS student_name, a.status AS attendance_status " +
+                    "FROM attendance a " +
+                    "JOIN students st ON a.student_id = st.id " +
+                    "JOIN users s ON st.user_id = s.id " +
+                    "WHERE a.attendance_date = ? AND a.class_id = ?";
+
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setDate(1, Date.valueOf(selectedDate));
+                stmt.setInt(2, classId);
+
+                ResultSet rs = stmt.executeQuery();
+
+                while (rs.next()) {
+                    String studentName = rs.getString("student_name");
+                    String status = rs.getString("attendance_status");
+                    originalData.add(new Attendance(0, classId, 0, studentName, selectedDate.toString(), status));
                 }
             }
 
-            studentTableView.setItems(historyList);
+            filterByStatus();
 
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("Lỗi", "Không thể tải lịch sử điểm danh: " + e.getMessage());
         }
+    }
+
+    private int getClassId(Connection conn, String className) throws SQLException {
+        try (PreparedStatement stmt = conn.prepareStatement("SELECT id FROM classes WHERE class_name = ?")) {
+            stmt.setString(1, className);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next() ? rs.getInt("id") : -1;
+        }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

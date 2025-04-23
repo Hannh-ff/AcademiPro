@@ -18,6 +18,15 @@ public class Class {
         this.price = new SimpleDoubleProperty(price);
     }
 
+    public Class(int id, String className) {
+        this.id = new SimpleIntegerProperty(id);
+        this.className = new SimpleStringProperty(className);
+        this.description = new SimpleStringProperty("");
+        this.image = new SimpleStringProperty("");
+        this.price = new SimpleDoubleProperty(0.0);
+    }
+
+
     // Getter and Setter Methods for the fields
 
     public IntegerProperty idProperty() {
@@ -78,5 +87,9 @@ public class Class {
 
     public void setPrice(double price) {
         this.price.set(price);
+    }
+    @Override
+    public String toString() {
+        return getClassName();
     }
 }

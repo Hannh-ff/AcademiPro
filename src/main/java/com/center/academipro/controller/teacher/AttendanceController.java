@@ -24,21 +24,38 @@ public class AttendanceController {
     private ObservableList<Attendance> attendanceList = FXCollections.observableArrayList();
 
     public void initialize() {
-        loadClasses(); // Load danh sách lớp học vào ComboBox
+        loadClasses();
         loadAllStudents();
         // Cột họ tên
         studentNameColumn.setCellValueFactory(data -> data.getValue().studentNameProperty());
+        studentTableView.setEditable(true);
+        presentColumn.setEditable(true);
+        absentColumn.setEditable(true);
+
 
         // Cột checkbox "Có mặt"
         presentColumn.setCellValueFactory(data -> data.getValue().presentProperty());
-        presentColumn.setCellFactory(CheckBoxTableCell.forTableColumn(presentColumn));
+        presentColumn.setCellFactory(col -> {
+            CheckBoxTableCell<Attendance, Boolean> cell = new CheckBoxTableCell<>(index -> {
+                Attendance att = studentTableView.getItems().get(index);
+                return att.presentProperty();
+            });
+            return cell;
+        });
 
         // Cột checkbox "Vắng mặt"
         absentColumn.setCellValueFactory(data -> data.getValue().absentProperty());
-        absentColumn.setCellFactory(CheckBoxTableCell.forTableColumn(absentColumn));
+        absentColumn.setCellFactory(col -> {
+            CheckBoxTableCell<Attendance, Boolean> cell = new CheckBoxTableCell<>(index -> {
+                Attendance att = studentTableView.getItems().get(index);
+                return att.absentProperty();
+            });
+            return cell;
+        });
 
         // Khi chọn lớp thì load danh sách sinh viên
-//        classCombox.setOnAction(e -> loadStudentsForSelectedClass());
+        classCombox.setOnAction(e -> loadStudentsForSelectedClass());
+
 
         // Lưu điểm danh khi nhấn nút
         saveButton.setOnAction(e -> saveAttendance());
