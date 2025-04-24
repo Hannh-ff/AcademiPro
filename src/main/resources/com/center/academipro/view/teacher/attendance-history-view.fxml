@@ -3,39 +3,75 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<?import java.lang.String?>
 <VBox xmlns="http://javafx.com/javafx/23.0.1"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.center.academipro.controller.teacher.AttendanceHistoryController"
-      prefHeight="400.0" prefWidth="600.0"
-      spacing="15.0" >
+      prefHeight="600.0" prefWidth="800.0"
+      spacing="15.0" stylesheets="@../../css/thao.css">
 
     <padding>
-        <Insets top="20.0" right="20.0" bottom="20.0" left="20.0"/>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <HBox spacing="10">
-        <Label text="Chọn lớp học"/>
-        <ComboBox fx:id="classCombox" prefWidth="200"/>
-        <Label text="Chọn ngày: "/>
-        <DatePicker fx:id="datePicker"/>
-        <Button fx:id="viewButton" text="Xem lịch sử"/>
+    <AnchorPane prefHeight="57.0" prefWidth="760.0">
+        <children>
+            <HBox alignment="CENTER" layoutX="68.0" layoutY="-31.0" prefHeight="69.33333333333333" prefWidth="760.0"
+                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <children>
+                    <Label styleClass="main-text" text="Attendance History">
+                        <font>
+                            <Font name="System Bold Italic" size="20.0"/>
+                        </font>
+                    </Label>
+                </children>
+            </HBox>
+        </children>
+    </AnchorPane>
+
+    <HBox alignment="CENTER" prefHeight="46.0" prefWidth="760.0" spacing="10">
+        <Label prefHeight="20.0" prefWidth="90.0" text="Chọn lớp học">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <ComboBox fx:id="classCombox" prefHeight="31.0" prefWidth="200" styleClass="main-color"/>
+        <Label alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="221.0" text="Chọn ngày: ">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
+        <DatePicker fx:id="datePicker" prefHeight="33.0" prefWidth="204.0" styleClass="main-color"/>
+        <Button fx:id="viewButton" prefHeight="33.0" prefWidth="150" text="Xem lịch sử">
+            <styleClass>
+                <String fx:value="btn"/>
+                <String fx:value="btn-add"/>
+            </styleClass>
+        </Button>
     </HBox>
 
-    <TableView fx:id="studentTableView" prefHeight="300">
+    <TableView fx:id="studentTableView" prefHeight="344.0" prefWidth="760.0">
         <columns>
-            <TableColumn fx:id="studentNameColumn" text="Họ tên sinh viên" prefWidth="300"/>
-            <TableColumn fx:id="statusColumn" text="Trạng thái" prefWidth="200"/>
+            <TableColumn fx:id="studentNameColumn" prefWidth="380" text="Họ tên sinh viên"/>
+            <TableColumn fx:id="statusColumn" prefWidth="380" text="Trạng thái"/>
         </columns>
     </TableView>
 
-
-    <HBox spacing="10">
+    <HBox alignment="CENTER" prefHeight="63.0" prefWidth="760.0" spacing="10">
         <Label text="Lọc theo trạng thái:"/>
-        <ComboBox fx:id="statusFilterComboBox" prefWidth="150"/>
-        <Button text="Trang trước" fx:id="prevPageButton"/>
+        <ComboBox fx:id="statusFilterComboBox" prefWidth="150" styleClass="main-color"/>
+        <Button fx:id="prevPageButton" text="Trang trước">
+            <styleClass>
+                <String fx:value="btn"/>
+            </styleClass>
+        </Button>
         <Label fx:id="pageLabel" text="Trang 1"/>
-        <Button text="Trang sau" fx:id="nextPageButton"/>
+        <Button fx:id="nextPageButton" text="Trang sau">
+            <styleClass>
+                <String fx:value="btn"/>
+            </styleClass>
+        </Button>
     </HBox>
-
 </VBox>
-

@@ -24,7 +24,6 @@ public class Attendance {
         this.present = new SimpleBooleanProperty("present".equalsIgnoreCase(status));
         this.absent = new SimpleBooleanProperty("absent".equalsIgnoreCase(status));
 
-        // Đồng bộ trạng thái checkbox
         initListeners();
     }
 
@@ -44,12 +43,22 @@ public class Attendance {
     }
 
     private void initListeners() {
-        present.addListener((obs, oldVal, newVal) -> {
-            if (newVal) absent.set(false);
+        present.addListener((obs, wasSelected, isSelected) -> {
+            if (isSelected) {
+                absent.set(false);
+                status.set("present");
+            } else if (!absent.get()) {
+                status.set("unknown");
+            }
         });
 
-        absent.addListener((obs, oldVal, newVal) -> {
-            if (newVal) present.set(false);
+        absent.addListener((obs, wasSelected, isSelected) -> {
+            if (isSelected) {
+                present.set(false);
+                status.set("absent");
+            } else if (!present.get()) {
+                status.set("unknown");
+            }
         });
     }
 
