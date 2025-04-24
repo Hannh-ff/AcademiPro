@@ -1,76 +1,81 @@
 package com.center.academipro.models;
 
+import javafx.beans.property.*;
+
 public class Attendance {
-    private int id;
-    private int classId;
+    private final IntegerProperty id;
+    private final IntegerProperty classId;
+    private final IntegerProperty studentId;
+    private final StringProperty studentName;
+    private final StringProperty date;
+    private final StringProperty status;
 
-
-
-    private int studentId;
-    private String studentName;
-    private String date;
-    private String status;
+    private final BooleanProperty present;
+    private final BooleanProperty absent;
 
     public Attendance(int id, int classId, int studentId, String studentName, String date, String status) {
-        this.id = id;
-        this.classId = classId;
-        this.studentId = studentId;
-        this.studentName = studentName;
-        this.date = date;
-        this.status = status;
+        this.id = new SimpleIntegerProperty(id);
+        this.classId = new SimpleIntegerProperty(classId);
+        this.studentId = new SimpleIntegerProperty(studentId);
+        this.studentName = new SimpleStringProperty(studentName);
+        this.date = new SimpleStringProperty(date);
+        this.status = new SimpleStringProperty(status);
+
+        this.present = new SimpleBooleanProperty("present".equalsIgnoreCase(status));
+        this.absent = new SimpleBooleanProperty("absent".equalsIgnoreCase(status));
+
+        // Đồng bộ trạng thái checkbox
+        initListeners();
     }
 
+    // Constructor khi chỉ load tên và ID
     public Attendance(int studentId, String studentName) {
-        this.studentId = studentId;
-        this.studentName = studentName;
-    }
-    public int getId() {
-        return id;
+        this.id = new SimpleIntegerProperty(0);
+        this.classId = new SimpleIntegerProperty(0);
+        this.studentId = new SimpleIntegerProperty(studentId);
+        this.studentName = new SimpleStringProperty(studentName);
+        this.date = new SimpleStringProperty("");
+        this.status = new SimpleStringProperty("");
+
+        this.present = new SimpleBooleanProperty(false);
+        this.absent = new SimpleBooleanProperty(false);
+
+        initListeners();
     }
 
-    public void setId(int id) {
-        this.id = id;
+    private void initListeners() {
+        present.addListener((obs, oldVal, newVal) -> {
+            if (newVal) absent.set(false);
+        });
+
+        absent.addListener((obs, oldVal, newVal) -> {
+            if (newVal) present.set(false);
+        });
     }
 
-    public int getClassId() {
-        return classId;
-    }
-
-    public void setClassId(int classId) {
-        this.classId = classId;
-    }
-
-    public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
+    // Getter & Setter dạng property
+    public int getId() { return id.get(); }
+    public int getClassId() { return classId.get(); }
+    public int getStudentId() { return studentId.get(); }
+    public String getStudentName() { return studentName.get(); }
+    public String getDate() { return date.get(); }
     public String getStatus() {
-        return status;
+        if (present.get()) return "present";
+        if (absent.get()) return "absent";
+        return "unknown";
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public void setClassId(int classId) { this.classId.set(classId); }
+    public void setDate(String date) { this.date.set(date); }
+    public void setStatus(String status) { this.status.set(status); }
 
+    public BooleanProperty presentProperty() { return present; }
+    public BooleanProperty absentProperty() { return absent; }
+    public StringProperty studentNameProperty() { return studentName; }
 
+    // Có thể dùng thêm nếu cần hiển thị chi tiết:
+    public IntegerProperty idProperty() { return id; }
+    public IntegerProperty studentIdProperty() { return studentId; }
+    public StringProperty dateProperty() { return date; }
+    public StringProperty statusProperty() { return status; }
 }
