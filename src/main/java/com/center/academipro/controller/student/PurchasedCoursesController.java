@@ -24,29 +24,29 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ListCoursesController implements Initializable {
+public class PurchasedCoursesController implements Initializable {
 
     @FXML
-    private VBox courseListVBox;
+    private VBox purchasedCoursesVBox;
     @FXML
     private TextField searchField;
     @FXML
     private Label pageIndicator;
 
-    private final ObservableList<Course> allCourses  = FXCollections.observableArrayList();
-    private FilteredList<Course> filteredCourse;
+    private final ObservableList<Course> allPurchasedCourses = FXCollections.observableArrayList();
+    private FilteredList<Course> filteredPurchasedCourse;
     private static final int ITEMS_PER_PAGE = 4;
     private int currentPage = 0;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Course> courses = EventCourses.getAllCourses();
-        allCourses.setAll(courses);
+        List<Course> purchasedCourses = EventCourses.getPurchasedCoursesByUserId();
+        allPurchasedCourses.setAll(purchasedCourses);
         setupSearchFilter();
     }
 
-    private HBox createCourseCard(Course course){
+    private HBox createPurchasedCourseCard(Course course) {
         HBox card = new HBox(15);
         card.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 10;");
         card.setEffect(new DropShadow(5, Color.rgb(0, 0, 0, 0.1)));
@@ -54,7 +54,6 @@ public class ListCoursesController implements Initializable {
         ImageView imageView = new ImageView();
         InputStream imgStream = getClass().getResourceAsStream("/com/center/academipro/images/" + course.getImage());
         if (imgStream == null) {
-            System.out.println("Image not found " + course.getImage());
             imgStream = getClass().getResourceAsStream("/com/center/academipro/images/1.png");
         }
         if (imgStream != null) {
@@ -77,45 +76,45 @@ public class ListCoursesController implements Initializable {
         price.setStyle("-fx-text-fill: orange; -fx-font-weight: bold;");
 
         info.getChildren().addAll(title, desc, price);
-
-        Button enrollBtn = new Button("Buy now ➜");
-        enrollBtn.setStyle("-fx-background-color: #3a86ff; -fx-text-fill: white; -fx-background-radius: 5;");
-        VBox actionBox = new VBox(5, enrollBtn);
-        actionBox.setAlignment(Pos.TOP_RIGHT);
         HBox.setHgrow(info, Priority.ALWAYS);
+
+        Button cancelBtn = new Button("Cancel ➜");
+        cancelBtn.setStyle("-fx-background-color: #ff6b6b; -fx-text-fill: white; -fx-background-radius: 5;");
+        cancelBtn.setOnAction(e -> {
+            EventCourses.cancelCourse(course.getId());
+            allPurchasedCourses.setAll(EventCourses.getPurchasedCoursesByUserId());
+            currentPage = 0;
+            renderPage(currentPage);
+        });
+
+        VBox actionBox = new VBox(5, cancelBtn);
+        actionBox.setAlignment(Pos.TOP_RIGHT);
 
         card.getChildren().addAll(imageView, info, actionBox);
         return card;
     }
 
-    private void renderCourses(List<Course> courses) {
-        courseListVBox.getChildren().clear();
-        for (Course course : courses) {
-            courseListVBox.getChildren().add(createCourseCard(course));
-        }
-    }
-
     private void setupSearchFilter() {
-        if (allCourses == null) {
+        if (allPurchasedCourses == null) {
             System.out.println("Course list is NULL!");
             return;
         }
 
-        System.out.println("Course List Size: " + allCourses.size());
-        for (Course c : allCourses) {
+        System.out.println("Course List Size: " + allPurchasedCourses.size());
+        for (Course c : allPurchasedCourses) {
             System.out.println("Course: " + c.getCourseName());
         }
 
-        if (allCourses.isEmpty()) {
+        if (allPurchasedCourses.isEmpty()) {
             System.out.println("Course List is empty!");
             return;
         }
 
-        filteredCourse = new FilteredList<>(allCourses, p -> true);
+        filteredPurchasedCourse = new FilteredList<>(allPurchasedCourses, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Search: " + newValue);
 
-            filteredCourse.setPredicate(course ->{
+            filteredPurchasedCourse.setPredicate(course ->{
                 if (newValue == null || newValue.trim().isEmpty()) {
                     return true;
                 }
@@ -129,7 +128,7 @@ public class ListCoursesController implements Initializable {
             });
 
 
-            System.out.println("Filtered Movies: " + filteredCourse.size());
+            System.out.println("Filtered Movies: " + filteredPurchasedCourse.size());
             currentPage = 0;
             renderPage(currentPage);
         });
@@ -139,27 +138,21 @@ public class ListCoursesController implements Initializable {
     }
 
     private void renderPage(int page) {
-        courseListVBox.getChildren().clear();
+        purchasedCoursesVBox.getChildren().clear();
         int start = page * ITEMS_PER_PAGE;
-        int end = Math.min(start + ITEMS_PER_PAGE, filteredCourse.size());
+        int end = Math.min(start + ITEMS_PER_PAGE, filteredPurchasedCourse.size());
 
         for (int i = start; i < end; i++) {
-            courseListVBox.getChildren().add(createCourseCard(filteredCourse.get(i)));
+            purchasedCoursesVBox.getChildren().add(createPurchasedCourseCard(filteredPurchasedCourse.get(i)));
         }
 
-        int totalPages = (int) Math.ceil((double) filteredCourse.size() / ITEMS_PER_PAGE);
+        int totalPages = (int) Math.ceil((double) filteredPurchasedCourse.size() / ITEMS_PER_PAGE);
         pageIndicator.setText("Page " + (currentPage + 1) + " / " + totalPages);
-    }
-
-    private List<Course> getCurrentPageItems() {
-        int start = currentPage * ITEMS_PER_PAGE;
-        int end = Math.min(start + ITEMS_PER_PAGE, filteredCourse.size());
-        return filteredCourse.subList(start, end);
     }
 
     @FXML
     private void handleNextPage() {
-        if ((currentPage + 1) * ITEMS_PER_PAGE < filteredCourse.size()) {
+        if ((currentPage + 1) * ITEMS_PER_PAGE < filteredPurchasedCourse.size()) {
             currentPage++;
             renderPage(currentPage);
         }
@@ -173,4 +166,11 @@ public class ListCoursesController implements Initializable {
         }
     }
 
+    private void renderPurchasedCourses(List<Course> courses) {
+        purchasedCoursesVBox.getChildren().clear();
+
+        for (Course course : courses) {
+            purchasedCoursesVBox.getChildren().add(createPurchasedCourseCard(course));
+        }
+    }
 }

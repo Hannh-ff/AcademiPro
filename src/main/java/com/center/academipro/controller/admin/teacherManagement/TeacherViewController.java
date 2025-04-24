@@ -2,14 +2,20 @@ package com.center.academipro.controller.admin.teacherManagement;
 
 import com.center.academipro.models.Teacher;
 import com.center.academipro.utils.DBConnection;
+import com.center.academipro.utils.SceneSwitch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -21,15 +27,24 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 public class TeacherViewController {
-    @FXML private TableView<Teacher> tableView_Teacher;
-    @FXML private TableColumn<Teacher, Integer> teacherId;
-    @FXML private TableColumn<Teacher, String> teacherName;
-    @FXML private TableColumn<Teacher, String> teacherUser;
-    @FXML private TableColumn<Teacher, String> teacherEmail;
-    @FXML private TableColumn<Teacher, LocalDate> teacherBirth;
-    @FXML private TableColumn<Teacher, String> teacherPhone;
-    @FXML private TableColumn<Teacher, String> teacherCourse;
-    @FXML private TableColumn<Teacher, Void> teacherAction;
+    @FXML
+    private TableView<Teacher> tableView_Teacher;
+    @FXML
+    private TableColumn<Teacher, Integer> teacherId;
+    @FXML
+    private TableColumn<Teacher, String> teacherName;
+    @FXML
+    private TableColumn<Teacher, String> teacherUser;
+    @FXML
+    private TableColumn<Teacher, String> teacherEmail;
+    @FXML
+    private TableColumn<Teacher, LocalDate> teacherBirth;
+    @FXML
+    private TableColumn<Teacher, String> teacherPhone;
+    @FXML
+    private TableColumn<Teacher, String> teacherCourse;
+    @FXML
+    private TableColumn<Teacher, Void> teacherAction;
 
 //    private Connection connect;
 //    private PreparedStatement prepare;
@@ -56,23 +71,24 @@ public class TeacherViewController {
         ObservableList<Teacher> teacherList = FXCollections.observableArrayList();
 
         String query = """
-        SELECT t.id, u.fullname, u.username, u.email, t.birthday, t.phone,
-               GROUP_CONCAT(c.course_name SEPARATOR ', ') AS courses
-        FROM teachers t
-        JOIN users u ON t.user_id = u.id
-        LEFT JOIN teacher_courses tc ON t.id = tc.teacher_id
-        LEFT JOIN courses c ON tc.course_id = c.id
-        WHERE u.role = 'Teacher'
-        GROUP BY t.id
-    """;
+                    SELECT t.id, t.user_id, u.fullname, u.username, u.email, t.birthday, t.phone,
+                                        GROUP_CONCAT(c.course_name SEPARATOR ', ') AS courses
+                                 FROM teachers t
+                                 JOIN users u ON t.user_id = u.id
+                                 LEFT JOIN teacher_courses tc ON t.id = tc.teacher_id
+                                 LEFT JOIN courses c ON tc.course_id = c.id
+                                 WHERE u.role = 'Teacher'
+                                 GROUP BY t.id
+                """;
 
         try (Connection conn = DBConnection.getConn();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(query)){
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 Teacher teacher = new Teacher(
                         rs.getInt("id"),
+                        rs.getInt("user_id"),
                         rs.getString("fullname"),
                         rs.getString("username"),
                         rs.getString("email"),
@@ -131,18 +147,23 @@ public class TeacherViewController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/teacherManagement/update-teacher-view.fxml"));
-            Parent root = loader.load();
+            FXMLLoader loader = SceneSwitch.loadView("view/admin/teacherManagement/update-teacher-view.fxml");
+            if (loader != null) {
+                EditTeacherController controller = loader.getController();
+                controller.setTeacher(teacher); // Truyền dữ liệu ghế cần chỉnh sửa
 
-            // Gửi dữ liệu teacher sang controller của update-teacher.fxml
-            EditTeacherController controller = loader.getController();
-            controller.setTeacher(teacher);
+                Parent newView = loader.getRoot();
+                StackPane pane = (StackPane) tableView_Teacher.getScene().getRoot();
+                BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Update Teacher");
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
+                if (mainPane != null) {
+                    mainPane.setCenter(newView);
+                } else {
+                    System.err.println("BorderPane with ID 'mainBorderPane' not found");
+                }
+            } else {
+                System.err.println("Could not load edit-seat.fxml");
+            }
 
             // Sau khi đóng form update, reload lại danh sách
             loadTeachers();
@@ -152,7 +173,7 @@ public class TeacherViewController {
         }
     }
 
-    private void handleDelete(Teacher teacher) {
+    private void handleDelete(Teacher teacher)  {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Delete Confirmation");
         confirm.setHeaderText(null);
@@ -207,20 +228,20 @@ public class TeacherViewController {
     }
 
 
-    public void changeSceneAdd(){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/teacherManagement/add-new-teacher.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) tableView_Teacher.getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void changeSceneAdd(ActionEvent event) {
+        FXMLLoader loader = SceneSwitch.loadView("view/admin/teacherManagement/add-new-teacher.fxml");
+        if (loader != null) {
+            Parent newView = loader.getRoot(); // Lấy Root từ FXMLLoader
+            StackPane pane = (StackPane) ((Node) event.getSource()).getScene().getRoot();
+            BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
+            mainPane.setCenter(newView); // Thay đổi nội dung của center
+        } else {
+            System.err.println("Failed to load addnew-user.fxml");
         }
 
-    };
+    }
+
+    ;
 
     private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
@@ -231,11 +252,7 @@ public class TeacherViewController {
     }
 
 
-
-
-
-
-
-
-
+    public void handleReload(ActionEvent actionEvent) {
+        loadTeachers();
+    }
 }

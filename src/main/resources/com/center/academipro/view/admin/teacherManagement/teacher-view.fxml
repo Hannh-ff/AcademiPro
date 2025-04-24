@@ -29,7 +29,7 @@
                     </font>
                 </TextField>
                 <Button onAction="#changeSceneAdd" layoutX="746.0" layoutY="9.0" mnemonicParsing="false"  prefHeight="31.0" prefWidth="74.0" styleClass="btn-add" text="Add new" AnchorPane.rightAnchor="22.0" />
-                <Button layoutX="643.0" layoutY="9.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="74.0" text="ReLoad" AnchorPane.rightAnchor="125.0" />
+                <Button onAction="#handleReload" layoutX="643.0" layoutY="9.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="74.0" text="ReLoad" AnchorPane.rightAnchor="125.0" />
             </children>
         </AnchorPane>
         <AnchorPane layoutX="20.0" layoutY="135.0" prefHeight="409.0" prefWidth="842.0" stylesheets="@../../../css/thao.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="135.0">

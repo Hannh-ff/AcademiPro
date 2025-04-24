@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,7 +38,7 @@ public class LoginController {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     String dbPassword = rs.getString("password");
-                    if (dbPassword.equals(password)) {
+                    if (dbPassword.equals(hashPassword(password))) {
                         user = new Users();
                         user.setId(rs.getInt("id"));
                         user.setFullName(rs.getString("fullname"));
@@ -49,6 +51,8 @@ public class LoginController {
                 }
                 // Nếu không tìm thấy người dùng hoặc mật khẩu không khớp
                 return null;
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -78,7 +82,7 @@ public class LoginController {
                     // chuyển đến giao diện học viên
                     System.out.println("Login successful with role: Student");
                     Stage currentStage3 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                    SceneSwitch.switchTo(currentStage3, "view/student/list-courses.fxml");
+                    SceneSwitch.switchTo(currentStage3, "view/student/menu-bar-view.fxml");
                     break;
                 default:
                     System.out.println("Role not recognized");
@@ -93,4 +97,14 @@ public class LoginController {
         }
 
     }
+
+    private String hashPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hashed = md.digest(password.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hashed) sb.append(String.format("%02x", b));
+        return sb.toString();
+    }
+
+
 }

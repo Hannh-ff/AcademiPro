@@ -4,6 +4,7 @@ module com.center.academipro {
     requires java.sql;
     requires jdk.security.auth;
     requires mysql.connector.j;
+    requires java.desktop;
 
     opens com.center.academipro to javafx.fxml;
     opens com.center.academipro.view to javafx.fxml;
