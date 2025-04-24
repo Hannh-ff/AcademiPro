@@ -70,7 +70,6 @@ public class AddStudentController implements Initializable {
         }
     }
 
-
     @FXML
     private void addStudent() {
         String fullNameValue = fullName.getText().trim();
