@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane prefHeight="564.0" prefWidth="882.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -22,7 +22,7 @@
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="137.0" prefWidth="1000.0">
                            <children>
-                              <AnchorPane layoutX="26.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" style="-fx-background-color: #1fb4ff;" styleClass="shadow" stylesheets="@../../css/thao.css">
+                              <AnchorPane layoutX="26.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" styleClass="main-color" stylesheets="@../../css/thao.css">
                                  <children>
                                     <Label layoutX="21.0" layoutY="14.0" text="Total Student" textFill="WHITE">
                                        <font>
@@ -36,7 +36,7 @@
                                     </Label>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane layoutX="286.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" style="-fx-background-color: #1fb4ff;" styleClass="shadow" stylesheets="@../../css/thao.css">
+                              <AnchorPane layoutX="286.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" styleClass="main-color" stylesheets="@../../css/thao.css">
                                  <children>
                                     <Label layoutX="18.0" layoutY="17.0" text="Total Teacher" textFill="WHITE">
                                        <font>
@@ -50,7 +50,7 @@
                                     </Label>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane layoutX="539.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" style="-fx-background-color: #1fb4ff;" styleClass="shadow" stylesheets="@../../css/thao.css">
+                              <AnchorPane layoutX="539.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" styleClass="main-color" stylesheets="@../../css/thao.css">
                                  <children>
                                     <Label layoutX="18.0" layoutY="17.0" text="Total Course" textFill="WHITE">
                                        <font>
@@ -64,7 +64,7 @@
                                     </Label>
                                  </children>
                               </AnchorPane>
-                              <AnchorPane layoutX="786.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" style="-fx-background-color: #1fb4ff;" styleClass="shadow" stylesheets="@../../css/thao.css">
+                              <AnchorPane layoutX="786.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" styleClass="main-color" stylesheets="@../../css/thao.css">
                                  <children>
                                     <Label layoutX="18.0" layoutY="17.0" text="Total Income" textFill="WHITE">
                                        <font>

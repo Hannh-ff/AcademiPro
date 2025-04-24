@@ -123,7 +123,7 @@ public class StudentViewController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/studentManagement/update-student-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/studentManagement/edit-student-view.fxml"));
             Parent root = loader.load();
 
             // Gửi dữ liệu teacher sang controller của update-teacher.fxml
