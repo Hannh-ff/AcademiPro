@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" prefHeight="600.0" prefWidth="800.0"
-            style="-fx-background-color: linear-gradient(to bottom right, #f6f6f6, #e8e8e8);"
+<BorderPane xmlns:fx="http://javafx.com/fxml"
             xmlns="http://javafx.com/javafx/23.0.1"
-            fx:controller="com.center.academipro.controller.student.ListCoursesController">
+            fx:controller="com.center.academipro.controller.student.PurchasedCoursesController"
+            prefHeight="600.0" prefWidth="800.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #f6f6f6, #e8e8e8);">
     <top>
         <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-background-radius: 10;">
-            <Label text="Courses List" style="-fx-font-weight: bold; -fx-font-size: 20px;"/>
+            <Label text="My Purchased Courses" style="-fx-font-weight: bold; -fx-font-size: 20px;"/>
             <TextField fx:id="searchField" promptText="Search" style="-fx-pref-width: 300;" HBox.hgrow="ALWAYS"/>
         </VBox>
     </top>
@@ -20,8 +22,8 @@
         <VBox>
             <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
                 <content>
-                    <VBox fx:id="courseListVBox" spacing="20" style="-fx-padding: 20;">
-                        <!-- Các course sẽ được thêm vào đây bằng code -->
+                    <VBox fx:id="purchasedCoursesVBox" spacing="20" style="-fx-padding: 20;">
+                        <!-- Các khóa học đã mua sẽ được thêm vào đây bằng code -->
                     </VBox>
                 </content>
             </ScrollPane>

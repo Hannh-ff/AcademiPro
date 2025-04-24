@@ -4,10 +4,12 @@ import com.center.academipro.utils.SceneSwitch;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -16,26 +18,12 @@ public class MenuBarController {
     private BorderPane mainBorderPane;
     @FXML
     private Button btnDashboard, btnTeacher, btnCourse, btnPayment, btnStudent, btnClass;
-//    @FXML
-//    public void initialize() {
-////        btnDashboard.setOnAction(e -> loadPage("dashboard.fxml"));
-//        btnTeacher.setOnAction(e -> loadPage("view/admin/teacher-view.fxml"));
-////        btnCourse.setOnAction(e -> loadPage("course.fxml"));
-////        btnPayment.setOnAction(e -> loadPage("payment.fxml"));
-////        btnStudent.setOnAction(e -> loadPage("student.fxml"));
-////        btnClass.setOnAction(e -> loadPage("student.fxml"));
-//
-//        loadPage("dashboard.fxml");
-//    }
-//    private void loadPage(String fxmlFile) {
-//        try {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/" + fxmlFile));
-//            AnchorPane pane = loader.load();
-//            mainBorderPane.setCenter(pane);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    @FXML
+    public void changePasswordScene(ActionEvent event) {
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        SceneSwitch.switchTo(currentStage, "view/change-password-view.fxml");
+    }
 
     public void dashboardScene(ActionEvent actionEvent) {
         FXMLLoader loader = SceneSwitch.loadView("view/admin/adminMainForm.fxml"); // Thêm đường dẫn đến file FXML của dashboard
@@ -79,4 +67,18 @@ public class MenuBarController {
         mainBorderPane.setCenter(newView);
     }
 
+
+    public void listCoursesScene(ActionEvent actionEvent) {
+        FXMLLoader loader = SceneSwitch.loadView("view/student/list-courses.fxml");
+        assert loader != null;
+        Parent newView = loader.getRoot();
+        mainBorderPane.setCenter(newView);
+    }
+
+    public void historyScene(ActionEvent actionEvent) {
+        FXMLLoader loader = SceneSwitch.loadView("view/student/purchased-courses.fxml");
+        assert loader != null;
+        Parent newView = loader.getRoot();
+        mainBorderPane.setCenter(newView);
+    }
 }

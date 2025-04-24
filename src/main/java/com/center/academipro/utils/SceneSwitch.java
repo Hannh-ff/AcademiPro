@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -71,12 +72,12 @@ public class SceneSwitch {
         }
     }
 
-    public static void backToView(ActionEvent actionEvent, String fxmlFile) {
+    public static void returnToView(ActionEvent actionEvent, String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(SceneSwitch.class.getResource("/com/center/academipro/" + fxmlFile));
             Parent seatView = loader.load();
 
-            AnchorPane root = (AnchorPane) ((Button) actionEvent.getSource()).getScene().getRoot();
+            StackPane root = (StackPane) ((Button) actionEvent.getSource()).getScene().getRoot();
             BorderPane mainPane = (BorderPane) root.lookup("#mainBorderPane");
 
             if (mainPane != null) {

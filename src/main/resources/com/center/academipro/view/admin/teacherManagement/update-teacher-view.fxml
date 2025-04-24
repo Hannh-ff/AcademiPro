@@ -80,9 +80,9 @@
                 </Label>
                 <Separator layoutY="31.0" prefHeight="9.0" prefWidth="231.0" />
                 <Button onAction="#updateTeacher" layoutX="19.0" layoutY="51.0" mnemonicParsing="false"  prefHeight="37.0" prefWidth="75.0" styleClass="btn-update" text="Update" />
-                <Button layoutX="131.0" layoutY="51.0" mnemonicParsing="false"  prefHeight="37.0" prefWidth="75.0" styleClass="btn-clear" text="Clear" />
+                <Button onAction="#clearTeacher" layoutX="131.0" layoutY="51.0" mnemonicParsing="false"  prefHeight="37.0" prefWidth="75.0" styleClass="btn-clear" text="Clear" />
             </children>
         </AnchorPane>
-        <Button layoutX="355.0" layoutY="398.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="222.0" styleClass="btn-delete" text="Cancel" />
+        <Button onAction="#handleCancel" layoutX="355.0" layoutY="398.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="222.0" styleClass="btn-delete" text="Cancel" />
     </children>
 </AnchorPane>

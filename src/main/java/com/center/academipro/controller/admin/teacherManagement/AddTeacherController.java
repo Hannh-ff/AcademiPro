@@ -2,11 +2,19 @@ package com.center.academipro.controller.admin.teacherManagement;
 
 import com.center.academipro.models.Course;
 import com.center.academipro.utils.DBConnection;
+import com.center.academipro.utils.SceneSwitch;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,7 +54,7 @@ public class AddTeacherController implements Initializable {
             pstUser.setString(1, fullNameValue);
             pstUser.setString(2, usernameValue);
             pstUser.setString(3, emailValue);
-            pstUser.setString(4, "123456"); // mật khẩu mặc định (bạn nên mã hóa với BCrypt)
+            pstUser.setString(4, hashPassword("123456")); // mật khẩu mặc định (bạn nên mã hóa với BCrypt)
 
             pstUser.executeUpdate();
             ResultSet rsUser = pstUser.getGeneratedKeys();
@@ -132,6 +140,18 @@ public class AddTeacherController implements Initializable {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Could not load course list.");
         }
+    }
+
+    public void handleCancel(ActionEvent actionEvent) {
+        SceneSwitch.returnToView(actionEvent, "view/admin/teacherManagement/teacher-view.fxml");
+    }
+
+    private String hashPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hashed = md.digest(password.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hashed) sb.append(String.format("%02x", b));
+        return sb.toString();
     }
 
 }

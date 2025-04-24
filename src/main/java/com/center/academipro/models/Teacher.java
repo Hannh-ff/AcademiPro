@@ -15,6 +15,7 @@ import java.time.LocalDate;
 
 public class Teacher {
     private IntegerProperty id;
+    private IntegerProperty userId;
     private StringProperty fullname;
     private StringProperty username;
     private StringProperty email;
@@ -25,14 +26,38 @@ public class Teacher {
 
 
     public Teacher(){}
-    public Teacher(int id, String fullname, String username, String email, LocalDate birthday, String phone, String courses) {
+
+//    public Teacher(int id, String fullname, String username, String email, LocalDate birthday, String phone, String courses) {
+//        this.id = new SimpleIntegerProperty(id);
+//        this.fullname = new SimpleStringProperty(fullname);
+//        this.username = new SimpleStringProperty(username);
+//        this.email = new SimpleStringProperty(email);
+//        this.birthday = new SimpleObjectProperty<>(birthday);
+//        this.phone = new SimpleStringProperty(phone);
+//        this.courses = new SimpleStringProperty(courses);
+//    }
+
+    public Teacher(int id, int userId, String fullname, String username, String email, LocalDate birthday, String phone, String courses) {
         this.id = new SimpleIntegerProperty(id);
+        this.userId = new SimpleIntegerProperty(userId);
         this.fullname = new SimpleStringProperty(fullname);
         this.username = new SimpleStringProperty(username);
         this.email = new SimpleStringProperty(email);
         this.birthday = new SimpleObjectProperty<>(birthday);
         this.phone = new SimpleStringProperty(phone);
         this.courses = new SimpleStringProperty(courses);
+    }
+
+    public int getUserId() {
+        return userId.get();
+    }
+
+    public IntegerProperty userIdProperty() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId.set(userId);
     }
 
     public IntegerProperty idProperty() { return id; }

@@ -3,6 +3,8 @@ package com.center.academipro.controller.admin.teacherManagement;
 import com.center.academipro.models.Course;
 import com.center.academipro.models.Teacher;
 import com.center.academipro.utils.DBConnection;
+import com.center.academipro.utils.SceneSwitch;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -15,12 +17,18 @@ import java.util.ResourceBundle;
 
 public class EditTeacherController implements Initializable {
 
-    @FXML private TextField fullName;
-    @FXML private TextField username;
-    @FXML private TextField email;
-    @FXML private DatePicker birthday;
-    @FXML private TextField phone;
-    @FXML private ListView<Course> courseListView; // hoặc ListView<Course> nếu có custom cell
+    @FXML
+    private TextField fullName;
+    @FXML
+    private TextField username;
+    @FXML
+    private TextField email;
+    @FXML
+    private DatePicker birthday;
+    @FXML
+    private TextField phone;
+    @FXML
+    private ListView<Course> courseListView; // hoặc ListView<Course> nếu có custom cell
 
     private int userId; // ID của user đang được chỉnh sửa
 
@@ -28,7 +36,7 @@ public class EditTeacherController implements Initializable {
     public void setTeacher(Teacher teacher) {
         if (teacher == null) return;
 
-        this.userId = teacher.getId();
+        this.userId = teacher.getUserId();
         fullName.setText(teacher.getFullname());
         username.setText(teacher.getUsername());
         email.setText(teacher.getEmail());
@@ -50,10 +58,8 @@ public class EditTeacherController implements Initializable {
         }
     }
 
-
-
     @FXML
-    private void updateTeacher() {
+    private void updateTeacher(ActionEvent actionEvent) {
         String fullnameStr = fullName.getText();
         String usernameStr = username.getText();
         String emailStr = email.getText();
@@ -64,6 +70,25 @@ public class EditTeacherController implements Initializable {
 
         try (Connection conn = DBConnection.getConnection()) {
             conn.setAutoCommit(false); // Begin transaction
+
+            // 0. Check if email already exists and is used by another user
+            String checkEmailSQL = "SELECT id FROM users WHERE email = ? AND id != ?";
+            boolean emailExists = false;
+            try (PreparedStatement checkPs = conn.prepareStatement(checkEmailSQL)) {
+                checkPs.setString(1, emailStr);
+                checkPs.setInt(2, userId); // chính xác phải khác ID hiện tại
+                try (ResultSet rs = checkPs.executeQuery()) {
+                    if (rs.next()) {
+                        int existingId = rs.getInt("id");
+                        System.out.println("Trùng email với userId: " + existingId);
+                        emailExists = true;
+                    }
+                }
+            }
+            if (emailExists) {
+                showAlert("Email is already in use by another user!", Alert.AlertType.ERROR);
+                return;
+            }
 
             // 1. Update user table
             String sqlUser = "UPDATE users SET fullname = ?, username = ?, email = ? WHERE id = ?";
@@ -107,11 +132,12 @@ public class EditTeacherController implements Initializable {
             }
 
             conn.commit(); // Commit all updates
-            showAlert( "Teacher updated successfully!", Alert.AlertType.INFORMATION);
+            showAlert("Teacher updated successfully!", Alert.AlertType.INFORMATION);
+            SceneSwitch.returnToView(actionEvent, "view/admin/teacherManagement/teacher-view.fxml");
 
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert( "Failed to update teacher: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Failed to update teacher: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
@@ -137,7 +163,7 @@ public class EditTeacherController implements Initializable {
         return -1;
     }
 
-    private void showAlert( String message, Alert.AlertType type) {
+    private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle("Thông báo");
         alert.setHeaderText(null);
@@ -148,7 +174,6 @@ public class EditTeacherController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         courseListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        loadCourses();
     }
 
     private void loadCourses() {
@@ -165,7 +190,21 @@ public class EditTeacherController implements Initializable {
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert( "Could not load course list.",Alert.AlertType.ERROR);
+            showAlert("Could not load course list.", Alert.AlertType.ERROR);
         }
+    }
+
+    @FXML
+    public void clearTeacher() {
+        fullName.clear();
+        username.clear();
+        email.clear();
+        phone.clear();
+        birthday.setValue(null);
+        courseListView.getSelectionModel().clearSelection();
+    }
+
+    public void handleCancel(ActionEvent actionEvent) {
+        SceneSwitch.returnToView(actionEvent, "view/admin/teacherManagement/teacher-view.fxml");
     }
 }
