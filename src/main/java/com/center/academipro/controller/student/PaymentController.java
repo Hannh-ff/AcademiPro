@@ -1,6 +1,5 @@
-package com.center.academipro.controller;
+package com.center.academipro.controller.student;
 
-import com.center.academipro.models.Payment;
 import com.center.academipro.models.Enrollment;
 import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.DBConnection;
