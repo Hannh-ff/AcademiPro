@@ -11,10 +11,26 @@
     -fx-background-color: linear-gradient(to bottom right, #0a3d91, #0b2e6f);
 }
 .btn{
-    -fx-background-color: linear-gradient(to bottom right, #3a8dde, #00a2ff);
+    -fx-background-color: linear-gradient(to bottom right, #3998ff, #7ccfff);
     -fx-text-fill:#fff;
     -fx-font-family: Arial;
     -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-background-radius:12px;
+}
+.btn-back{
+    -fx-background-color: White;
+    -fx-text-fill:#00000;
+    -fx-font-size: 14px;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+.btn-back:hover{
+    -fx-background-color: linear-gradient(to bottom right, #ff1e56, #ff4b2b);
+    -fx-text-fill:#fff;
+    -fx-font-family: Arial;
+    -fx-font-size: 14px;
+     -fx-background-radius:12px;
     -fx-cursor: hand;
 }
 .btn-add{
@@ -80,4 +96,33 @@
 }
 .main-text{
     -fx-text-fill: linear-gradient(to bottom right, #0d47a1, #1565c0);
+}
+.border{
+-fx-border-color: rgba(0, 0, 0, 0.3);
+-fx-border-width: 1;
+-fx-border-radius: 8px;
+}
+.radio-button {
+    -fx-border-color: gray;
+    -fx-border-width: 1;
+    -fx-border-radius: 8px;
+    -fx-padding: 5px;
+}
+.radio-button:selected {
+    -fx-border-color: #007bff;
+}
+.radio-button .radio {
+    -fx-background-color: lightgray;
+}
+
+.radio-button:selected .radio {
+    -fx-background-color: #007bff; /* Màu khi được chọn */
+}
+
+.radio-button .dot {
+    -fx-background-color: #007bff; /* Chấm tròn trong */
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: #007bff; /* Chấm tròn khi chọn */
 }
