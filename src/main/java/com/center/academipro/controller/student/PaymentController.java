@@ -1,96 +1,108 @@
 package com.center.academipro.controller.student;
 
-import com.center.academipro.models.Enrollment;
-import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.DBConnection;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
-import java.sql.*;
-import java.time.LocalDate;
+import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Alert.AlertType;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class PaymentController {
 
     @FXML
-    private TableView<Enrollment> enrollmentTable;
-    @FXML
-    private TableColumn<Enrollment, String> courseNameColumn;
-    @FXML
-    private TableColumn<Enrollment, String> statusColumn;
-    @FXML
-    private Button payButton;
-
-    private ObservableList<Enrollment> enrollments = FXCollections.observableArrayList();
+    private RadioButton cashPayment;
 
     @FXML
+    private RadioButton onlinePayment;
+
+    @FXML
+    private Label courseName;
+
+    @FXML
+    private Label priceCourse;
+
+    @FXML
+    private Label amountPayment;
+
+    @FXML
+    private Label total;
+
+    @FXML
+    private ImageView imageCourse;
+
+    @FXML
+    private Text descripCousre;
+
+    private ToggleGroup paymentMethodGroup;
+
+    // ID của học sinh và khóa học - bạn phải truyền giá trị này vào trước khi thanh toán(hoàng nhớ truyen vào)
+    private int studentId;
+    private int courseId;
+
     public void initialize() {
-        courseNameColumn.setCellValueFactory(cellData -> cellData.getValue().courseNameProperty());
-        statusColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
-
-        loadEnrollments();
+        paymentMethodGroup = new ToggleGroup();
+        cashPayment.setToggleGroup(paymentMethodGroup);
+        onlinePayment.setToggleGroup(paymentMethodGroup);
     }
 
-    private void loadEnrollments() {
-        enrollments.clear();
-        String username = SessionManager.getInstance().getUsername();
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT e.id, c.name, e.status FROM enrollments e JOIN classes cl ON e.class_id = cl.id " +
-                             "JOIN courses c ON cl.course_id = c.id WHERE e.student_id = ?")) {
-
-            stmt.setInt(1, Integer.parseInt(username));
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                int enrollmentId = rs.getInt("id");
-                String courseName = rs.getString("name");
-                String status = rs.getString("status");
-                enrollments.add(new Enrollment(enrollmentId, courseName, status));
-            }
-            enrollmentTable.setItems(enrollments);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void setStudentAndCourse(int studentId, int courseId) {
+        this.studentId = studentId;
+        this.courseId = courseId;
     }
 
     @FXML
-    private void handlePayment() {
-        Enrollment selected = enrollmentTable.getSelectionModel().getSelectedItem();
-        if (selected == null) {
-            showAlert("Vui lòng chọn một khóa học để thanh toán!");
-            return;
+    private void handlePayment(ActionEvent event) {
+        if (cashPayment.isSelected()) {
+            payByCash();
+        } else if (onlinePayment.isSelected()) {
+            payOnline(); // Nếu sau này bạn cần thanh toán online
+        } else {
+            showAlert(AlertType.WARNING, "Payment Method", "Please select a payment method!");
         }
+    }
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "INSERT INTO payments (enrollment_id, amount, payment_date, method) VALUES (?, ?, ?, ?)")) {
-            stmt.setInt(1, selected.getId());
-            stmt.setDouble(2, 1000000); // giá giả định
-            stmt.setDate(3, Date.valueOf(LocalDate.now()));
-            stmt.setString(4, "Tiền mặt");
+    private void payByCash() {
+        try {
+            Connection conn = DBConnection.getConnection();
+            String sql = "INSERT INTO payments (student_id, course_id, amount, payment_method, payment_status, payment_date) VALUES (?, ?, ?, ?, ?, ?)";
 
-            stmt.executeUpdate();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, studentId);
+            pstmt.setInt(2, courseId);
+            pstmt.setBigDecimal(3, new java.math.BigDecimal(total.getText()));
+            pstmt.setString(4, "Cash");
+            pstmt.setString(5, "Completed");
+            pstmt.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
 
-            updateEnrollmentStatus(selected.getId());
-            showAlert("Thanh toán thành công!");
-            loadEnrollments();
-        } catch (SQLException e) {
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                showAlert(AlertType.INFORMATION, "Payment Successful", "Cash payment completed successfully!");
+            } else {
+                showAlert(AlertType.ERROR, "Payment Failed", "Payment failed. Please try again.");
+            }
+
+            conn.close();
+        } catch (Exception e) {
             e.printStackTrace();
+            showAlert(AlertType.ERROR, "Error", "An error occurred during payment: " + e.getMessage());
         }
     }
 
-    private void updateEnrollmentStatus(int enrollmentId) throws SQLException {
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("UPDATE enrollments SET status = 'paid' WHERE id = ?")) {
-            stmt.setInt(1, enrollmentId);
-            stmt.executeUpdate();
-        }
+    private void payOnline() {
+        showAlert(AlertType.INFORMATION, "Coming Soon", "Online payment not implemented yet.");
     }
 
-    private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    private void showAlert(AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
         alert.setContentText(message);
         alert.showAndWait();
     }
 }
+
