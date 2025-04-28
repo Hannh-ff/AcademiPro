@@ -4,64 +4,63 @@ package com.center.academipro.models;
 import java.time.LocalDate;
 
 public class Payment {
-    private int id;
-    private int enrollmentId;
-    private double amount;
-    private LocalDate paymentDate;
-    private String method;
+   private int id;
+   private String studentName;
+   private String courseName;
+   private String paymentMethod;
+   private String paymentStatus;
+   private double price;
+   private LocalDate paymentDate;
 
-    public Payment(int id, int enrollmentId, double amount, LocalDate paymentDate, String method) {
-        this.id = id;
-        this.enrollmentId = enrollmentId;
-        this.amount = amount;
-        this.paymentDate = paymentDate;
-        this.method = method;
+    public Payment(int id, String studentName, String courseName, String paymentMethod, String paymentStatus, double price, LocalDate paymentDate) {
+         this.id = id;
+         this.studentName = studentName;
+         this.courseName = courseName;
+         this.paymentMethod = paymentMethod;
+         this.paymentStatus = paymentStatus;
+         this.price = price;
+         this.paymentDate = paymentDate;
     }
-
-    public Payment(int enrollmentId, double amount, LocalDate paymentDate, String method) {
-        this(-1, enrollmentId, amount, paymentDate, method);
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
-    public int getEnrollmentId() {
-        return enrollmentId;
+    public String getStudentName() {
+        return studentName;
     }
-
-    public void setEnrollmentId(int enrollmentId) {
-        this.enrollmentId = enrollmentId;
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
-
+    public String getCourseName() {
+        return courseName;
+    }
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+    public double getPrice() {
+        return price;
+    }
+    public void setPrice(double price) {
+        this.price = price;
+    }
     public LocalDate getPaymentDate() {
         return paymentDate;
     }
-
     public void setPaymentDate(LocalDate paymentDate) {
         this.paymentDate = paymentDate;
     }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-
-
 }

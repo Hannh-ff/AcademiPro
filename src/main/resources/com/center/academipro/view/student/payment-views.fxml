@@ -133,7 +133,7 @@
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <Button layoutX="27.0" layoutY="427.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="234.0" styleClass="btn" text="Payment" />
+                  <Button layoutX="27.0" onAction="#handlePayment" layoutY="427.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="234.0" styleClass="btn" text="Payment" />
                   <Separator layoutX="21.0" layoutY="404.0" prefHeight="10.0" prefWidth="250.0" />
                   <Button layoutX="27.0" layoutY="482.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="234.0" styleClass="btn-back" text="Cancel" />
                </children>
