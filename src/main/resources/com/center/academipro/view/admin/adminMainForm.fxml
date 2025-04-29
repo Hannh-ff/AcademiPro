@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.DashboardController">
    <children>
       <AnchorPane prefHeight="564.0" prefWidth="882.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -29,7 +29,7 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label alignment="TOP_RIGHT" layoutX="117.0" layoutY="57.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
+                                    <Label fx:id="lblTotalStudent" alignment="TOP_RIGHT" layoutX="117.0" layoutY="57.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
@@ -43,7 +43,7 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label alignment="TOP_RIGHT" layoutX="114.0" layoutY="60.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
+                                    <Label fx:id="lblTotalTeacher" alignment="TOP_RIGHT" layoutX="114.0" layoutY="60.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
@@ -57,7 +57,7 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label alignment="TOP_RIGHT" layoutX="114.0" layoutY="60.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
+                                    <Label fx:id="lblTotalCourse" alignment="TOP_RIGHT" layoutX="114.0" layoutY="60.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
@@ -71,7 +71,7 @@
                                           <Font name="System Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <Label alignment="TOP_RIGHT" layoutX="114.0" layoutY="60.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
+                                    <Label fx:id="lblTotalIncome" alignment="TOP_RIGHT" layoutX="114.0" layoutY="60.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
                                        <font>
                                           <Font size="24.0" />
                                        </font>
@@ -93,7 +93,7 @@
                         <String fx:value="white-bg" />
                      </styleClass>
                      <children>
-                        <AreaChart layoutX="-30.0" layoutY="-30.0" prefHeight="370.00000000000006" prefWidth="470.0" title="Student" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <AreaChart fx:id="AreaTimeStudent" layoutX="-30.0" layoutY="-30.0" prefHeight="370.00000000000006" prefWidth="470.0" title="Student" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -110,7 +110,7 @@
                         <String fx:value="white-bg" />
                      </styleClass>
                      <children>
-                        <BarChart prefHeight="400.0" prefWidth="500.0" title="Teacher" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <BarChart fx:id="BarChartTeachers" prefHeight="400.0" prefWidth="500.0" title="Teacher" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -130,7 +130,7 @@
                         <URL value="@../../css/thao.css" />
                      </stylesheets>
                      <children>
-                        <LineChart prefHeight="400.0" prefWidth="500.0" title="Income" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <LineChart fx:id="LineIncome" prefHeight="400.0" prefWidth="500.0" title="Income" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
