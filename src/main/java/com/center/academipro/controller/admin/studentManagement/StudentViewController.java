@@ -1,18 +1,27 @@
 package com.center.academipro.controller.admin.studentManagement;
 
+import com.center.academipro.controller.admin.teacherManagement.EditTeacherController;
 import com.center.academipro.models.Student;
+import com.center.academipro.models.Teacher;
 import com.center.academipro.utils.DBConnection;
+import com.center.academipro.utils.SceneSwitch;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -20,6 +29,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class StudentViewController {
@@ -33,26 +43,35 @@ public class StudentViewController {
     @FXML private TableColumn<Student, String> studentCourse;
     @FXML private TableColumn<Student, String> studentClass;
     @FXML private TableColumn<Student, Void> studentAction;
+    @FXML private TextField searchField;
+    @FXML private Label pageIndicator;
+
+    private final ObservableList<Student> studentList = FXCollections.observableArrayList();
+    private FilteredList<Student> filteredStudent;
+    private static final int ITEMS_PER_PAGE = 4;
+    private int currentPage = 0;
 
     @FXML
     public void initialize() {
-        studentId.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
-        studentName.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFullName()));
-        studentUser.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getUsername()));
-        studentEmail.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmail()));
-        studentBirth.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getBirthday()));
-        studentPhone.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getPhone()));
-        studentCourse.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCourse()));
-        studentClass.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getClassName()));
+        studentId.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
+        studentName.setCellValueFactory(cellData -> cellData.getValue().fullNameProperty());
+        studentUser.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
+        studentEmail.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
+        studentBirth.setCellValueFactory(cellData -> cellData.getValue().birthdayProperty());
+        studentPhone.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
+        studentCourse.setCellValueFactory(cellData -> cellData.getValue().courseProperty());
+        studentClass.setCellValueFactory(cellData-> cellData.getValue().classNameProperty());
 
         setUpActionColumn();
         loadStudent();
+        setupSearchFilter();
     }
 
     private void loadStudent() {
-        ObservableList<Student> studentList = FXCollections.observableArrayList();
+        studentList.clear();
+        
         String sql = """
-            SELECT s.id, u.fullname, u.username, u.email, s.birthday, s.phone, c.course_name, cl.class_name
+            SELECT s.id, s.user_id, u.fullname, u.username, u.email, s.birthday, s.phone, c.course_name, cl.class_name
             FROM students s
             JOIN users u ON s.user_id = u.id
             JOIN student_classes sc ON sc.student_id = s.id
@@ -67,6 +86,7 @@ public class StudentViewController {
             while (rs.next()) {
                 Student student = new Student(
                         rs.getInt("id"),
+                        rs.getInt("user_id"),
                         rs.getString("fullname"),
                         rs.getString("username"),
                         rs.getString("email"),
@@ -78,12 +98,19 @@ public class StudentViewController {
                 studentList.add(student);
             }
 
+            if (filteredStudent != null) {
+                // Nếu filteredStudent đã khởi tạo rồi thì chỉ cần render lại
+                currentPage = 0;
+                renderPage(currentPage);
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
+            showAlert("Error loading students: " + e.getMessage(), Alert.AlertType.ERROR);
         }
-
-        tableView_Student.setItems(studentList);
+        
     }
+
     private void setUpActionColumn() {
         studentAction.setCellFactory(param -> new TableCell<>() {
             private final Button updateBtn = new Button("Update");
@@ -103,6 +130,7 @@ public class StudentViewController {
 
                 updateBtn.setStyle("-fx-background-color: linear-gradient(to bottom right, #a18cd1, #fbc2eb); -fx-text-fill: white;");
                 deleteBtn.setStyle("-fx-background-color: linear-gradient(to bottom right, #ff1e56, #ff4b2b); -fx-text-fill: white;");
+                btnBox.setAlignment(Pos.CENTER);
             }
 
             @Override
@@ -116,6 +144,7 @@ public class StudentViewController {
             }
         });
     }
+
     private void handleUpdate(Student student) {
         if (student == null) {
             System.out.println("Student is null. Cannot open update view.");
@@ -123,18 +152,23 @@ public class StudentViewController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/studentManagement/edit-student-view.fxml"));
-            Parent root = loader.load();
+            FXMLLoader loader = SceneSwitch.loadView("view/admin/studentManagement/edit-student-view.fxml");
+            if (loader != null) {
+                EditStudentController controller = loader.getController();
+                controller.setStudent(student); // Truyền dữ liệu ghế cần chỉnh sửa
 
-            // Gửi dữ liệu teacher sang controller của update-teacher.fxml
-            EditStudentController controller = loader.getController();
-            controller.setStudent(student);
+                Parent newView = loader.getRoot();
+                StackPane pane = (StackPane) tableView_Student.getScene().getRoot();
+                BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
 
-            Stage stage = new Stage();
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Update Teacher");
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
+                if (mainPane != null) {
+                    mainPane.setCenter(newView);
+                } else {
+                    System.err.println("BorderPane with ID 'mainBorderPane' not found");
+                }
+            } else {
+                System.err.println("Could not load edit-seat.fxml");
+            }
 
             // Sau khi đóng form update, reload lại danh sách
             loadStudent();
@@ -143,6 +177,7 @@ public class StudentViewController {
             e.printStackTrace();
         }
     }
+
     private void handleDelete(Student student) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Delete Confirmation");
@@ -196,6 +231,7 @@ public class StudentViewController {
             }
         });
     }
+
     private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(type.name());
@@ -203,19 +239,89 @@ public class StudentViewController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    public void changeSceneAdd(){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/admin/studentManagement/add-new-student.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = (Stage) tableView_Student.getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void changeSceneAdd(ActionEvent event) {
+        FXMLLoader loader = SceneSwitch.loadView("view/admin/studentManagement/add-new-student.fxml");
+        if (loader != null) {
+            Parent newView = loader.getRoot(); // Lấy Root từ FXMLLoader
+            StackPane pane = (StackPane) ((Node) event.getSource()).getScene().getRoot();
+            BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
+            mainPane.setCenter(newView); // Thay đổi nội dung của center
+        } else {
+            System.err.println("Failed to load addnew-user.fxml");
         }
 
-    };
+    }
+
+    public void handleReload(ActionEvent actionEvent) {
+        loadStudent();
+    }
+
+    private void setupSearchFilter(){
+
+        filteredStudent = new FilteredList<>(studentList, p -> true);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("Search: " + newValue);
+
+            filteredStudent.setPredicate(student ->{
+                if (newValue == null || newValue.trim().isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                boolean match = student.getUsername().toLowerCase().contains(lowerCaseFilter);
+
+                if (match) {
+                    System.out.println("Matched: " + student.getUsername());
+                }
+                return match;
+            });
+
+
+            System.out.println("Filtered : " + filteredStudent.size());
+            currentPage = 0;
+            renderPage(currentPage);
+        });
+
+        renderPage(currentPage);
+    }
+
+    private void renderPage(int page) {
+        int start = page * ITEMS_PER_PAGE;
+        int end = Math.min(start + ITEMS_PER_PAGE, filteredStudent.size());
+
+        // Lấy danh sách con (subList) cho trang hiện tại
+        List<Student> pageStudents = filteredStudent.subList(start, end);
+        // Cập nhật dữ liệu vào TableView
+        tableView_Student.setItems(FXCollections.observableArrayList(pageStudents));
+        setUpActionColumn();
+
+        // Hiển thị log để kiểm tra dữ liệu hiển thị (có thể xóa sau khi hoàn tất)
+        System.out.println("========== Page " + (page + 1) + " ==========");
+        for (Student student : pageStudents) {
+            System.out.println("Rendering course: " + student.getUsername());
+        }
+
+        int totalPages = (int) Math.ceil((double) filteredStudent.size() / ITEMS_PER_PAGE);
+        if (totalPages == 0) {
+            totalPages = 1; // Đảm bảo luôn hiển thị ít nhất "Page 1 / 1"
+        }
+        pageIndicator.setText("Page " + (currentPage + 1) + " / " + totalPages);
+    }
+
+    @FXML
+    private void handleNextPage() {
+        if ((currentPage + 1) * ITEMS_PER_PAGE < filteredStudent.size()) {
+            currentPage++;
+            renderPage(currentPage);
+        }
+    }
+
+    @FXML
+    private void handlePrevPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            renderPage(currentPage);
+        }
+    }
 
 }

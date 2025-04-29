@@ -1,6 +1,8 @@
 package com.center.academipro.controller.admin.courseManagement;
 
 import com.center.academipro.models.Course;
+import com.center.academipro.utils.SceneSwitch;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
@@ -42,12 +44,8 @@ public class EditCourseController {
         }
     }
 
-    public void setParentController(CourseController controller) {
-        this.parentController = controller;
-    }
-
     @FXML
-    private void updateCourse() {
+    private void updateCourse(ActionEvent actionEvent) {
         if (selectedCourse == null) {
             showAlert(Alert.AlertType.ERROR, "Lỗi", "Không có khóa học nào được chọn.");
             return;
@@ -63,7 +61,8 @@ public class EditCourseController {
             stmt.setInt(5, selectedCourse.getId());
 
             stmt.executeUpdate();
-            showAlert(Alert.AlertType.INFORMATION, "Thành công", "Cập nhật khóa học thành công.");
+            showAlert(Alert.AlertType.INFORMATION, "Successfully!", "Updated course successfully!");
+            SceneSwitch.returnToView(actionEvent, "view/admin/courseManagement/course-management.fxml");
 
             if (parentController != null) {
                 parentController.reloadCourseTable();
@@ -71,7 +70,7 @@ public class EditCourseController {
 
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể cập nhật khóa học.");
+            showAlert(Alert.AlertType.ERROR, "Error", "Cannot update course: " + e.getMessage());
         }
     }
 
@@ -92,10 +91,9 @@ public class EditCourseController {
             imagePreview.setImage(image);
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Lỗi", "Không thể tải hình ảnh.");
+            showAlert(Alert.AlertType.ERROR, "Error", "Cannot load image: " + imagePath);
         }
     }
-
 
     @FXML
     private void clearForm() {
@@ -112,5 +110,9 @@ public class EditCourseController {
         alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
+    }
+
+    public void handleCancel(ActionEvent actionEvent) {
+        SceneSwitch.returnToView(actionEvent, "view/admin/courseManagement/course-management.fxml");
     }
 }

@@ -32,6 +32,11 @@ public class EditTeacherController implements Initializable {
 
     private int userId; // ID của user đang được chỉnh sửa
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        courseListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    }
+
     // Hàm khởi tạo dữ liệu giáo viên
     public void setTeacher(Teacher teacher) {
         if (teacher == null) return;
@@ -169,11 +174,6 @@ public class EditTeacherController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        courseListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     private void loadCourses() {

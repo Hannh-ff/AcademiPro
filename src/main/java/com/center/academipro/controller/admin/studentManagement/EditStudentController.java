@@ -4,15 +4,20 @@ import com.center.academipro.models.Class;
 import com.center.academipro.models.Course;
 import com.center.academipro.models.Student;
 import com.center.academipro.utils.DBConnection;
+import com.center.academipro.utils.SceneSwitch;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
+import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class EditStudentController {
+public class EditStudentController implements Initializable {
     @FXML
     private TextField fullName, username, email, phone;
 
@@ -24,17 +29,24 @@ public class EditStudentController {
     @FXML
     private ComboBox<Class> className;
     private int userId; // ID của user đang được chỉnh sửa
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        courseListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+//        loadClasses();
+    }
+
     public void setStudent(Student student) {
         if (student == null) return;
 
-        this.userId = student.getId();
+        this.userId = student.getUserId();
         fullName.setText(student.getFullName());
         username.setText(student.getUsername());
         email.setText(student.getEmail());
         birthday.setValue(student.getBirthday());
         phone.setText(student.getPhone());
 
-        loadClasses();;
+//        loadClasses();
         for (Class c : className.getItems()) {
             if (c.getClassName().equals(student.getClassName())) { // so sánh tên lớp
                 className.setValue(c);
@@ -50,10 +62,8 @@ public class EditStudentController {
         }
     }
 
-
-
     @FXML
-    private void updateStudent() {
+    private void updateStudent(ActionEvent actionEvent) {
         String fullNameStr = fullName.getText();
         String usernameStr = username.getText();
         String emailStr = email.getText();
@@ -103,13 +113,16 @@ public class EditStudentController {
             }
 
             conn.commit();
-            showAlert(Alert.AlertType.INFORMATION,"Cập nhật sinh viên thành công!");
+            showAlert(Alert.AlertType.INFORMATION,"Update student successfully.");
+            SceneSwitch.returnToView(actionEvent, "view/admin/studentManagement/student-view.fxml");
+
 
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert( Alert.AlertType.ERROR,"Lỗi khi cập nhật sinh viên: " + e.getMessage());
+            showAlert( Alert.AlertType.ERROR,"Error update student: " + e.getMessage());
         }
     }
+
     private int getStudentIdByUserId(Connection conn, int userId) throws SQLException {
         String sql = "SELECT id FROM students WHERE user_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -121,23 +134,23 @@ public class EditStudentController {
         return -1;
     }
 
-    private void loadClasses() {
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pst = conn.prepareStatement("SELECT id, class_name FROM classes");
-             ResultSet rs = pst.executeQuery()) {
-
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("class_name");
-                Class c = new Class(id, name);
-                className.getItems().add(c);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Could not load class list.");
-        }
-    }
+//    private void loadClasses() {
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement pst = conn.prepareStatement("SELECT id, class_name FROM classes");
+//             ResultSet rs = pst.executeQuery()) {
+//
+//            while (rs.next()) {
+//                int id = rs.getInt("id");
+//                String name = rs.getString("class_name");
+//                Class c = new Class(id, name);
+//                className.getItems().add(c);
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            showAlert(Alert.AlertType.ERROR, "Could not load class list.");
+//        }
+//    }
 
     private void loadCourses() {
         try (Connection conn = DBConnection.getConnection();
@@ -156,6 +169,7 @@ public class EditStudentController {
             showAlert(Alert.AlertType.ERROR, "Could not load course list.");
         }
     }
+
     private void showAlert(Alert.AlertType type, String message) {
         Alert alert = new Alert(type);
         alert.setTitle(type.name());
@@ -164,5 +178,17 @@ public class EditStudentController {
         alert.showAndWait();
     }
 
+    public void clearStudent(ActionEvent actionEvent) {
+        fullName.clear();
+        username.clear();
+        email.clear();
+        phone.clear();
+        birthday.setValue(null);
+        className.getSelectionModel().clearSelection();
+        courseListView.getSelectionModel().clearSelection();
+    }
 
+    public void handleCancel(ActionEvent actionEvent) {
+        SceneSwitch.returnToView(actionEvent, "view/admin/studentManagement/student-view.fxml");
+    }
 }

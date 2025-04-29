@@ -8,10 +8,10 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.center.academipro.controller.student.ListClassesController"
+      fx:controller="com.center.academipro.controller.student.classs.ListClassesController"
       prefHeight="400.0" prefWidth="600.0" spacing="20" alignment="TOP_CENTER" style="-fx-background-color: #f4f6f9;">
 
-    <Label text="Chọn lớp học để tham gia"
+    <Label text="Choose class to join "
            style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #333;"/>
 
     <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
