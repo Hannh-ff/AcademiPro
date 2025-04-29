@@ -1,7 +1,10 @@
 package com.center.academipro.controller.admin.courseManagement;
 
 import com.center.academipro.models.Course;
+import com.center.academipro.utils.SceneSwitch;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -21,9 +24,6 @@ public class AddCourseController {
 
     private CourseController parentController;
 
-    public void setParentController(CourseController parentController) {
-        this.parentController = parentController;
-    }
 
     @FXML
     private void addCourse() {
@@ -39,12 +39,13 @@ public class AddCourseController {
 
             stmt.executeUpdate();
 
-            showAlert(Alert.AlertType.INFORMATION, "Khóa học đã được thêm!");
+            showAlert(Alert.AlertType.INFORMATION, "Add course successfully");
+            clearForm();
 
             if (parentController != null) parentController.reloadCourseTable();
 
         } catch (SQLException e) {
-            showAlert(Alert.AlertType.ERROR, "Không thể thêm khóa học: " + e.getMessage());
+            showAlert(Alert.AlertType.ERROR, "Cannot add course: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -95,5 +96,9 @@ public class AddCourseController {
 
     private void showAlert(Alert.AlertType type, String msg) {
         new Alert(type, msg, ButtonType.OK).showAndWait();
+    }
+
+    public void handleCancel(ActionEvent actionEvent) {
+        SceneSwitch.returnToView(actionEvent, "view/admin/courseManagement/course-management.fxml");
     }
 }

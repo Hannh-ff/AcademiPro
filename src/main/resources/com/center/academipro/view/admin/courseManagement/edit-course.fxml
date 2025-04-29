@@ -21,61 +21,61 @@
             <children>
                 <ImageView fx:id="imagePreview" fitHeight="160.0" fitWidth="161.0"
                            pickOnBounds="true" preserveRatio="true"
-                           styleClass="radius" />
+                           styleClass="radius"/>
             </children>
         </AnchorPane>
 
         <!-- Tên khóa học -->
         <Label layoutX="228.0" layoutY="33.0" text="Course Name:">
             <font>
-                <Font name="System Bold" size="18.0" />
+                <Font name="System Bold" size="18.0"/>
             </font>
         </Label>
         <TextField fx:id="txtCourseName" layoutX="254.0" layoutY="68.0"
                    prefHeight="36.0" prefWidth="302.0" promptText="Course name">
             <font>
-                <Font size="14.0" />
+                <Font size="14.0"/>
             </font>
         </TextField>
 
         <!-- Giá -->
         <Label layoutX="228.0" layoutY="121.0" text="Price:">
             <font>
-                <Font name="System Bold" size="18.0" />
+                <Font name="System Bold" size="18.0"/>
             </font>
         </Label>
         <TextField fx:id="txtPrice" layoutX="254.0" layoutY="156.0"
                    prefHeight="36.0" prefWidth="302.0" promptText="Price">
             <font>
-                <Font size="14.0" />
+                <Font size="14.0"/>
             </font>
         </TextField>
 
         <!-- Mô tả -->
         <Label layoutX="25.0" layoutY="222.0" text="Description:">
             <font>
-                <Font name="System Bold" size="18.0" />
+                <Font name="System Bold" size="18.0"/>
             </font>
         </Label>
         <TextArea fx:id="txtDescription" layoutX="25.0" layoutY="256.0"
                   prefHeight="127.0" prefWidth="357.0"
                   promptText="Description">
             <font>
-                <Font size="14.0" />
+                <Font size="14.0"/>
             </font>
         </TextArea>
 
         <!-- Nút Add -->
-        <Button fx:id="btnAdd" layoutX="495.0" layoutY="332.0"
-                mnemonicParsing="false" prefHeight="44.0" prefWidth="74.0"
-                styleClass="btn-add" text="Add" onAction="#updateCourse"/>
+        <Button fx:id="btnAdd" layoutX="405.0" layoutY="268.0" mnemonicParsing="false" onAction="#updateCourse"
+                prefHeight="44.0" prefWidth="74.0" styleClass="btn-add" text="Update"/>
 
-        <Button fx:id="btnClear" layoutX="405.0" layoutY="332.0"
-                mnemonicParsing="false" prefHeight="44.0" prefWidth="74.0"
-                text="Clear" styleClass="btn-add btn-clear" onAction="#clearForm"/>
+        <Button fx:id="btnClear" layoutX="495.0" layoutY="268.0" mnemonicParsing="false" onAction="#clearForm"
+                prefHeight="44.0" prefWidth="74.0" styleClass="btn-add btn-clear" text="Clear"/>
+        <Button fx:id="btnCancel" layoutX="408.0" layoutY="334.0" mnemonicParsing="false" onAction="#handleCancel"
+                prefHeight="37.0" prefWidth="161.0" styleClass="btn-delete" text="Cancel"/>
 
         <!-- Đường dẫn ảnh (ẩn) -->
         <TextField fx:id="txtImage" layoutX="200.0" layoutY="190.0"
-                   prefWidth="356.0" promptText="Image path" visible="false" />
+                   prefWidth="356.0" promptText="Image path" visible="false"/>
     </children>
 </AnchorPane>

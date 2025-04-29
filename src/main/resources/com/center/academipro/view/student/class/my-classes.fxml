@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.center.academipro.controller.student.classs.MyClassesController"
+            prefWidth="1000" prefHeight="700"
+            style="-fx-background-color: #f4f6f9;">
+
+    <top>
+        <Label text="Your Classes"
+               style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-padding: 20;"
+               BorderPane.alignment="CENTER"/>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <content>
+                <GridPane fx:id="gridPane"
+                          hgap="20" vgap="20"
+                          style="-fx-padding: 20;">
+                    <!-- Các lớp học sẽ được thêm bằng code Java -->
+                </GridPane>
+            </content>
+        </ScrollPane>
+    </center>
+
+    <bottom>
+        <!--        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10;">-->
+        <!--            <Button text="◀ Prev" onAction="#handlePrevPage"/>-->
+        <!--            <Label fx:id="pageIndicator" style="-fx-font-weight: bold;"/>-->
+        <!--            <Button text="Next ▶" onAction="#handleNextPage"/>-->
+        <!--        </HBox>-->
+    </bottom>
+</BorderPane>
