@@ -4,87 +4,101 @@ import javafx.beans.property.*;
 
 public class Attendance {
     private final IntegerProperty id;
-    private final IntegerProperty classId;
+    private final IntegerProperty timetableId;
     private final IntegerProperty studentId;
     private final StringProperty studentName;
     private final StringProperty date;
     private final StringProperty status;
-
+    private final StringProperty notes;
     private final BooleanProperty present;
     private final BooleanProperty absent;
+    private final BooleanProperty late;
+    private final BooleanProperty excused;
 
-    public Attendance(int id, int classId, int studentId, String studentName, String date, String status) {
-        this.id = new SimpleIntegerProperty(id);
-        this.classId = new SimpleIntegerProperty(classId);
+    // Constructor đơn giản hóa
+    public Attendance(int studentId, String studentName, int timetableId, String date) {
+        this.id = new SimpleIntegerProperty(0);
+        this.timetableId = new SimpleIntegerProperty(timetableId);
         this.studentId = new SimpleIntegerProperty(studentId);
         this.studentName = new SimpleStringProperty(studentName);
         this.date = new SimpleStringProperty(date);
-        this.status = new SimpleStringProperty(status);
-
-        this.present = new SimpleBooleanProperty("present".equalsIgnoreCase(status));
-        this.absent = new SimpleBooleanProperty("absent".equalsIgnoreCase(status));
-
-        initListeners();
-    }
-
-    // Constructor khi chỉ load tên và ID
-    public Attendance(int studentId, String studentName) {
-        this.id = new SimpleIntegerProperty(0);
-        this.classId = new SimpleIntegerProperty(0);
-        this.studentId = new SimpleIntegerProperty(studentId);
-        this.studentName = new SimpleStringProperty(studentName);
-        this.date = new SimpleStringProperty("");
         this.status = new SimpleStringProperty("");
+        this.notes = new SimpleStringProperty("");
 
         this.present = new SimpleBooleanProperty(false);
         this.absent = new SimpleBooleanProperty(false);
+        this.late = new SimpleBooleanProperty(false);
+        this.excused = new SimpleBooleanProperty(false);
 
         initListeners();
     }
 
     private void initListeners() {
-        present.addListener((obs, wasSelected, isSelected) -> {
-            if (isSelected) {
+        present.addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
                 absent.set(false);
-                status.set("present");
-            } else if (!absent.get()) {
-                status.set("unknown");
+                late.set(false);
+                excused.set(false);
+                status.set("Present");
             }
         });
 
-        absent.addListener((obs, wasSelected, isSelected) -> {
-            if (isSelected) {
+        absent.addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
                 present.set(false);
-                status.set("absent");
-            } else if (!present.get()) {
-                status.set("unknown");
+                late.set(false);
+                excused.set(false);
+                status.set("Absent");
+            }
+        });
+
+        late.addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                present.set(false);
+                absent.set(false);
+                excused.set(false);
+                status.set("Late");
+            }
+        });
+
+        excused.addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                present.set(false);
+                absent.set(false);
+                late.set(false);
+                status.set("Excused");
             }
         });
     }
 
-    // Getter & Setter dạng property
+    // Getter methods
     public int getId() { return id.get(); }
-    public int getClassId() { return classId.get(); }
+    public int getTimetableId() { return timetableId.get(); }
     public int getStudentId() { return studentId.get(); }
     public String getStudentName() { return studentName.get(); }
     public String getDate() { return date.get(); }
-    public String getStatus() {
-        if (present.get()) return "present";
-        if (absent.get()) return "absent";
-        return "unknown";
-    }
+    public String getStatus() { return status.get(); }
+    public String getNotes() { return notes.get(); }
+    public boolean isPresent() { return present.get(); }
+    public boolean isAbsent() { return absent.get(); }
+    public boolean isLate() { return late.get(); }
+    public boolean isExcused() { return excused.get(); }
 
-    public void setClassId(int classId) { this.classId.set(classId); }
-    public void setDate(String date) { this.date.set(date); }
-    public void setStatus(String status) { this.status.set(status); }
-
-    public BooleanProperty presentProperty() { return present; }
-    public BooleanProperty absentProperty() { return absent; }
-    public StringProperty studentNameProperty() { return studentName; }
-
-    // Có thể dùng thêm nếu cần hiển thị chi tiết:
+    // Property getters
     public IntegerProperty idProperty() { return id; }
+    public IntegerProperty timetableIdProperty() { return timetableId; }
     public IntegerProperty studentIdProperty() { return studentId; }
+    public StringProperty studentNameProperty() { return studentName; }
     public StringProperty dateProperty() { return date; }
     public StringProperty statusProperty() { return status; }
+    public StringProperty notesProperty() { return notes; }
+    public BooleanProperty presentProperty() { return present; }
+    public BooleanProperty absentProperty() { return absent; }
+    public BooleanProperty lateProperty() { return late; }
+    public BooleanProperty excusedProperty() { return excused; }
+
+
+    // Setter methods
+    public void setNotes(String notes) { this.notes.set(notes); }
+    public void setStatus(String status) { this.status.set(status); }
 }

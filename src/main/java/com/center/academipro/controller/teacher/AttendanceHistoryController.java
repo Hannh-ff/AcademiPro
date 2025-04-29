@@ -7,128 +7,169 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class AttendanceHistoryController {
-
     @FXML private ComboBox<String> classCombox;
-    @FXML private DatePicker datePicker;
+    @FXML private DatePicker fromDatePicker;
+    @FXML private DatePicker toDatePicker;
     @FXML private ComboBox<String> statusFilterComboBox;
-    @FXML private TableView<Attendance> studentTableView;
+    @FXML private TableView<Attendance> attendanceTableView;
+    @FXML private TableColumn<Attendance, String> dateColumn;
     @FXML private TableColumn<Attendance, String> studentNameColumn;
     @FXML private TableColumn<Attendance, String> statusColumn;
+    @FXML private TableColumn<Attendance, String> notesColumn;
     @FXML private Button viewButton;
+    @FXML private Button exportButton;
+    @FXML private Label statusLabel;
 
-    @FXML private Button prevPageButton;
-    @FXML private Label pageLabel;
-    @FXML private Button nextPageButton;
-
-    private FilteredList<Attendance> filteredData;
     private ObservableList<Attendance> originalData = FXCollections.observableArrayList();
+    private FilteredList<Attendance> filteredData;
 
+    @FXML
     public void initialize() {
+        setupTableColumns();
         loadClasses();
-
-        // Thiết lập combobox lọc trạng thái
-        statusFilterComboBox.setItems(FXCollections.observableArrayList(
-                "Tất cả", "Present", "Absent"
-        ));
-        statusFilterComboBox.getSelectionModel().selectFirst();
-
-        // Thiết lập binding dữ liệu
-        studentNameColumn.setCellValueFactory(cellData -> cellData.getValue().studentNameProperty());
-        statusColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
-
-        // Khởi tạo filteredData
-        filteredData = new FilteredList<>(originalData, p -> true);
-        studentTableView.setItems(filteredData);
+        setupStatusFilter();
 
         viewButton.setOnAction(e -> loadAttendanceHistory());
         statusFilterComboBox.setOnAction(e -> filterByStatus());
+
+        filteredData = new FilteredList<>(originalData, p -> true);
+        attendanceTableView.setItems(originalData);
+    }
+
+    private void setupTableColumns() {
+        // Sửa cách bind dữ liệu không dùng PropertyValueFactory
+        dateColumn.setCellValueFactory(cellData -> cellData.getValue().dateProperty());
+        studentNameColumn.setCellValueFactory(cellData -> cellData.getValue().studentNameProperty());
+        statusColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
+        notesColumn.setCellValueFactory(cellData -> cellData.getValue().notesProperty());
+
+
+        // Định dạng ngày tháng
+        dateColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(String date, boolean empty) {
+                super.updateItem(date, empty);
+                setText(empty || date == null ? null : LocalDate.parse(date).toString());
+            }
+        });
+    }
+    private void loadClasses() {
+        try (Connection conn = DBConnection.getConn();
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT class_name FROM classes ORDER BY class_name")) {
+
+            ResultSet rs = stmt.executeQuery();
+            classCombox.getItems().clear();
+            while (rs.next()) {
+                classCombox.getItems().add(rs.getString("class_name"));
+            }
+        } catch (SQLException e) {
+            showAlert("Database Error", "Failed to load classes: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void setupStatusFilter() {
+        statusFilterComboBox.setItems(FXCollections.observableArrayList(
+                "All", "Present", "Absent", "Late", "Excused"
+        ));
+        statusFilterComboBox.getSelectionModel().selectFirst();
+    }
+
+    private void loadAttendanceHistory() {
+        String selectedClass = classCombox.getValue();
+        LocalDate fromDate = fromDatePicker.getValue();
+        LocalDate toDate = toDatePicker.getValue();
+
+        if (selectedClass == null || fromDate == null || toDate == null) {
+            showAlert("Validation Error", "Please select class and date range");
+            return;
+        }
+
+        if (toDate.isBefore(fromDate)) {
+            showAlert("Validation Error", "End date must be after start date");
+            return;
+        }
+
+        try (Connection conn = DBConnection.getConn()) {
+            String query = """
+                SELECT 
+                    t.date,
+                    u.fullname AS student_name,
+                    a.status,
+                    a.notes
+                FROM attendance a
+                JOIN timetable t ON a.timetable_id = t.id
+                JOIN classes c ON t.class_id = c.id
+                JOIN students s ON a.student_id = s.id
+                JOIN users u ON s.user_id = u.id
+                WHERE c.class_name = ?
+                AND t.date BETWEEN ? AND ?
+                ORDER BY t.date, u.fullname""";
+
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, selectedClass);
+                stmt.setDate(2, Date.valueOf(fromDate));
+                stmt.setDate(3, Date.valueOf(toDate));
+
+                ResultSet rs = stmt.executeQuery();
+                originalData.clear();
+
+                while (rs.next()) {
+                    Attendance att = new Attendance(
+                            0, // id không sử dụng
+                            rs.getString("student_name"),
+                            0, // timetableId không sử dụng
+                            rs.getDate("date").toString()
+                    );
+                    att.setStatus(rs.getString("status"));
+                    att.setNotes(rs.getString("notes"));
+
+                    originalData.add(att);
+                }
+
+                filterByStatus();
+                statusLabel.setText("Found " + originalData.size() + " records");
+            }
+        } catch (SQLException e) {
+            showAlert("Database Error", "Failed to load attendance history: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void filterByStatus() {
         String selectedStatus = statusFilterComboBox.getValue();
 
-        if (selectedStatus == null || "Tất cả".equals(selectedStatus)) {
-            filteredData.setPredicate(attendance -> true);
+        if (selectedStatus == null || "All".equals(selectedStatus)) {
+            filteredData.setPredicate(att -> true);
         } else {
-            filteredData.setPredicate(attendance ->
-                    selectedStatus.equalsIgnoreCase(attendance.getStatus())
+            filteredData.setPredicate(att ->
+                    selectedStatus.equalsIgnoreCase(att.getStatus())
             );
         }
+
+        statusLabel.setText("Showing " + filteredData.size() + " filtered records");
     }
 
-    private void loadClasses() {
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT class_name FROM classes")) {
-
-            ResultSet rs = stmt.executeQuery();
-            ObservableList<String> classes = FXCollections.observableArrayList();
-            while (rs.next()) {
-                classes.add(rs.getString("class_name"));
-            }
-            classCombox.setItems(classes);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Lỗi", "Không thể tải danh sách lớp: " + e.getMessage());
-        }
-    }
-
-    private void loadAttendanceHistory() {
-        String selectedClass = classCombox.getValue();
-        LocalDate selectedDate = datePicker.getValue();
-
-        if (selectedClass == null || selectedDate == null) {
-            showAlert("Cảnh báo", "Vui lòng chọn cả lớp và ngày");
+    private void exportToExcel() {
+        if (filteredData.isEmpty()) {
+            showAlert("Export Error", "No data to export");
             return;
         }
 
-        originalData.clear();
-
-        try (Connection conn = DBConnection.getConnection()) {
-            int classId = getClassId(conn, selectedClass);
-            if (classId == -1) return;
-
-            String query = "SELECT s.fullname AS student_name, a.status AS attendance_status " +
-                    "FROM attendance a " +
-                    "JOIN students st ON a.student_id = st.id " +
-                    "JOIN users s ON st.user_id = s.id " +
-                    "WHERE a.attendance_date = ? AND a.class_id = ?";
-
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setDate(1, Date.valueOf(selectedDate));
-                stmt.setInt(2, classId);
-
-                ResultSet rs = stmt.executeQuery();
-
-                while (rs.next()) {
-                    String studentName = rs.getString("student_name");
-                    String status = rs.getString("attendance_status");
-                    originalData.add(new Attendance(0, classId, 0, studentName, selectedDate.toString(), status));
-                }
-            }
-
-            filterByStatus();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Lỗi", "Không thể tải lịch sử điểm danh: " + e.getMessage());
-        }
-    }
-
-    private int getClassId(Connection conn, String className) throws SQLException {
-        try (PreparedStatement stmt = conn.prepareStatement("SELECT id FROM classes WHERE class_name = ?")) {
-            stmt.setString(1, className);
-            ResultSet rs = stmt.executeQuery();
-            return rs.next() ? rs.getInt("id") : -1;
-        }
+        // TODO: Implement export logic
+        showAlert("Info", "Export feature will be implemented here");
     }
 
     private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);

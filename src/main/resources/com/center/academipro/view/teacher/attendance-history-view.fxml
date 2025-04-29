@@ -1,77 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.text.Font?>
 
-<?import java.lang.String?>
-<VBox xmlns="http://javafx.com/javafx/23.0.1"
-      xmlns:fx="http://javafx.com/fxml/1"
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.center.academipro.controller.teacher.AttendanceHistoryController"
-      prefHeight="600.0" prefWidth="800.0"
-      spacing="15.0" stylesheets="@../../css/thao.css">
+      spacing="15" prefHeight="600" prefWidth="900"    stylesheets="@../../css/thao.css">
 
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets top="15" right="15" bottom="15" left="15"/>
     </padding>
 
-    <AnchorPane prefHeight="57.0" prefWidth="760.0">
-        <children>
-            <HBox alignment="CENTER" layoutX="68.0" layoutY="-31.0" prefHeight="69.33333333333333" prefWidth="760.0"
-                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                <children>
-                    <Label styleClass="main-text" text="Attendance History">
-                        <font>
-                            <Font name="System Bold Italic" size="20.0"/>
-                        </font>
-                    </Label>
-                </children>
-            </HBox>
-        </children>
-    </AnchorPane>
+    <Label text="Attendance History">
+        <font>
+            <Font name="System Bold" size="20"/>
+        </font>
+    </Label>
 
-    <HBox alignment="CENTER" prefHeight="46.0" prefWidth="760.0" spacing="10">
-        <Label prefHeight="20.0" prefWidth="90.0" text="Chọn lớp học">
-            <font>
-                <Font size="14.0"/>
-            </font>
-        </Label>
-        <ComboBox fx:id="classCombox" prefHeight="31.0" prefWidth="200" styleClass="main-color"/>
-        <Label alignment="CENTER_RIGHT" prefHeight="20.0" prefWidth="221.0" text="Chọn ngày: ">
-            <font>
-                <Font size="14.0"/>
-            </font>
-        </Label>
-        <DatePicker fx:id="datePicker" prefHeight="33.0" prefWidth="204.0" styleClass="main-color"/>
-        <Button fx:id="viewButton" prefHeight="33.0" prefWidth="150" text="Xem lịch sử">
-            <styleClass>
-                <String fx:value="btn"/>
-                <String fx:value="btn-add"/>
-            </styleClass>
-        </Button>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Class:"/>
+        <ComboBox fx:id="classCombox" prefWidth="200"/>
+
+        <Label text="From:"/>
+        <DatePicker fx:id="fromDatePicker" prefWidth="150"/>
+
+        <Label text="To:"/>
+        <DatePicker fx:id="toDatePicker" prefWidth="150"/>
+
+        <Label text="Status:"/>
+        <ComboBox fx:id="statusFilterComboBox" prefWidth="100"/>
+
+        <Button fx:id="viewButton" text="View"/>
     </HBox>
 
-    <TableView fx:id="studentTableView" prefHeight="344.0" prefWidth="760.0">
+    <TableView fx:id="attendanceTableView" prefHeight="400">
         <columns>
-            <TableColumn fx:id="studentNameColumn" prefWidth="380" text="Họ tên sinh viên"/>
-            <TableColumn fx:id="statusColumn" prefWidth="380" text="Trạng thái"/>
+            <TableColumn fx:id="dateColumn" text="Date" prefWidth="120"/>
+            <TableColumn fx:id="studentCodeColumn" text="Student ID" prefWidth="100"/>
+            <TableColumn fx:id="studentNameColumn" text="Student Name" prefWidth="250"/>
+            <TableColumn fx:id="statusColumn" text="Status" prefWidth="100"/>
+            <TableColumn fx:id="notesColumn" text="Notes" prefWidth="300"/>
         </columns>
     </TableView>
 
-    <HBox alignment="CENTER" prefHeight="63.0" prefWidth="760.0" spacing="10">
-        <Label text="Lọc theo trạng thái:"/>
-        <ComboBox fx:id="statusFilterComboBox" prefWidth="150" styleClass="main-color"/>
-        <Button fx:id="prevPageButton" text="Trang trước">
-            <styleClass>
-                <String fx:value="btn"/>
-            </styleClass>
-        </Button>
-        <Label fx:id="pageLabel" text="Trang 1"/>
-        <Button fx:id="nextPageButton" text="Trang sau">
-            <styleClass>
-                <String fx:value="btn"/>
-            </styleClass>
-        </Button>
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Label fx:id="statusLabel" text="Ready"/>
+        <Button fx:id="exportButton" text="Export to Excel"/>
     </HBox>
 </VBox>
+
