@@ -4,53 +4,38 @@ import javafx.beans.property.*;
 
 public class Class {
 
-    private final IntegerProperty id;
-    private final StringProperty className;
-    private final StringProperty description;
-    private final StringProperty image;
-    private final DoubleProperty price;
+    private IntegerProperty id;
+    private StringProperty className;
+    private StringProperty teacherName;
+    private StringProperty courseName;
+    private IntegerProperty studentCount;
 
-    public Class(int id, String className, String description, String image, double price) {
+
+    public Class() {
+    }
+
+    public Class(int id, String className, String teacherName, String courseName, int studentCount) {
         this.id = new SimpleIntegerProperty(id);
         this.className = new SimpleStringProperty(className);
-        this.description = new SimpleStringProperty(description);
-        this.image = new SimpleStringProperty(image);
-        this.price = new SimpleDoubleProperty(price);
+        this.teacherName = new SimpleStringProperty(teacherName);
+        this.courseName = new SimpleStringProperty(courseName);
+        this.studentCount = new SimpleIntegerProperty(studentCount);
     }
 
-    public Class(int id, String className) {
+    public Class(int id, String className, String teacherName, String courseName){
         this.id = new SimpleIntegerProperty(id);
         this.className = new SimpleStringProperty(className);
-        this.description = new SimpleStringProperty("");
-        this.image = new SimpleStringProperty("");
-        this.price = new SimpleDoubleProperty(0.0);
-    }
-
-
-    // Getter and Setter Methods for the fields
-
-    public IntegerProperty idProperty() {
-        return id;
-    }
-
-    public StringProperty classNameProperty() {
-        return className;
-    }
-
-    public StringProperty descriptionProperty() {
-        return description;
-    }
-
-    public StringProperty imageProperty() {
-        return image;
-    }
-
-    public DoubleProperty priceProperty() {
-        return price;
+        this.teacherName = new SimpleStringProperty(teacherName);
+        this.courseName = new SimpleStringProperty(courseName);
+        this.studentCount = new SimpleIntegerProperty(0);
     }
 
     public int getId() {
         return id.get();
+    }
+
+    public IntegerProperty idProperty() {
+        return id;
     }
 
     public void setId(int id) {
@@ -61,35 +46,49 @@ public class Class {
         return className.get();
     }
 
+    public StringProperty classNameProperty() {
+        return className;
+    }
+
     public void setClassName(String className) {
         this.className.set(className);
     }
 
-    public String getDescription() {
-        return description.get();
+    public String getTeacherName() {
+        return teacherName.get();
     }
 
-    public void setDescription(String description) {
-        this.description.set(description);
+    public StringProperty teacherNameProperty() {
+        return teacherName;
     }
 
-    public String getImage() {
-        return image.get();
+    public void setTeacherName(String teacherName) {
+        this.teacherName.set(teacherName);
     }
 
-    public void setImage(String image) {
-        this.image.set(image);
+    public String getCourseName() {
+        return courseName.get();
     }
 
-    public double getPrice() {
-        return price.get();
+    public StringProperty courseNameProperty() {
+        return courseName;
     }
 
-    public void setPrice(double price) {
-        this.price.set(price);
+    public void setCourseName(String courseName) {
+        this.courseName.set(courseName);
     }
-    @Override
-    public String toString() {
-        return getClassName();
+
+    public int getStudentCount() {
+        return studentCount.get();
     }
+
+    public IntegerProperty studentCountProperty() {
+        return studentCount;
+    }
+
+    public void setStudentCount(int studentCount) {
+        this.studentCount.set(studentCount);
+    }
+
+
 }

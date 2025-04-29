@@ -23,9 +23,10 @@
                                 <Font size="14.0" />
                             </font>
                         </Label>
-                        <Button fx:id="btnListCourses" layoutX="8.0" layoutY="150.0" mnemonicParsing="false" onAction="#listCoursesScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="List Courses" textFill="WHITE" />
-                        <Button fx:id="btnHistory" layoutX="8.0" layoutY="205.0" mnemonicParsing="false" onAction="#historyScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="History" textFill="WHITE" />
+                        <Button fx:id="btnListCourses" layoutX="9.0" layoutY="235.0" mnemonicParsing="false" onAction="#listCoursesScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="List Courses" textFill="WHITE" />
+                        <Button fx:id="btnHistory" layoutX="9.0" layoutY="165.0" mnemonicParsing="false" onAction="#historyScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Purchased Course" textFill="WHITE" />
                         <Line endX="100.0" layoutX="109.0" layoutY="125.0" startX="-100.0" stroke="WHITE" />
+                        <Button layoutX="9.0" layoutY="305.0" mnemonicParsing="false" onAction="#myClassScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="My Class" textFill="WHITE" />
                     </children>
                 </AnchorPane>
             </left>

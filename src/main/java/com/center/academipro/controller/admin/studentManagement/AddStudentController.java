@@ -3,10 +3,14 @@ package com.center.academipro.controller.admin.studentManagement;
 import com.center.academipro.models.Course;
 import com.center.academipro.models.Class;
 import com.center.academipro.utils.DBConnection;
+import com.center.academipro.utils.SceneSwitch;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +35,7 @@ public class AddStudentController implements Initializable {
     public void initialize(java.net.URL location, ResourceBundle resources) {
         courseListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         loadCourses();
-        loadClasses();
+//        loadClasses();
         restrictFutureDate();
     }
 
@@ -52,23 +56,24 @@ public class AddStudentController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "Could not load course list.");
         }
     }
-    private void loadClasses() {
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pst = conn.prepareStatement("SELECT id, class_name FROM classes");
-             ResultSet rs = pst.executeQuery()) {
 
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("class_name");
-                Class c = new Class(id, name);
-                className.getItems().add(c);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Could not load class list.");
-        }
-    }
+//    private void loadClasses() {
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement pst = conn.prepareStatement("SELECT id, class_name FROM classes");
+//             ResultSet rs = pst.executeQuery()) {
+//
+//            while (rs.next()) {
+//                int id = rs.getInt("id");
+//                String name = rs.getString("class_name");
+//                Class c = new Class(id, name);
+//                className.getItems().add(c);
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            showAlert(Alert.AlertType.ERROR, "Could not load class list.");
+//        }
+//    }
 
     @FXML
     private void addStudent() {
@@ -79,7 +84,7 @@ public class AddStudentController implements Initializable {
         LocalDate birthdayValue = birthday.getValue();
         Class selectedClass = className.getValue(); // Lấy class_id từ phone1 field
 
-        if (fullNameValue.isEmpty() || usernameValue.isEmpty() || emailValue.isEmpty() || selectedClass==null) {
+        if (fullNameValue.isEmpty() || usernameValue.isEmpty() || emailValue.isEmpty()) {
             showAlert(Alert.AlertType.ERROR, "Please fill in all required fields.");
             return;
         }
@@ -100,7 +105,7 @@ public class AddStudentController implements Initializable {
             pstUser.setString(1, fullNameValue);
             pstUser.setString(2, usernameValue);
             pstUser.setString(3, emailValue);
-            pstUser.setString(4, "123456"); // mật khẩu mặc định
+            pstUser.setString(4, hashPassword("123456")); // mật khẩu mặc định
 
             pstUser.executeUpdate();
             ResultSet rsUser = pstUser.getGeneratedKeys();
@@ -158,6 +163,7 @@ public class AddStudentController implements Initializable {
         birthday.setValue(null);
         courseListView.getSelectionModel().clearSelection();
     }
+
     private void restrictFutureDate() {
         birthday.setDayCellFactory(picker -> new DateCell() {
             @Override
@@ -169,5 +175,17 @@ public class AddStudentController implements Initializable {
                 }
             }
         });
+    }
+
+    public void handleCancel(ActionEvent actionEvent) {
+        SceneSwitch.returnToView(actionEvent, "view/admin/studentManagement/student-view.fxml");
+    }
+
+    private String hashPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hashed = md.digest(password.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hashed) sb.append(String.format("%02x", b));
+        return sb.toString();
     }
 }
