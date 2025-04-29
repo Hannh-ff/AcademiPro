@@ -28,4 +28,6 @@ module com.center.academipro {
     exports com.center.academipro.controller.admin.teacherManagement;
     exports com.center.academipro.controller.teacher;
     exports com.center.academipro.controller.admin.classManagement to javafx.fxml;
+    opens com.center.academipro.controller.student.classs to javafx.fxml;
+    opens com.center.academipro.controller.student.course to javafx.fxml;
 }

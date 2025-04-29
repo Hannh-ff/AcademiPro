@@ -47,21 +47,21 @@ public class MenuBarController {
     }
 
     public void classScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView("view/admin/classManagement/class-management.fxml"); // Thêm đường dẫn đến file FXML của class
+        FXMLLoader loader = SceneSwitch.loadView("view/admin/classManagement/class-management.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
     }
 
     public void paymentScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView(""); // Thêm đường dẫn đến file FXML của payment
+        FXMLLoader loader = SceneSwitch.loadView("view/admin/paymentManagement/payment-view.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
     }
 
     public void studentScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView("view/admin/studentManagement/student-view.fxml"); // Thêm đường dẫn đến file FXML của student
+        FXMLLoader loader = SceneSwitch.loadView("view/admin/studentManagement/student-view.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
@@ -69,14 +69,21 @@ public class MenuBarController {
 
 
     public void listCoursesScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView("view/student/list-courses.fxml");
+        FXMLLoader loader = SceneSwitch.loadView("view/student/course/list-courses.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
     }
 
     public void historyScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView("view/student/purchased-courses.fxml");
+        FXMLLoader loader = SceneSwitch.loadView("view/student/course/purchased-courses.fxml");
+        assert loader != null;
+        Parent newView = loader.getRoot();
+        mainBorderPane.setCenter(newView);
+    }
+
+    public void myClassScene(ActionEvent actionEvent) {
+        FXMLLoader loader = SceneSwitch.loadView("view/student/class/my-classes.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
