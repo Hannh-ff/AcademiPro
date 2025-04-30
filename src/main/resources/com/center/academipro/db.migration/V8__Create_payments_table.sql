@@ -1,11 +1,12 @@
 CREATE TABLE payments (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    student_id INT NOT NULL,
+    user_id INT NOT NULL,
     course_id INT NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
-    payment_method ENUM('Cash', 'Online') NOT NULL,
-    payment_status ENUM('Pending', 'Completed', 'Failed') NOT NULL,
-    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+    payment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('Pending', 'Completed', 'Failed', 'Refunded') DEFAULT 'Pending',
+    payment_method VARCHAR(50),
+    transaction_id VARCHAR(100),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
 );
