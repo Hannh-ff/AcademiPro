@@ -1,11 +1,13 @@
 package com.center.academipro.controller;
 
+import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.SceneSwitch;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -88,4 +90,21 @@ public class MenuBarController {
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
     }
+
+    @FXML
+    private void handleLogout(ActionEvent event) {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/login-view.fxml")); // đổi path đúng file login
+            Parent root = loader.load();
+            Stage loginStage = new Stage();
+            loginStage.setScene(new Scene(root));
+            loginStage.setTitle("Login");
+            loginStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
