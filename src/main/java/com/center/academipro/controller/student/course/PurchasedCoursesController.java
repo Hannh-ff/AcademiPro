@@ -1,5 +1,6 @@
-package com.center.academipro.controller.student;
+package com.center.academipro.controller.student.course;
 
+import com.center.academipro.controller.student.EventDAO;
 import com.center.academipro.models.Course;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,7 +42,7 @@ public class PurchasedCoursesController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Course> purchasedCourses = EventCourses.getPurchasedCoursesByUserId();
+        List<Course> purchasedCourses = EventDAO.getPurchasedCoursesByUserId();
         allPurchasedCourses.setAll(purchasedCourses);
         setupSearchFilter();
     }
@@ -81,8 +82,8 @@ public class PurchasedCoursesController implements Initializable {
         Button cancelBtn = new Button("Cancel ➜");
         cancelBtn.setStyle("-fx-background-color: #ff6b6b; -fx-text-fill: white; -fx-background-radius: 5;");
         cancelBtn.setOnAction(e -> {
-            EventCourses.cancelCourse(course.getId());
-            allPurchasedCourses.setAll(EventCourses.getPurchasedCoursesByUserId());
+            EventDAO.cancelCourse(course.getId());
+            allPurchasedCourses.setAll(EventDAO.getPurchasedCoursesByUserId());
             currentPage = 0;
             renderPage(currentPage);
         });
@@ -128,7 +129,7 @@ public class PurchasedCoursesController implements Initializable {
             });
 
 
-            System.out.println("Filtered Movies: " + filteredPurchasedCourse.size());
+            System.out.println("Filtered : " + filteredPurchasedCourse.size());
             currentPage = 0;
             renderPage(currentPage);
         });

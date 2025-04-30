@@ -1,24 +1,28 @@
-package com.center.academipro.controller.student;
+package com.center.academipro.controller.student.course;
 
+import com.center.academipro.controller.student.EventDAO;
 import com.center.academipro.models.Course;
+import com.center.academipro.session.SessionCourse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import javafx.scene.image.ImageView;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
@@ -41,12 +45,12 @@ public class ListCoursesController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        List<Course> courses = EventCourses.getAllCourses();
+        List<Course> courses = EventDAO.getAllCourses();
         allCourses.setAll(courses);
         setupSearchFilter();
     }
 
-    private HBox createCourseCard(Course course){
+    private HBox createCourseCard(Course course) {
         HBox card = new HBox(15);
         card.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-padding: 10;");
         card.setEffect(new DropShadow(5, Color.rgb(0, 0, 0, 0.1)));
@@ -83,6 +87,26 @@ public class ListCoursesController implements Initializable {
         VBox actionBox = new VBox(5, enrollBtn);
         actionBox.setAlignment(Pos.TOP_RIGHT);
         HBox.setHgrow(info, Priority.ALWAYS);
+
+        enrollBtn.setOnAction(e -> {
+            SessionCourse.setCourseId(course.getId()); // Lưu courseId vào session
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/student/class/list-classes.fxml"));
+                Parent newView = loader.load(); // Load xong lấy root mới
+
+                StackPane pane = (StackPane) ((Node) e.getSource()).getScene().getRoot();
+                BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
+
+                if (mainPane != null) {
+                    mainPane.setCenter(newView); // Chỉ thay Center, không replace root
+                } else {
+                    System.err.println("Cannot find #mainBorderPane");
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         card.getChildren().addAll(imageView, info, actionBox);
         return card;

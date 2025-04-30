@@ -69,14 +69,21 @@ public class MenuBarController {
 
 
     public void listCoursesScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView("view/student/list-courses.fxml");
+        FXMLLoader loader = SceneSwitch.loadView("view/student/course/list-courses.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
     }
 
     public void historyScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView("view/student/purchased-courses.fxml");
+        FXMLLoader loader = SceneSwitch.loadView("view/student/course/purchased-courses.fxml");
+        assert loader != null;
+        Parent newView = loader.getRoot();
+        mainBorderPane.setCenter(newView);
+    }
+
+    public void myClassScene(ActionEvent actionEvent) {
+        FXMLLoader loader = SceneSwitch.loadView("view/student/class/my-classes.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);

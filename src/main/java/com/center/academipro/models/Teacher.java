@@ -25,17 +25,16 @@ public class Teacher {
     private ObservableList<Course> courseList = FXCollections.observableArrayList();
 
 
-    public Teacher(){}
-
-//    public Teacher(int id, String fullname, String username, String email, LocalDate birthday, String phone, String courses) {
-//        this.id = new SimpleIntegerProperty(id);
-//        this.fullname = new SimpleStringProperty(fullname);
-//        this.username = new SimpleStringProperty(username);
-//        this.email = new SimpleStringProperty(email);
-//        this.birthday = new SimpleObjectProperty<>(birthday);
-//        this.phone = new SimpleStringProperty(phone);
-//        this.courses = new SimpleStringProperty(courses);
-//    }
+    public Teacher(){
+        this.id = new SimpleIntegerProperty();
+        this.userId = new SimpleIntegerProperty();
+        this.fullname = new SimpleStringProperty();
+        this.username = new SimpleStringProperty();
+        this.email = new SimpleStringProperty();
+        this.birthday = new SimpleObjectProperty<>();
+        this.phone = new SimpleStringProperty();
+        this.courses = new SimpleStringProperty();
+    }
 
     public Teacher(int id, int userId, String fullname, String username, String email, LocalDate birthday, String phone, String courses) {
         this.id = new SimpleIntegerProperty(id);
@@ -46,6 +45,11 @@ public class Teacher {
         this.birthday = new SimpleObjectProperty<>(birthday);
         this.phone = new SimpleStringProperty(phone);
         this.courses = new SimpleStringProperty(courses);
+    }
+
+    public Teacher(int id, String name) {
+        this.id = new SimpleIntegerProperty(id);
+        this.fullname = new SimpleStringProperty(name);
     }
 
     public int getUserId() {
@@ -132,4 +136,8 @@ public class Teacher {
         this.courseList = courseList;
     }
 
+    @Override
+    public String toString() {
+        return this.getFullname();
+    }
 }

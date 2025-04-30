@@ -1,13 +1,16 @@
 package com.center.academipro.controller.admin.teacherManagement;
 
+import com.center.academipro.models.Course;
 import com.center.academipro.models.Teacher;
 import com.center.academipro.utils.DBConnection;
 import com.center.academipro.utils.SceneSwitch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,6 +27,7 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class TeacherViewController {
@@ -45,9 +49,13 @@ public class TeacherViewController {
     private TableColumn<Teacher, String> teacherCourse;
     @FXML
     private TableColumn<Teacher, Void> teacherAction;
-
-
-    private final ObservableList<Teacher> teachersList = FXCollections.observableArrayList();
+    @FXML private TextField searchField;
+    @FXML private Label pageIndicator;
+    
+    private final ObservableList<Teacher> teacherList = FXCollections.observableArrayList();
+    private FilteredList<Teacher> filteredTeacher;
+    private static final int ITEMS_PER_PAGE = 4;
+    private int currentPage = 0;
 
 
     @FXML
@@ -62,10 +70,11 @@ public class TeacherViewController {
 
         setUpActionColumn();
         loadTeachers();
+        setupSearchFilter();
     }
 
     private void loadTeachers() {
-        ObservableList<Teacher> teacherList = FXCollections.observableArrayList();
+        teacherList.clear();
 
         String query = """
                     SELECT t.id, t.user_id, u.fullname, u.username, u.email, t.birthday, t.phone,
@@ -96,13 +105,17 @@ public class TeacherViewController {
                 teacherList.add(teacher);
             }
 
-            tableView_Teacher.setItems(teacherList);
+            if (filteredTeacher != null) {
+                // Nếu filteredTeacher đã khởi tạo rồi thì chỉ cần render lại
+                currentPage = 0;
+                renderPage(currentPage);
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            showAlert("Error loading teachers: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
-
 
     private void setUpActionColumn() {
         teacherAction.setCellFactory(param -> new TableCell<>() {
@@ -123,6 +136,7 @@ public class TeacherViewController {
 
                 updateBtn.setStyle("-fx-background-color: linear-gradient(to bottom right, #a18cd1, #fbc2eb); -fx-text-fill: white;");
                 deleteBtn.setStyle("-fx-background-color: linear-gradient(to bottom right, #ff1e56, #ff4b2b); -fx-text-fill: white;");
+                btnBox.setAlignment(Pos.CENTER);
             }
 
             @Override
@@ -170,7 +184,7 @@ public class TeacherViewController {
         }
     }
 
-    private void handleDelete(Teacher teacher)  {
+    private void handleDelete(Teacher teacher) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Delete Confirmation");
         confirm.setHeaderText(null);
@@ -224,7 +238,6 @@ public class TeacherViewController {
         });
     }
 
-
     public void changeSceneAdd(ActionEvent event) {
         FXMLLoader loader = SceneSwitch.loadView("view/admin/teacherManagement/add-new-teacher.fxml");
         if (loader != null) {
@@ -238,8 +251,6 @@ public class TeacherViewController {
 
     }
 
-    ;
-
     private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(type.name());
@@ -248,8 +259,74 @@ public class TeacherViewController {
         alert.showAndWait();
     }
 
-
     public void handleReload(ActionEvent actionEvent) {
         loadTeachers();
+    }
+
+    private void setupSearchFilter(){
+
+        filteredTeacher = new FilteredList<>(teacherList, p -> true);
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println("Search: " + newValue);
+
+            filteredTeacher.setPredicate(teacher ->{
+                if (newValue == null || newValue.trim().isEmpty()) {
+                    return true;
+                }
+                String lowerCaseFilter = newValue.toLowerCase();
+                boolean match = teacher.getUsername().toLowerCase().contains(lowerCaseFilter);
+
+                if (match) {
+                    System.out.println("Matched: " + teacher.getUsername());
+                }
+                return match;
+            });
+
+
+            System.out.println("Filtered : " + filteredTeacher.size());
+            currentPage = 0;
+            renderPage(currentPage);
+        });
+
+        renderPage(currentPage);
+    }
+
+    private void renderPage(int page) {
+        int start = page * ITEMS_PER_PAGE;
+        int end = Math.min(start + ITEMS_PER_PAGE, filteredTeacher.size());
+
+        // Lấy danh sách con (subList) cho trang hiện tại
+        List<Teacher> pageTeachers = filteredTeacher.subList(start, end);
+        // Cập nhật dữ liệu vào TableView
+        tableView_Teacher.setItems(FXCollections.observableArrayList(pageTeachers));
+        setUpActionColumn();
+
+        // Hiển thị log để kiểm tra dữ liệu hiển thị (có thể xóa sau khi hoàn tất)
+        System.out.println("========== Page " + (page + 1) + " ==========");
+        for (Teacher teacher : pageTeachers) {
+            System.out.println("Rendering course: " + teacher.getUsername());
+        }
+
+        int totalPages = (int) Math.ceil((double) filteredTeacher.size() / ITEMS_PER_PAGE);
+        if (totalPages == 0) {
+            totalPages = 1; // Đảm bảo luôn hiển thị ít nhất "Page 1 / 1"
+        }
+        pageIndicator.setText("Page " + (currentPage + 1) + " / " + totalPages);
+    }
+
+    @FXML
+    private void handleNextPage() {
+        if ((currentPage + 1) * ITEMS_PER_PAGE < filteredTeacher.size()) {
+            currentPage++;
+            renderPage(currentPage);
+        }
+    }
+
+    @FXML
+    private void handlePrevPage() {
+        if (currentPage > 0) {
+            currentPage--;
+            renderPage(currentPage);
+        }
     }
 }
