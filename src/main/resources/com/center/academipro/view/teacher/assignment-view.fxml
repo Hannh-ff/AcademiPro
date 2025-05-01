@@ -12,14 +12,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-fx:controller="com.center.academipro.controller.teacher.AssignmentController">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../css/thao.css"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.center.academipro.controller.teacher.AssignmentController">
    <children>
-      <VBox layoutX="77.0" layoutY="89.0" prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="77.0" layoutY="89.0" prefHeight="600.0" prefWidth="1000.0"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane prefHeight="67.0" prefWidth="1000.0">
                <children>
-                  <HBox alignment="CENTER" layoutX="178.0" layoutY="-16.0" prefHeight="77.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox alignment="CENTER" layoutX="178.0" layoutY="-16.0"
+                        prefHeight="77.0" prefWidth="1000.0"
+                        AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                        AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label alignment="TOP_LEFT" styleClass="main-text" text="Assign assignments">
                            <font>
@@ -30,52 +36,93 @@ fx:controller="com.center.academipro.controller.teacher.AssignmentController">
                   </HBox>
                </children>
             </AnchorPane>
+
             <AnchorPane prefHeight="450.0" prefWidth="1000.0">
                <children>
-                  <AnchorPane layoutX="72.0" layoutY="32.0" prefHeight="390.0" prefWidth="876.0" AnchorPane.bottomAnchor="32.0" AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0" AnchorPane.topAnchor="32.0">
+                  <AnchorPane layoutX="72.0" layoutY="32.0" prefHeight="390.0"
+                              prefWidth="876.0" AnchorPane.bottomAnchor="32.0"
+                              AnchorPane.leftAnchor="70.0" AnchorPane.rightAnchor="70.0"
+                              AnchorPane.topAnchor="32.0">
                      <styleClass>
                         <String fx:value="white-bg" />
                         <String fx:value="shadow" />
                         <String fx:value="radius" />
                      </styleClass>
                      <children>
-                        <Label layoutX="51.0" layoutY="46.0" prefHeight="25.0" prefWidth="55.0" styleClass="extra-text" text="Title :">
+                        <!-- Title Section -->
+                        <Label layoutX="51.0" layoutY="46.0" prefHeight="25.0"
+                               prefWidth="55.0" styleClass="extra-text" text="Title :">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="title" layoutX="70.0" layoutY="79.0" prefHeight="38.0" prefWidth="313.0" promptText="Title" styleClass="radius-textField" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="79.0">
+                        <TextField fx:id="title" layoutX="70.0" layoutY="79.0"
+                                   prefHeight="38.0" prefWidth="313.0" promptText="Title"
+                                   styleClass="radius-textField"
+                                   AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="79.0">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </TextField>
-                        <Label layoutX="51.0" layoutY="129.0" prefHeight="25.0" prefWidth="146.0" styleClass="extra-text" text="Submission date :">
+
+                        <!-- Date Section -->
+                        <Label layoutX="51.0" layoutY="129.0" prefHeight="25.0"
+                               prefWidth="146.0" styleClass="extra-text"
+                               text="Submission date :">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <DatePicker fx:id="deadline" layoutX="71.0" layoutY="168.0" prefHeight="38.0" prefWidth="252.0" styleClass="radius-textField" AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="168.0" />
-                        <Label layoutX="403.0" layoutY="45.0" prefHeight="25.0" prefWidth="146.0" styleClass="extra-text" text="Write question :" AnchorPane.rightAnchor="311.0">
+                        <DatePicker fx:id="deadline" layoutX="71.0" layoutY="168.0"
+                                    prefHeight="38.0" prefWidth="252.0"
+                                    styleClass="radius-textField"
+                                    AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="168.0" />
+
+                        <!-- Class Section - ĐÃ SỬA VỊ TRÍ -->
+                        <Label layoutX="51.0" layoutY="215.0" prefHeight="25.0"
+                               prefWidth="146.0" styleClass="extra-text" text="Class :">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <TextArea fx:id="description" layoutX="468.0" layoutY="94.0" prefHeight="248.0" prefWidth="386.0" styleClass="radius-textField" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="98.0" />
-                        <Button layoutX="51.0" layoutY="320.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="78.0" styleClass="btn-clear" text="Clear" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="51.0" />
-                        <Label layoutX="51.0" layoutY="215.0" prefHeight="25.0" prefWidth="146.0" styleClass="extra-text" text="Class :">
+                        <ComboBox fx:id="classCombox" layoutX="71.0" layoutY="254.0"
+                                  prefHeight="38.0" prefWidth="252.0"
+                                  AnchorPane.leftAnchor="70.0" AnchorPane.topAnchor="254.0"/>
+
+                        <!-- Question Section -->
+                        <Label layoutX="403.0" layoutY="45.0" prefHeight="25.0"
+                               prefWidth="146.0" styleClass="extra-text"
+                               text="Write question :" AnchorPane.rightAnchor="311.0">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <ComboBox layoutX="71.0" layoutY="254.0" prefHeight="38.0" prefWidth="252.0" AnchorPane.leftAnchor="70.0" />
+                        <TextArea fx:id="description" layoutX="468.0" layoutY="94.0"
+                                  prefHeight="248.0" prefWidth="386.0"
+                                  styleClass="radius-textField"
+                                  AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="35.0"
+                                  AnchorPane.topAnchor="98.0" />
+
+                        <!-- Clear Button -->
+                        <Button layoutX="51.0" layoutY="320.0" mnemonicParsing="false"
+                                prefHeight="38.0" prefWidth="78.0" styleClass="btn-clear"
+                                text="Clear" AnchorPane.bottomAnchor="28.0"
+                                AnchorPane.leftAnchor="51.0" />
                      </children>
                   </AnchorPane>
                </children>
             </AnchorPane>
+
+            <!-- Footer Buttons -->
             <AnchorPane prefHeight="77.0" prefWidth="1000.0">
                <children>
-                  <Button layoutX="804.0" layoutY="16.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" styleClass="btn-add" text="Add exercises" AnchorPane.rightAnchor="70.0" />
-                  <Button layoutX="664.0" layoutY="16.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="91.0" styleClass="btn-delete" text="Back" AnchorPane.rightAnchor="245.0" />
+                  <Button fx:id="addButton" layoutX="804.0" layoutY="16.0"
+                          mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0"
+                          styleClass="btn-add" text="Add exercises"
+                          onAction="#handleAddAssignment" AnchorPane.rightAnchor="70.0" />
+                  <Button layoutX="664.0" layoutY="16.0" mnemonicParsing="false"
+                          prefHeight="45.0" prefWidth="91.0" styleClass="btn-delete"
+                          text="Back" AnchorPane.rightAnchor="245.0" />
                </children>
             </AnchorPane>
          </children>
