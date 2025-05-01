@@ -1,0 +1,77 @@
+<?php
+// Bật hiển thị lỗi để debug (tắt khi chạy production)
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Kết nối database
+$servername = "localhost";
+$username = "root";
+$password = "123456";
+$dbname = "academipro";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    die("Kết nối database thất bại: " . $e->getMessage());
+}
+
+// Lấy tham số từ VNPay
+$vnp_ResponseCode = $_GET['vnp_ResponseCode'] ?? '';
+$vnp_TxnRef = $_GET['vnp_TxnRef'] ?? '';
+$vnp_SecureHash = $_GET['vnp_SecureHash'] ?? '';
+$student_id = $_GET['custom_student_id'] ?? '';
+$course_id = $_GET['custom_course_id'] ?? '';
+
+// 1. Kiểm tra chữ ký bảo mật
+$vnp_HashSecret = "UIHVD0YFF3V9FXRNIS6FXJ62VH7UPVD6"; // Khóa bí mật của bạn
+$inputData = [];
+foreach ($_GET as $key => $value) {
+    if (substr($key, 0, 4) == "vnp_") {
+        $inputData[$key] = $value;
+    }
+}
+
+ksort($inputData);
+$hashData = "";
+foreach ($inputData as $key => $value) {
+    if ($key != 'vnp_SecureHash') {
+        $hashData .= $key . "=" . $value . "&";
+    }
+}
+$hashData = rtrim($hashData, "&");
+
+$secureHash = hash('sha256', $vnp_HashSecret . $hashData);
+if ($secureHash != $vnp_SecureHash) {
+    die("Chữ ký không hợp lệ!");
+}
+
+// 2. Xử lý kết quả thanh toán
+if ($vnp_ResponseCode == '00') {
+    $status = "Completed";
+    $message = "Thanh toán thành công!";
+} else {
+    $status = "Failed";
+    $message = "Thanh toán thất bại!";
+}
+
+// 3. Cập nhật database
+try {
+    $stmt = $conn->prepare("UPDATE payments SET status = :status WHERE transaction_id = :transaction_id");
+    $stmt->bindParam(':status', $status);
+    $stmt->bindParam(':transaction_id', $vnp_TxnRef);
+    $stmt->execute();
+
+    // Ghi log
+    file_put_contents('vnpay_log.txt', date('Y-m-d H:i:s') . " - $vnp_TxnRef - $status\n", FILE_APPEND);
+
+    // Trả về kết quả cho VNPay
+    echo json_encode([
+        'code' => '00',
+        'message' => $message,
+        'transaction_id' => $vnp_TxnRef
+    ]);
+} catch(PDOException $e) {
+    die("Lỗi cập nhật database: " . $e->getMessage());
+}
+?>
