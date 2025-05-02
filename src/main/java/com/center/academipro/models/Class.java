@@ -21,6 +21,13 @@ public class Class {
         this.courseName = new SimpleStringProperty(courseName);
         this.studentCount = new SimpleIntegerProperty(studentCount);
     }
+    public Class(int id,String className){
+        this.id = new SimpleIntegerProperty(id);
+        this.className = new SimpleStringProperty(className);
+        this.teacherName = new SimpleStringProperty("");
+        this.courseName = new SimpleStringProperty("");
+        this.studentCount = new SimpleIntegerProperty(0);
+    }
 
     public Class(int id, String className, String teacherName, String courseName){
         this.id = new SimpleIntegerProperty(id);
@@ -90,5 +97,8 @@ public class Class {
         this.studentCount.set(studentCount);
     }
 
-
+    @Override
+    public String toString() {
+        return className.get();
+    }
 }
