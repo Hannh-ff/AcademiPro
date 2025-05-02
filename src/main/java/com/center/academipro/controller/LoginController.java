@@ -38,7 +38,8 @@ public class LoginController {
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     String dbPassword = rs.getString("password");
-                    if (dbPassword.equals(hashPassword(password))) {
+                    System.out.println("User found: true");
+                    if (dbPassword.trim().equals(hashPassword(password).trim())) {
                         user = new Users();
                         user.setId(rs.getInt("id"));
                         user.setFullName(rs.getString("fullname"));
@@ -48,7 +49,11 @@ public class LoginController {
                         user.setRole(rs.getString("role"));
                         return user;
                     }
+                    System.out.println("Input password (raw): " + password);
+                    System.out.println("Input password (hashed): " + hashPassword(password));
+                    System.out.println("DB password: " + dbPassword);
                 }
+
                 // Nếu không tìm thấy người dùng hoặc mật khẩu không khớp
                 return null;
             } catch (NoSuchAlgorithmException e) {
@@ -76,7 +81,7 @@ public class LoginController {
                     // chuyển đến giao diện giáo viên
                     System.out.println("Login successful with role: Teacher");
                     Stage currentStage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-                    SceneSwitch.switchTo(currentStage2, "view/teacher/attendance-view.fxml");
+                    SceneSwitch.switchTo(currentStage2, "view/teacher/menu-bar-view.fxml");
                     break;
                 case "Student":
                     // chuyển đến giao diện học viên
@@ -91,6 +96,7 @@ public class LoginController {
                     break;
             }
         } else {
+
             System.out.println("Login failed: Invalid username or password");
             // Hiển thị thông báo lỗi cho người dùng
             Alerts.alertError("Login Error", "Invalid username or password");

@@ -1,166 +1,157 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.student.PaymentController">
-   <children>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0">
-         <children>
-            <AnchorPane layoutX="30.0" layoutY="25.0" prefHeight="324.0" prefWidth="508.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="25.0">
-               <styleClass>
-                  <String fx:value="shadow" />
-                  <String fx:value="white-bg" />
-                  <String fx:value="radius" />
-               </styleClass>
-               <children>
-                  <Label layoutX="24.0" layoutY="20.0" text="Course Information">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="224.0" layoutY="58.0" text="Course name :">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="courseName" layoutX="224.0" layoutY="85.0" prefHeight="20.0" prefWidth="274.0" text="Tiếng Anh  ai eo 6+">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="224.0" layoutY="119.0" text="Description :">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <AnchorPane layoutX="33.0" layoutY="68.0" prefHeight="200.0" prefWidth="147.0">
-                     <children>
-                        <ImageView fx:id="imageCourse" fitHeight="209.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" />
-                     </children>
-                  </AnchorPane>
-                  <VBox layoutX="224.0" layoutY="147.0" prefHeight="153.0" prefWidth="250.0">
-                     <children>
-                        <Text fx:id="descripCousre" strokeType="OUTSIDE" strokeWidth="0.0" text="Lorem ipsum&quot; is placeholder text, also known as dummy or blind text, commonly used in graphic design, publishing, and web development. It serves as a visual representation of content, allowing designers to focus on layout and typography without being distracted by actual content" wrappingWidth="250.0">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="571.0" layoutY="24.0" prefHeight="552.0" prefWidth="292.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="25.0">
-               <styleClass>
-                  <String fx:value="radius" />
-                  <String fx:value="white-bg" />
-                  <String fx:value="shadow" />
-               </styleClass>
-               <children>
-                  <Label layoutX="27.0" layoutY="27.0" text="Payment Method">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <RadioButton fx:id="onlinePayment" layoutX="21.0" layoutY="68.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="250.0" text="Online Payment">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </RadioButton>
-                  <RadioButton fx:id="cashPayment" layoutX="21.0" layoutY="149.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="250.0" text="Cash Payment">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </RadioButton>
-                  <Label layoutX="21.0" layoutY="256.0" prefHeight="20.0" prefWidth="61.0" text="Expense">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="21.0" layoutY="290.0" text="Pay:">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="priceCourse" alignment="CENTER_RIGHT" layoutX="139.0" layoutY="294.0" prefHeight="25.0" prefWidth="127.0" text="200000">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="273.0" layoutY="294.0" text="đ">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="21.0" layoutY="319.0" text="Fee:">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="amountPayment" alignment="CENTER_RIGHT" layoutX="139.0" layoutY="323.0" prefHeight="25.0" prefWidth="127.0" text="0">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="273.0" layoutY="323.0" text="đ">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="21.0" layoutY="352.0" text="Total:">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="total" alignment="CENTER_RIGHT" layoutX="139.0" layoutY="352.0" prefHeight="25.0" prefWidth="127.0" text="200000">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="273.0" layoutY="352.0" text="đ">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Button layoutX="27.0" onAction="#handlePayment" layoutY="427.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="234.0" styleClass="btn" text="Payment" />
-                  <Separator layoutX="21.0" layoutY="404.0" prefHeight="10.0" prefWidth="250.0" />
-                  <Button layoutX="27.0" layoutY="482.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="234.0" styleClass="btn-back" text="Cancel" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="30.0" layoutY="377.0" prefHeight="200.0" prefWidth="508.0" AnchorPane.bottomAnchor="25.0">
-               <styleClass>
-                  <String fx:value="shadow" />
-                  <String fx:value="white-bg" />
-                  <String fx:value="radius" />
-               </styleClass>
-               <children>
-                  <Label layoutX="14.0" layoutY="14.0" text="Payment Information">
-                     <font>
-                        <Font name="System Bold" size="18.0" />
-                     </font>
-                  </Label>
-                  <TableView layoutX="22.0" layoutY="65.0" prefHeight="113.0" prefWidth="467.0">
-                    <columns>
-                      <TableColumn fx:id="studenNameCol" prefWidth="75.0" text="Student name" />
-                      <TableColumn fx:id="courseNameCol" prefWidth="75.0" text="Course name" />
-                        <TableColumn fx:id="dateCol" prefWidth="75.0" text="Date" />
-                        <TableColumn fx:id="priceCol" prefWidth="75.0" text="Price" />
-                    </columns>
-                  </TableView>
-               </children>
-            </AnchorPane>
-         </children>
-      </AnchorPane>
-   </children>
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.student.PaymentController">
+    <children>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <AnchorPane layoutX="30.0" layoutY="25.0" prefHeight="324.0" prefWidth="508.0" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="25.0">
+                    <styleClass>
+                        <String fx:value="shadow" />
+                        <String fx:value="white-bg" />
+                        <String fx:value="radius" />
+                    </styleClass>
+                    <children>
+                        <Label layoutX="24.0" layoutY="20.0" text="Course Information">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="224.0" layoutY="58.0" text="Course name :">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="courseName" layoutX="224.0" layoutY="85.0" prefHeight="20.0" prefWidth="274.0" text="Tiếng Anh  ai eo 6+">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="224.0" layoutY="119.0" text="Description :">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                        <AnchorPane layoutX="33.0" layoutY="68.0" prefHeight="200.0" prefWidth="147.0">
+                            <children>
+                                <ImageView fx:id="imageCourse" fitHeight="209.0" fitWidth="147.0" pickOnBounds="true" preserveRatio="true" />
+                            </children>
+                        </AnchorPane>
+                        <VBox layoutX="224.0" layoutY="147.0" prefHeight="153.0" prefWidth="250.0">
+                            <children>
+                                <Text fx:id="descripCousre" strokeType="OUTSIDE" strokeWidth="0.0" text="Lorem ipsum&quot; is placeholder text, also known as dummy or blind text, commonly used in graphic design, publishing, and web development. It serves as a visual representation of content, allowing designers to focus on layout and typography without being distracted by actual content" wrappingWidth="250.0">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+                <AnchorPane layoutX="571.0" layoutY="24.0" prefHeight="552.0" prefWidth="292.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="25.0">
+                    <styleClass>
+                        <String fx:value="radius" />
+                        <String fx:value="white-bg" />
+                        <String fx:value="shadow" />
+                    </styleClass>
+                    <children>
+                        <Label layoutX="27.0" layoutY="27.0" text="Payment Method">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <RadioButton fx:id="onlinePayment" layoutX="21.0" layoutY="68.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="250.0" text="Online Payment">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </RadioButton>
+                        <RadioButton fx:id="cashPayment" layoutX="21.0" layoutY="149.0" mnemonicParsing="false" prefHeight="53.0" prefWidth="250.0" text="Cash Payment">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </RadioButton>
+                        <Label layoutX="21.0" layoutY="256.0" prefHeight="20.0" prefWidth="61.0" text="Expense">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="21.0" layoutY="290.0" text="Pay:">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="priceCourse" alignment="CENTER_RIGHT" layoutX="139.0" layoutY="294.0" prefHeight="25.0" prefWidth="127.0" text="200000">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="273.0" layoutY="294.0" text="đ">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="21.0" layoutY="319.0" text="Fee:">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="amountPayment" alignment="CENTER_RIGHT" layoutX="139.0" layoutY="323.0" prefHeight="25.0" prefWidth="127.0" text="0">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="273.0" layoutY="323.0" text="đ">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="21.0" layoutY="352.0" text="Total:">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="total" alignment="CENTER_RIGHT" layoutX="139.0" layoutY="352.0" prefHeight="25.0" prefWidth="127.0" text="200000">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Label layoutX="273.0" layoutY="352.0" text="đ">
+                            <font>
+                                <Font size="16.0" />
+                            </font>
+                        </Label>
+                        <Button layoutX="27.0" layoutY="427.0" mnemonicParsing="false" onAction="#handlePayment" prefHeight="35.0" prefWidth="234.0" styleClass="btn" text="Payment" />
+                        <Separator layoutX="21.0" layoutY="404.0" prefHeight="10.0" prefWidth="250.0" />
+                        <Button layoutX="27.0" layoutY="482.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="234.0" styleClass="btn-back" text="Cancel" />
+                    </children>
+                </AnchorPane>
+                <AnchorPane layoutX="30.0" layoutY="377.0" prefHeight="200.0" prefWidth="508.0" AnchorPane.bottomAnchor="25.0">
+                    <styleClass>
+                        <String fx:value="shadow" />
+                        <String fx:value="white-bg" />
+                        <String fx:value="radius" />
+                    </styleClass>
+                    <children>
+                        <Label layoutX="14.0" layoutY="14.0" text="Payment Information">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                        <TableView fx:id="paymentTable" layoutX="22.0" layoutY="65.0" prefHeight="113.0" prefWidth="467.0">
+                            <columns>
+                                <TableColumn fx:id="studenNameCol" prefWidth="155.0" text="Student name" />
+                                <TableColumn fx:id="courseNameCol" prefWidth="144.0" text="Course name" />
+                                <TableColumn fx:id="dateCol" prefWidth="167.0" text="Date" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
 </StackPane>
