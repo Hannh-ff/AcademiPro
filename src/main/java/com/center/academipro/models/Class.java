@@ -11,8 +11,7 @@ public class Class {
     private IntegerProperty studentCount;
 
 
-    public Class() {
-    }
+    public Class() {}
 
     public Class(int id, String className, String teacherName, String courseName, int studentCount) {
         this.id = new SimpleIntegerProperty(id);
