@@ -1,8 +1,10 @@
 package com.center.academipro.controller.student.course;
 
 import com.center.academipro.controller.student.EventDAO;
+import com.center.academipro.controller.student.PaymentController;
 import com.center.academipro.models.Course;
 import com.center.academipro.session.SessionCourse;
+import com.center.academipro.session.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -92,8 +94,11 @@ public class ListCoursesController implements Initializable {
             SessionCourse.setCourseId(course.getId()); // Lưu courseId vào session
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/student/class/list-classes.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/student/payment-views.fxml"));
                 Parent newView = loader.load(); // Load xong lấy root mới
+
+                PaymentController controller = loader.getController();
+                controller.setStudentAndCourse(SessionManager.getInstance().getUserId(), course.getId());
 
                 StackPane pane = (StackPane) ((Node) e.getSource()).getScene().getRoot();
                 BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
