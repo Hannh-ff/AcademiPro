@@ -33,6 +33,7 @@ public class AssignmentController {
     @FXML
     private void initialize() {
         loadClassList();
+        System.out.println("Teacher ID: " + teacherId);
     }
 
     private void loadClassList() {
@@ -53,7 +54,7 @@ public class AssignmentController {
     }
 
 
-    private void handleAddAssignment() {
+    public void handleAddAssignment() {
         String titleText = title.getText();
         String desc = description.getText();
         LocalDate localDate = deadline.getValue();
@@ -66,6 +67,14 @@ public class AssignmentController {
 
         int classId = selectedClass.getId();
         Date deadlineDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        int userId = SessionManager.getInstance().getUserId();
+        Integer teacherId = getTeacherIdFromUserId(userId);
+
+        if (teacherId == null) {
+            showAlert(Alert.AlertType.ERROR, "Cannot find teacher information for current user.");
+            return;
+        }
 
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "INSERT INTO assignments (class_id, teacher_id, title, description, deadline) VALUES (?, ?, ?, ?, ?)";
@@ -89,12 +98,27 @@ public class AssignmentController {
         }
     }
 
-    private void clearForm() {
+    public void clearForm() {
         title.clear();
         description.clear();
         deadline.setValue(null);
         classCombo.setValue(null);
     }
+    private Integer getTeacherIdFromUserId(int userId) {
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "SELECT id FROM teachers WHERE user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            var rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     private void showAlert(Alert.AlertType type, String message) {
         Alert alert = new Alert(type);

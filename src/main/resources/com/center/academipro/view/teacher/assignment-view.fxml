@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-fx:controller="com.center.academipro.controller.teacher.AssignmentController">
+<AnchorPane prefHeight="600.0" prefWidth="1000.0" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.teacher.AssignmentController">
    <children>
       <VBox layoutX="77.0" layoutY="89.0" prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -61,20 +60,20 @@ fx:controller="com.center.academipro.controller.teacher.AssignmentController">
                            </font>
                         </Label>
                         <TextArea fx:id="description" layoutX="468.0" layoutY="94.0" prefHeight="248.0" prefWidth="386.0" styleClass="radius-textField" AnchorPane.bottomAnchor="28.0" AnchorPane.rightAnchor="35.0" AnchorPane.topAnchor="98.0" />
-                        <Button layoutX="51.0" layoutY="320.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="78.0" styleClass="btn-clear" text="Clear" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="51.0" />
+                        <Button layoutX="51.0" layoutY="320.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="78.0" onAction="#clearForm" styleClass="btn-clear" text="Clear" AnchorPane.bottomAnchor="28.0" AnchorPane.leftAnchor="51.0" />
                         <Label layoutX="51.0" layoutY="215.0" prefHeight="25.0" prefWidth="146.0" styleClass="extra-text" text="Class :">
                            <font>
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <ComboBox layoutX="71.0" layoutY="254.0" prefHeight="38.0" prefWidth="252.0" AnchorPane.leftAnchor="70.0" />
+                        <ComboBox fx:id="classCombo" layoutX="71.0" layoutY="254.0" prefHeight="38.0" prefWidth="252.0" AnchorPane.leftAnchor="70.0" />
                      </children>
                   </AnchorPane>
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="77.0" prefWidth="1000.0">
                <children>
-                  <Button layoutX="804.0" layoutY="16.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="125.0" styleClass="btn-add" text="Add exercises" AnchorPane.rightAnchor="70.0" />
+                  <Button layoutX="804.0" layoutY="16.0" mnemonicParsing="false" onAction="#handleAddAssignment" prefHeight="45.0" prefWidth="125.0" styleClass="btn-add" text="Add exercises" AnchorPane.rightAnchor="70.0" />
                   <Button layoutX="664.0" layoutY="16.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="91.0" styleClass="btn-delete" text="Back" AnchorPane.rightAnchor="245.0" />
                </children>
             </AnchorPane>

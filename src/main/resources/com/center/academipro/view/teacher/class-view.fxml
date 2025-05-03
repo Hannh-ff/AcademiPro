@@ -18,12 +18,12 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Button layoutX="849.0" layoutY="31.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="103.0" styleClass="btn" text="Assignment" AnchorPane.rightAnchor="30.0" />
+            <Button layoutX="849.0" layoutY="31.0" mnemonicParsing="false" onAction="#changeSceneAssignment" prefHeight="47.0" prefWidth="103.0" styleClass="btn" text="Assignment" AnchorPane.rightAnchor="30.0" />
             <AnchorPane layoutX="45.0" layoutY="125.0" prefHeight="431.0" prefWidth="907.0" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="95.0">
                <children>
                   <TableView fx:id="tableViewSubmit" layoutX="29.0" layoutY="47.0" prefHeight="431.3333333333333" prefWidth="940.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn prefWidth="75.0" text="Id" />
+                      <TableColumn fx:id="idCol" prefWidth="75.0" text="Id" />
                       <TableColumn fx:id="studentCol" prefWidth="75.0" text="Name" />
                         <TableColumn fx:id="assignmentCol" prefWidth="75.0" text="Asignment" />
                         <TableColumn fx:id="submitDateCol" prefWidth="75.0" text="Submit date" />
@@ -34,7 +34,6 @@
                   </TableView>
                </children>
             </AnchorPane>
-            <Button layoutX="882.0" layoutY="546.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="87.0" styleClass="btn-add" text="Save" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="30.0" />
          </children>
       </AnchorPane>
    </children>
