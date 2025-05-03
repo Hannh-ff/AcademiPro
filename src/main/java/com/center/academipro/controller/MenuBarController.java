@@ -91,6 +91,27 @@ public class MenuBarController {
         mainBorderPane.setCenter(newView);
     }
 
+    public void attendanceScene(ActionEvent actionEvent) {
+        FXMLLoader loader = SceneSwitch.loadView("view/teacher/attendance-view.fxml");
+        assert loader != null;
+        Parent newView = loader.getRoot();
+        mainBorderPane.setCenter(newView);
+    }
+
+    public void historyAttendanceScene(ActionEvent actionEvent) {
+        FXMLLoader loader = SceneSwitch.loadView("view/teacher/history-attendance.fxml");
+        assert loader != null;
+        Parent newView = loader.getRoot();
+        mainBorderPane.setCenter(newView);
+    }
+
+    public void myClassTeacherScene(ActionEvent actionEvent) {
+        FXMLLoader loader = SceneSwitch.loadView("view/teacher/class-view.fxml");
+        assert loader != null;
+        Parent newView = loader.getRoot();
+        mainBorderPane.setCenter(newView);
+    }
+
     @FXML
     private void handleLogout(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

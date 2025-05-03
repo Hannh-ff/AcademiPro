@@ -35,7 +35,7 @@ public class AddStudentController implements Initializable {
     public void initialize(java.net.URL location, ResourceBundle resources) {
         courseListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         loadCourses();
-//        loadClasses();
+        loadClasses();
         restrictFutureDate();
     }
 
@@ -57,23 +57,23 @@ public class AddStudentController implements Initializable {
         }
     }
 
-//    private void loadClasses() {
-//        try (Connection conn = DBConnection.getConnection();
-//             PreparedStatement pst = conn.prepareStatement("SELECT id, class_name FROM classes");
-//             ResultSet rs = pst.executeQuery()) {
-//
-//            while (rs.next()) {
-//                int id = rs.getInt("id");
-//                String name = rs.getString("class_name");
-//                Class c = new Class(id, name);
-//                className.getItems().add(c);
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            showAlert(Alert.AlertType.ERROR, "Could not load class list.");
-//        }
-//    }
+    private void loadClasses() {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pst = conn.prepareStatement("SELECT id, class_name FROM classes");
+             ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("class_name");
+                Class c = new Class(id, name);
+                className.getItems().add(c);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Could not load class list.");
+        }
+    }
 
     @FXML
     private void addStudent() {
