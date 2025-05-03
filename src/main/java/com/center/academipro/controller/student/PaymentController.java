@@ -6,6 +6,7 @@ import com.center.academipro.models.Student;
 import com.center.academipro.session.SessionCourse;
 import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.DBConnection;
+import com.center.academipro.utils.SceneSwitch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -68,7 +69,6 @@ public class PaymentController {
         courseNameCol.setCellValueFactory(cell -> cell.getValue().courseNameProperty());
         dateCol.setCellValueFactory(cell -> cell.getValue().paymentDateProperty());
 
-
     }
 
     public void setStudentAndCourse(int studentId, int courseId) {
@@ -77,6 +77,7 @@ public class PaymentController {
 
         getCourseInfo();
         getStudentInfo();
+
     }
 
     public void getCourseInfo() {
@@ -104,37 +105,57 @@ public class PaymentController {
 
     public void getStudentInfo() {
         info.clear();
-        String sql = "SELECT u.fullname AS student_name, c.course_name, p.payment_date " +
-                "FROM payments p " +
-                "JOIN students s ON p.student_id = s.id " +
-                "JOIN users u ON s.user_id = u.id " +
-                "JOIN courses c ON p.course_id = c.id " +
-                "WHERE s.id = ? AND c.id = ?";
 
+        System.out.println("Student ID: " + studentId);
+        System.out.println("Course ID: " + courseId);
+
+        String sql = "SELECT u.fullname AS student_name, c.course_name " +
+                "FROM students s " +
+                "JOIN users u ON s.user_id = u.id " +
+                "JOIN courses c ON c.id = ? " +
+                "WHERE s.user_id  = ?";
         try (Connection conn = DBConnection.getConn();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, studentId);
-            stmt.setInt(2, courseId);
+
+            stmt.setInt(1, courseId);
+            stmt.setInt(2, studentId);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
                 String studentName = rs.getString("student_name");
                 String courseName = rs.getString("course_name");
-                LocalDateTime date = rs.getTimestamp("payment_date").toLocalDateTime();
+                LocalDateTime date = LocalDateTime.now();
 
                 info.add(new Payment(studentName, courseName, date));
+                System.out.println("Student Name: " + studentName + ", Course: " + courseName + ", Date: " + date);
 
             }
+
             paymentTable.setItems(info);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    private int getStudentIdByUserId(int userId) {
+        String sql = "SELECT id FROM students WHERE user_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; // Trả về -1 nếu không tìm thấy
+    }
+
     @FXML
-    private void handlePayment(ActionEvent event) {
+    private void handlePayment(ActionEvent actionEvent) {
         if (cashPayment.isSelected()) {
-            payByCash();
+            payByCash(actionEvent);
         } else if (onlinePayment.isSelected()) {
             payOnline(); // Nếu sau này bạn cần thanh toán online
         } else {
@@ -142,31 +163,77 @@ public class PaymentController {
         }
     }
 
-    private void payByCash() {
+    public void handleCancel(ActionEvent actionEvent) {
+        SceneSwitch.returnToView(actionEvent, "view/student/course/list-courses.fxml");
+    }
+
+    private void payByCash(ActionEvent actionEvent) {
         try {
+            int userId = SessionManager.getInstance().getUserId();
+            int studentId = getStudentIdByUserId(userId);
+
+            if (studentId == -1) {
+                showAlert(AlertType.ERROR, "Error", "Student information not found for this user.");
+                return;
+            }
+
             Connection conn = DBConnection.getConnection();
-            String sql = "INSERT INTO payments (student_id, course_id, amount, payment_method, payment_status, payment_date) VALUES (?, ?, ?, ?, ?, ?)";
+            conn.setAutoCommit(false); // Bắt đầu transaction
 
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, studentId);
-            pstmt.setInt(2, courseId);
-            pstmt.setBigDecimal(3, new java.math.BigDecimal(total.getText()));
-            pstmt.setString(4, "Cash");
-            pstmt.setString(5, "Completed");
-            pstmt.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+            // Kiểm tra đã đăng ký chưa
+            String checkSql = "SELECT COUNT(*) FROM enrollments WHERE student_id = ? AND course_id = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkSql);
+            checkStmt.setInt(1, studentId);
+            checkStmt.setInt(2, courseId);
+            ResultSet rs = checkStmt.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                showAlert(AlertType.WARNING, "Duplicate Enrollment", "You have already enrolled in this course.");
+                conn.close();
+                return;
+            }
 
-            int affectedRows = pstmt.executeUpdate();
+            // Thực hiện thanh toán
+            String paymentSql = "INSERT INTO payments (student_id, course_id, amount, payment_method, payment_status, payment_date) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement paymentStmt = conn.prepareStatement(paymentSql);
+            paymentStmt.setInt(1, studentId);
+            paymentStmt.setInt(2, courseId);
+            paymentStmt.setBigDecimal(3, new java.math.BigDecimal(total.getText()));
+            paymentStmt.setString(4, "Cash");
+            paymentStmt.setString(5, "Completed");
+            paymentStmt.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+            int paymentResult = paymentStmt.executeUpdate();
 
-            if (affectedRows > 0) {
-                showAlert(AlertType.INFORMATION, "Payment Successful", "Cash payment completed successfully!");
+            // Thêm vào bảng enrollments
+            String enrollSql = "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)";
+            PreparedStatement enrollStmt = conn.prepareStatement(enrollSql);
+            enrollStmt.setInt(1, studentId);
+            enrollStmt.setInt(2, courseId);
+            int enrollResult = enrollStmt.executeUpdate();
+
+            // Thêm vào bảng purchase_history
+            String historySql = "INSERT INTO purchase_history (user_id, course_id, purchase_date) VALUES (?, ?, ?)";
+            PreparedStatement historyStmt = conn.prepareStatement(historySql);
+            historyStmt.setInt(1, userId);
+            historyStmt.setInt(2, courseId);
+            historyStmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
+            int historyResult = historyStmt.executeUpdate();
+
+            conn.commit(); // Mọi thứ thành công
+
+            if (paymentResult > 0 && enrollResult > 0) {
+                showAlert(AlertType.INFORMATION, "Success", "Payment and enrollment completed!");
+                SessionCourse.setCourseId(courseId);
+                SceneSwitch.returnToView(actionEvent, "view/student/class/list-classes.fxml");
             } else {
-                showAlert(AlertType.ERROR, "Payment Failed", "Payment failed. Please try again.");
+                showAlert(AlertType.ERROR, "Failed", "Operation failed. Please try again.");
             }
 
             conn.close();
+        } catch (SQLIntegrityConstraintViolationException ex) {
+            showAlert(AlertType.WARNING, "Duplicate Entry", "You have already enrolled in this course.");
         } catch (Exception e) {
             e.printStackTrace();
-            showAlert(AlertType.ERROR, "Error", "An error occurred during payment: " + e.getMessage());
+            showAlert(AlertType.ERROR, "Error", "An error occurred: " + e.getMessage());
         }
     }
 
@@ -180,5 +247,7 @@ public class PaymentController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
+
 }
 

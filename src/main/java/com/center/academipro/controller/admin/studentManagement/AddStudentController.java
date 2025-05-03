@@ -93,7 +93,7 @@ public class AddStudentController implements Initializable {
             return;
         }
 
-        int classId= selectedClass.getId(); // Lấy class_id từ selectedClass
+        Integer classId = (selectedClass != null) ? selectedClass.getId() : null;
 
 
         try (Connection conn = DBConnection.getConnection()) {
@@ -129,11 +129,13 @@ public class AddStudentController implements Initializable {
             }
 
             // 3. Thêm vào bảng student_classes
-            String insertSC = "INSERT INTO student_classes(student_id, class_id) VALUES (?, ?)";
-            PreparedStatement pstSC = conn.prepareStatement(insertSC);
-            pstSC.setInt(1, studentId);
-            pstSC.setInt(2, classId);
-            pstSC.executeUpdate();
+            if (classId != null) {
+                String insertSC = "INSERT INTO student_classes(student_id, class_id) VALUES (?, ?)";
+                PreparedStatement pstSC = conn.prepareStatement(insertSC);
+                pstSC.setInt(1, studentId);
+                pstSC.setInt(2, classId);
+                pstSC.executeUpdate();
+            }
 
             conn.commit();
             showAlert(Alert.AlertType.INFORMATION, "Student added successfully.");
