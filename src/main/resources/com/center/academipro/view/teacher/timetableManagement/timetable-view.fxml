@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.teacher.TimetableController">
+    <children>
+        <Label layoutX="38.0" layoutY="14.0" text="Timetable">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+        <AnchorPane layoutX="30.0" layoutY="56.0" prefHeight="49.0" prefWidth="837.0" stylesheets="@../../../css/thao.css" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <styleClass>
+                <String fx:value="shadow" />
+                <String fx:value="white-bg" />
+                <String fx:value="radius" />
+            </styleClass>
+            <children>
+                <TextField fx:id="searchField" layoutX="23.0" layoutY="7.0" prefHeight="35.0" prefWidth="450.0" promptText="Search">
+                    <font>
+                        <Font />
+                    </font>
+                </TextField>
+                <Button layoutX="746.0" layoutY="9.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="74.0" styleClass="btn-add" text="Add new" AnchorPane.rightAnchor="22.0" />
+                <Button layoutX="643.0" layoutY="9.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="74.0" styleClass="btn-clear" text="ReLoad" AnchorPane.rightAnchor="125.0" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="20.0" layoutY="135.0" prefHeight="409.0" prefWidth="842.0" stylesheets="@../../../css/thao.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="135.0">
+            <styleClass>
+                <String fx:value="radius" />
+                <String fx:value="white-bg" />
+                <String fx:value="shadow" />
+            </styleClass>
+            <children>
+                <AnchorPane layoutX="28.0" layoutY="24.0" prefHeight="349.0" prefWidth="795.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+                    <children>
+                        <TableView fx:id="timetableTable" prefHeight="431.0" prefWidth="1020.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <columns>
+                                <TableColumn fx:id="idColumn" prefWidth="45.0" text="ID" />
+                                <TableColumn fx:id="classColumn" prefWidth="123.0" text="Class Name" />
+                                <TableColumn fx:id="dateColumn" prefWidth="115.0" text="Date" />
+                                <TableColumn fx:id="startTimeCol" prefWidth="131.0" text="Start  Time" />
+                                <TableColumn fx:id="endTimeCol" prefWidth="114.0" text="End Time" />
+                                <TableColumn fx:id="actionColumn" prefWidth="123.0" text="Actions" />
+                            </columns>
+                        </TableView>
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

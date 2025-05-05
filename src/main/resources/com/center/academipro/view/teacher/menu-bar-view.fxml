@@ -27,6 +27,7 @@
                         <Button fx:id="btnHistory" layoutX="8.0" layoutY="205.0" mnemonicParsing="false" onAction="#historyAttendanceScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="History Attendance" textFill="WHITE" />
                         <Button fx:id="btnMyClassTeacher" layoutX="8.0" layoutY="259.0" mnemonicParsing="false" onAction="#myClassTeacherScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="My Class" textFill="WHITE" />
                         <Line endX="100.0" layoutX="109.0" layoutY="125.0" startX="-100.0" stroke="WHITE" />
+                  <Button fx:id="btnTimetable" layoutX="8.0" layoutY="314.0" mnemonicParsing="false" onAction="#timeTableScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Timetable" textFill="WHITE" />
                     </children>
                 </AnchorPane>
             </left>

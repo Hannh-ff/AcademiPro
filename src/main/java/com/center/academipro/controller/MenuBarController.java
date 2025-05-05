@@ -99,7 +99,7 @@ public class MenuBarController {
     }
 
     public void historyAttendanceScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView("view/teacher/history-attendance.fxml");
+        FXMLLoader loader = SceneSwitch.loadView("view/teacher/history-attendance-view.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
@@ -107,6 +107,12 @@ public class MenuBarController {
 
     public void myClassTeacherScene(ActionEvent actionEvent) {
         FXMLLoader loader = SceneSwitch.loadView("view/teacher/class-view.fxml");
+        assert loader != null;
+        Parent newView = loader.getRoot();
+        mainBorderPane.setCenter(newView);
+    }
+    public void timeTableScene(ActionEvent actionEvent) {
+        FXMLLoader loader = SceneSwitch.loadView("view/teacher/timetableManagement/timetable-view.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
@@ -127,5 +133,4 @@ public class MenuBarController {
             e.printStackTrace();
         }
     }
-
 }
