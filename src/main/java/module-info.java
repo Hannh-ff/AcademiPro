@@ -12,6 +12,7 @@ module com.center.academipro {
     opens com.center.academipro.controller.student to javafx.fxml;
     opens com.center.academipro.controller.admin.courseManagement to javafx.fxml;
 //    opens com.center.academipro.controller.admin to javafx.fxml;
+    opens com.center.academipro.controller.admin.paymentManagement to javafx.fxml;
     opens com.center.academipro.controller.admin.teacherManagement to javafx.fxml;
     opens com.center.academipro.controller.teacher to javafx.fxml;
     opens com.center.academipro.controller.admin.studentManagement to javafx.fxml;
