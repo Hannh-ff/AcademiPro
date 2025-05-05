@@ -84,6 +84,8 @@ public class CourseController {
         addActionColumn();
         loadCoursesFromDatabase();
         setupSearchFilter();
+        tableCourse.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
 
     public void reloadCourseTable() {

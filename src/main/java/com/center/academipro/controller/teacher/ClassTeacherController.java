@@ -62,6 +62,7 @@ public class ClassTeacherController {
         });
 
         System.out.println("Teacher ID: " + teacherId);
+        tableViewSubmit.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     private void loadClassList() {
