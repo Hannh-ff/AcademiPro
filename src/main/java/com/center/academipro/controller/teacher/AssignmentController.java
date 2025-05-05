@@ -4,6 +4,7 @@ import com.center.academipro.models.Class;
 import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.DBConnection;
 import com.center.academipro.models.Assignment;
+import com.center.academipro.utils.SceneSwitch;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
@@ -126,5 +127,9 @@ public class AssignmentController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void handleBack(ActionEvent actionEvent) {
+        SceneSwitch.returnToView(actionEvent,"view/teacher/class-view.fxml");
     }
 }

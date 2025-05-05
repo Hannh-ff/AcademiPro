@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 
 import javafx.scene.image.ImageView;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -58,21 +59,42 @@ public class ListCoursesController implements Initializable {
         card.setEffect(new DropShadow(5, Color.rgb(0, 0, 0, 0.1)));
 
         ImageView imageView = new ImageView();
-        InputStream imgStream = getClass().getResourceAsStream("/com/center/academipro/images/" + course.getImage());
-        if (imgStream == null) {
-            System.out.println("Image not found " + course.getImage());
-            imgStream = getClass().getResourceAsStream("/com/center/academipro/images/1.png");
-        }
-        if (imgStream != null) {
-            Image image = new Image(imgStream);
+        File imgFile = new File("images/" + course.getImage());
+
+        if (imgFile.exists()) {
+            Image image = new Image(imgFile.toURI().toString());
             imageView.setImage(image);
-            imageView.setFitWidth(100);
-            imageView.setFitHeight(100);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
         } else {
-            System.out.println("Image stream is null for " + course.getImage());
+            System.out.println("Image not found: " + imgFile.getPath());
+            // Ảnh mặc định
+            InputStream fallback = getClass().getResourceAsStream("/com/center/academipro/images/1.png");
+            if (fallback != null) {
+                imageView.setImage(new Image(fallback));
+            }
         }
+
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+
+
+//        ImageView imageView = new ImageView();
+//        InputStream imgStream = getClass().getResourceAsStream("/com/center/academipro/images/" + course.getImage());
+//        if (imgStream == null) {
+//            System.out.println("Image not found " + course.getImage());
+//            imgStream = getClass().getResourceAsStream("/com/center/academipro/images/1.png");
+//        }
+//        if (imgStream != null) {
+//            Image image = new Image(imgStream);
+//            imageView.setImage(image);
+//            imageView.setFitWidth(100);
+//            imageView.setFitHeight(100);
+//            imageView.setPreserveRatio(true);
+//            imageView.setSmooth(true);
+//        } else {
+//            System.out.println("Image stream is null for " + course.getImage());
+//        }
 
         VBox info = new VBox(5);
         Label title = new Label(course.getCourseName());
@@ -156,9 +178,6 @@ public class ListCoursesController implements Initializable {
                 }
                 return match;
             });
-
-
-            System.out.println("Filtered Movies: " + filteredCourse.size());
             currentPage = 0;
             renderPage(currentPage);
         });

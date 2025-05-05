@@ -60,7 +60,10 @@ public class ClassTeacherController {
                 loadSubmissionDataByClassId(selectedClass.getId());
             }
         });
+
+        System.out.println("Teacher ID: " + teacherId);
     }
+
     private void loadClassList() {
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "SELECT id, class_name FROM classes WHERE teacher_id = ?";

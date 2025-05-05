@@ -2,6 +2,7 @@ package com.center.academipro.controller.admin.studentManagement;
 
 import com.center.academipro.models.Course;
 import com.center.academipro.models.Class;
+import com.center.academipro.utils.Alerts;
 import com.center.academipro.utils.DBConnection;
 import com.center.academipro.utils.SceneSwitch;
 import javafx.event.ActionEvent;
@@ -97,6 +98,17 @@ public class AddStudentController implements Initializable {
 
 
         try (Connection conn = DBConnection.getConnection()) {
+
+            // Kiểm tra xem username đã tồn tại chưa
+            String checkUsernameSQL = "SELECT id FROM users WHERE username = ?";
+            PreparedStatement checkUsernamePst = conn.prepareStatement(checkUsernameSQL);
+            checkUsernamePst.setString(1, usernameValue);
+            ResultSet checkResult = checkUsernamePst.executeQuery();
+            if (checkResult.next()) {
+                Alerts.alertWarning("Warning", "Username already exists.");
+                return;
+            }
+
             conn.setAutoCommit(false);
 
             // 1. Thêm vào bảng users
