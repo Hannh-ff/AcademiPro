@@ -14,10 +14,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
@@ -67,34 +64,50 @@ public class SubmitAssignmentController implements Initializable {
 
         String fileLink = selectedFile.getAbsolutePath(); // Hoặc upload lên server và lưu link
         String comment = commentField.getText();
-        int studentId = SessionManager.getInstance().getUserId();
+        int userId  = SessionManager.getInstance().getUserId();
         String status = LocalDateTime.now().isAfter(deadline.toLocalDateTime()) ? "Done Late" : "Done";
 
-        String sql = """
+        String sqlGetStudentId = "SELECT id FROM students WHERE user_id = ?";
+        String sqlSubmit  = """
             INSERT INTO submissions (assignment_id, student_id, submitted_at, status, file_link, comment)
             VALUES (?, ?, CURRENT_TIMESTAMP, ?, ?, ?)
             ON DUPLICATE KEY UPDATE submitted_at=CURRENT_TIMESTAMP, status=?, file_link=?, comment=?
         """;
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection()) {
+            int studentId = -1;
 
-            stmt.setInt(1, assignmentId);
-            stmt.setInt(2, studentId);
-            stmt.setString(3, status);
-            stmt.setString(4, fileLink);
-            stmt.setString(5, comment);
+            // Lấy student_id từ user_id
+            try (PreparedStatement ps = conn.prepareStatement(sqlGetStudentId)) {
+                ps.setInt(1, userId);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    studentId = rs.getInt("id");
+                } else {
+                    Alerts.alertError("Error", "Student not found.");
+                    return;
+                }
+            }
 
-            stmt.setString(6, status);
-            stmt.setString(7, fileLink);
-            stmt.setString(8, comment);
+            // Thực hiện ghi dữ liệu nộp bài
+            try (PreparedStatement stmt = conn.prepareStatement(sqlSubmit)) {
+                stmt.setInt(1, assignmentId);
+                stmt.setInt(2, studentId);
+                stmt.setString(3, status);
+                stmt.setString(4, fileLink);
+                stmt.setString(5, comment);
 
-            stmt.executeUpdate();
-            Alerts.alertInfo("Submission Successful", "Your assignment has been submitted successfully.");
+                stmt.setString(6, status);
+                stmt.setString(7, fileLink);
+                stmt.setString(8, comment);
+
+                stmt.executeUpdate();
+                Alerts.alertInfo("Successfully", "The assignment has been submitted successfully.");
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            Alerts.alertError("Submission Failed", "An error occurred while submitting your assignment.");
+            Alerts.alertError("Error", "An error occurred while submitting the assignment.");
         }
     }
 

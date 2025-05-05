@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
-import java.io.File;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -37,10 +37,10 @@ public class EditCourseController {
 
         // Hiển thị ảnh nếu có
         try {
-            Image image = new Image(course.getImage());
+            Image image = new Image(new File(course.getImage()).toURI().toString());
             imagePreview.setImage(image);
         } catch (Exception e) {
-            System.out.println("Không thể tải ảnh: " + course.getImage());
+            System.out.println("Cannot load image: " + course.getImage());
         }
     }
 
@@ -80,8 +80,31 @@ public class EditCourseController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
-            txtImage.setText(file.getAbsolutePath());
-            loadImage(file.getAbsolutePath());
+            try {
+                File imagesDir = new File("images"); // thư mục ngoài src
+                if (!imagesDir.exists()) {
+                    imagesDir.mkdirs();
+                }
+
+                String uniqueFileName = System.currentTimeMillis() + "_" + file.getName();
+                File destFile = new File(imagesDir, uniqueFileName);
+
+                // copy ảnh vào thư mục images
+                try (InputStream in = new FileInputStream(file);
+                     OutputStream out = new FileOutputStream(destFile)) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = in.read(buffer)) > 0) {
+                        out.write(buffer, 0, length);
+                    }
+                }
+
+                txtImage.setText("images/" + uniqueFileName); // lưu đường dẫn tương đối
+                loadImage(destFile.getPath());
+
+            } catch (IOException e) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Cannot import image: " + e.getMessage());
+            }
         }
     }
 

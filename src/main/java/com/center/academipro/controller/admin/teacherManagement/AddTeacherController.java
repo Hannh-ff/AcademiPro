@@ -1,6 +1,7 @@
 package com.center.academipro.controller.admin.teacherManagement;
 
 import com.center.academipro.models.Course;
+import com.center.academipro.utils.Alerts;
 import com.center.academipro.utils.DBConnection;
 import com.center.academipro.utils.SceneSwitch;
 import javafx.event.ActionEvent;
@@ -46,6 +47,17 @@ public class AddTeacherController implements Initializable {
         }
 
         try (Connection conn = DBConnection.getConnection()) {
+
+            // Kiểm tra username đã tồn tại chưa
+            String checkUsernameSQL = "SELECT id FROM users WHERE username = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkUsernameSQL);
+            checkStmt.setString(1, usernameValue);
+            ResultSet checkRs = checkStmt.executeQuery();
+            if (checkRs.next()) {
+                Alerts.alertWarning("Warning", "Username already exists.");
+                return;
+            }
+
             conn.setAutoCommit(false);
 
             // 1. Thêm vào bảng users
