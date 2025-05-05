@@ -8,84 +8,113 @@
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="900.0" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.DashboardController">
+<AnchorPane prefHeight="598.0" prefWidth="1052.0" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.DashboardController">
    <children>
       <AnchorPane prefHeight="564.0" prefWidth="882.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane prefHeight="564.0" prefWidth="882.0" stylesheets="@../../css/thao.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ScrollPane layoutX="19.333333333333332" layoutY="14.0" prefHeight="153.0" prefWidth="849.0" stylesheets="@../../css/thao.css" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
-                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="137.0" prefWidth="1000.0">
+                  <AnchorPane layoutX="14.0" layoutY="14.0" minHeight="0.0" minWidth="0.0" prefHeight="158.0" prefWidth="1000.0">
+                     <children>
+                        <AnchorPane layoutX="25.0" layoutY="10.0" prefHeight="120.0" prefWidth="225.0" style="-fx-background-radius: 15;" styleClass="main-color" stylesheets="@../../css/thao.css">
                            <children>
-                              <AnchorPane layoutX="26.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" styleClass="main-color" stylesheets="@../../css/thao.css">
+                              <Label layoutX="99.0" layoutY="23.0" text="Total Student" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblTotalStudent" alignment="TOP_LEFT" contentDisplay="RIGHT" layoutX="110.0" layoutY="50.0" prefHeight="27.0" prefWidth="190.0" text="0" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane layoutX="10.0" layoutY="20.0" prefHeight="85.0" prefWidth="85.0" style="-fx-background-color: white; -fx-background-radius: 50;">
                                  <children>
-                                    <Label layoutX="21.0" layoutY="14.0" text="Total Student" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="lblTotalStudent" alignment="TOP_RIGHT" layoutX="117.0" layoutY="57.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
-                                       <font>
-                                          <Font size="24.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane layoutX="286.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" styleClass="main-color" stylesheets="@../../css/thao.css">
-                                 <children>
-                                    <Label layoutX="18.0" layoutY="17.0" text="Total Teacher" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="lblTotalTeacher" alignment="TOP_RIGHT" layoutX="114.0" layoutY="60.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
-                                       <font>
-                                          <Font size="24.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane layoutX="539.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" styleClass="main-color" stylesheets="@../../css/thao.css">
-                                 <children>
-                                    <Label layoutX="18.0" layoutY="17.0" text="Total Course" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="lblTotalCourse" alignment="TOP_RIGHT" layoutX="114.0" layoutY="60.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
-                                       <font>
-                                          <Font size="24.0" />
-                                       </font>
-                                    </Label>
-                                 </children>
-                              </AnchorPane>
-                              <AnchorPane layoutX="786.0" layoutY="15.0" prefHeight="113.0" prefWidth="213.0" styleClass="main-color" stylesheets="@../../css/thao.css">
-                                 <children>
-                                    <Label layoutX="18.0" layoutY="17.0" text="Total Income" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="lblTotalIncome" alignment="TOP_RIGHT" layoutX="114.0" layoutY="60.0" prefHeight="27.0" prefWidth="82.0" text="0" textFill="WHITE">
-                                       <font>
-                                          <Font size="24.0" />
-                                       </font>
-                                    </Label>
+                                    <ImageView fitHeight="60.0" fitWidth="55.0" layoutX="15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/icon1.png" />
+                                       </image>
+                                    </ImageView>
                                  </children>
                               </AnchorPane>
                            </children>
                         </AnchorPane>
-                     </content>
-                     <styleClass>
-                        <String fx:value="white-bg" />
-                        <String fx:value="shadow" />
-                     </styleClass>
-                  </ScrollPane>
+                        <AnchorPane layoutX="345.0" layoutY="10.0" prefHeight="120.0" prefWidth="225.0" style="-fx-background-radius: 15;" styleClass="main-color" stylesheets="@../../css/thao.css">
+                           <children>
+                              <Label layoutX="99.0" layoutY="23.0" text="Total Teacher" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblTotalTeacher" alignment="TOP_LEFT" contentDisplay="RIGHT" layoutX="110.0" layoutY="50.0" prefHeight="27.0" prefWidth="190.0" text="0" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane layoutX="10.0" layoutY="20.0" prefHeight="85.0" prefWidth="85.0" style="-fx-background-color: white; -fx-background-radius: 50;">
+                                 <children>
+                                    <ImageView fitHeight="60.0" fitWidth="55.0" layoutX="15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/icon2.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="670.0" layoutY="10.0" prefHeight="120.0" prefWidth="225.0" style="-fx-background-radius: 15;" styleClass="main-color" stylesheets="@../../css/thao.css">
+                           <children>
+                              <Label layoutX="99.0" layoutY="23.0" text="Total Course" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblTotalCourse" alignment="TOP_LEFT" layoutX="110.0" layoutY="50.0" prefHeight="27.0" prefWidth="190.0" text="0" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane layoutX="10.0" layoutY="20.0" prefHeight="85.0" prefWidth="85.0" style="-fx-background-color: white; -fx-background-radius: 50;">
+                                 <children>
+                                    <ImageView fitHeight="60.0" fitWidth="55.0" layoutX="15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/icon3.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="995.0" layoutY="10.0" prefHeight="120.0" prefWidth="220.0" style="-fx-background-radius: 15;" styleClass="main-color" stylesheets="@../../css/thao.css">
+                           <children>
+                              <Label layoutX="99.0" layoutY="23.0" text="Total Income" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblTotalIncome" alignment="TOP_LEFT" layoutX="110.0" layoutY="50.0" prefHeight="35.0" prefWidth="190.0" text="0" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <AnchorPane layoutX="10.0" layoutY="20.0" prefHeight="85.0" prefWidth="85.0" style="-fx-background-color: white; -fx-background-radius: 50;">
+                                 <children>
+                                    <ImageView fitHeight="60.0" fitWidth="55.0" layoutX="15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../images/icon4.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
                   <AnchorPane layoutX="14.0" layoutY="182.0" prefHeight="359.0" prefWidth="431.0" stylesheets="@../../css/thao.css" AnchorPane.bottomAnchor="23.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="448.0" AnchorPane.topAnchor="182.0">
                      <styleClass>
                         <String fx:value="shadow" />
