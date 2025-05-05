@@ -63,6 +63,8 @@ public class ClassController {
         addActionColumn();
         loadClassesFromDatabase();
         setupSearchFilter();
+        tableClass.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
 
     public void reloadClassTable() {

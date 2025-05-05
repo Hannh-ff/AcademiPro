@@ -77,6 +77,7 @@ public class StudentViewController {
         setUpActionColumn();
         loadStudent();
         setupSearchFilter();
+        tableView_Student.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     private void loadStudent() {
