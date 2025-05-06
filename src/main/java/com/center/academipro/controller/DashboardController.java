@@ -44,26 +44,30 @@ public class DashboardController {
 
         loadTotalIncomeToLabel();
 
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Study Time");
+        // AreaChart
+        XYChart.Series<String, Number> seriesStudent = new XYChart.Series<>();
+        seriesStudent.setName("Study Time");
 
-        series.getData().add(new XYChart.Data<>("08:00", 30));
-        series.getData().add(new XYChart.Data<>("09:00", 45));
-        series.getData().add(new XYChart.Data<>("10:00", 20));
-        series.getData().add(new XYChart.Data<>("11:00", 50));
-        series.getData().add(new XYChart.Data<>("12:00", 35));
-        AreaTimeStudent.getData().add(series);
+        seriesStudent.getData().add(new XYChart.Data<>("08:00", 30));
+        seriesStudent.getData().add(new XYChart.Data<>("09:00", 45));
+        seriesStudent.getData().add(new XYChart.Data<>("10:00", 20));
+        seriesStudent.getData().add(new XYChart.Data<>("11:00", 50));
+        seriesStudent.getData().add(new XYChart.Data<>("12:00", 35));
+        AreaTimeStudent.getData().add(seriesStudent);
+
+        XYChart.Series<String, Number> seriesTeacher = new XYChart.Series<>();
+        seriesTeacher.setName("Teaching Hours");
+
+        seriesTeacher.getData().add(new XYChart.Data<>("Cô Lan", 40));
+        seriesTeacher.getData().add(new XYChart.Data<>("Thầy Minh", 35));
+        seriesTeacher.getData().add(new XYChart.Data<>("Thầy Hùng", 25));
+        seriesTeacher.getData().add(new XYChart.Data<>("Cô Trang", 30));
+        seriesTeacher.getData().add(new XYChart.Data<>("Thầy Sơn", 45));
+        BarChartTeachers.getData().clear();
+        BarChartTeachers.getData().add(seriesTeacher);
 
         loadIncome();
 
-        series.setName("Teaching Hours");
-        series.getData().add(new XYChart.Data<>("Cô Lan", 40));
-        series.getData().add(new XYChart.Data<>("Thầy Minh", 35));
-        series.getData().add(new XYChart.Data<>("Thầy Hùng", 25));
-        series.getData().add(new XYChart.Data<>("Cô Trang", 30));
-        series.getData().add(new XYChart.Data<>("Thầy Sơn", 45));
-        BarChartTeachers.getData().clear();
-        BarChartTeachers.getData().add(series);
     }
 
     public int getTotalStudents() {
@@ -159,7 +163,7 @@ public class DashboardController {
 
             if (rs.next()) {
                 double totalIncome = rs.getDouble("total_income");
-                lblTotalIncome.setText(String.format("%.0f VNĐ", totalIncome));
+                lblTotalIncome.setText(String.format("%.0f USD", totalIncome));
             }
         } catch (SQLException e) {
             e.printStackTrace();
