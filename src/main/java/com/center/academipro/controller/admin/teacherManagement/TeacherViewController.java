@@ -71,6 +71,7 @@ public class TeacherViewController {
         setUpActionColumn();
         loadTeachers();
         setupSearchFilter();
+        tableView_Teacher.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     private void loadTeachers() {

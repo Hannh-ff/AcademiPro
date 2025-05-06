@@ -47,6 +47,8 @@ public class PaymentManagement {
         payDateCol.setCellValueFactory(new PropertyValueFactory<>("paymentDate"));
 
         loadPaymentData();
+        tableViewPayment.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
 
     private void loadPaymentData() {

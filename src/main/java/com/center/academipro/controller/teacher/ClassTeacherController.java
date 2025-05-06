@@ -60,7 +60,11 @@ public class ClassTeacherController {
                 loadSubmissionDataByClassId(selectedClass.getId());
             }
         });
+
+        System.out.println("Teacher ID: " + teacherId);
+        tableViewSubmit.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
+
     private void loadClassList() {
         try (Connection conn = DBConnection.getConnection()) {
             String sql = "SELECT id, class_name FROM classes WHERE teacher_id = ?";

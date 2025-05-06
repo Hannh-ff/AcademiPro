@@ -57,11 +57,10 @@ public class MyClassDetailsController implements Initializable {
 
     private void loadClassInfo() {
 
-        String sql = "SELECT c.class_name, u.fullname AS teacher_name, co.course_name " +
-                "FROM classes c " +
-                "JOIN teachers t ON c.teacher_id = t.id " +
-                "JOIN users u ON t.user_id = u.id " +
-                "JOIN courses co ON c.course_id = co.id " +
+        String sql = "SELECT c.class_name, u.fullname AS teacher_name, co.course_name \n" +
+                "FROM classes c \n" +
+                "JOIN users u ON c.teacher_id = u.id \n" +
+                "JOIN courses co ON c.course_id = co.id \n" +
                 "WHERE c.id = ?";
 
         try (Connection conn = DBConnection.getConnection();

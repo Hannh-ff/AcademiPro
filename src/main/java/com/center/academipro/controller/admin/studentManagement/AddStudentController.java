@@ -2,6 +2,7 @@ package com.center.academipro.controller.admin.studentManagement;
 
 import com.center.academipro.models.Course;
 import com.center.academipro.models.Class;
+import com.center.academipro.utils.Alerts;
 import com.center.academipro.utils.DBConnection;
 import com.center.academipro.utils.SceneSwitch;
 import javafx.event.ActionEvent;
@@ -93,10 +94,21 @@ public class AddStudentController implements Initializable {
             return;
         }
 
-        int classId= selectedClass.getId(); // Lấy class_id từ selectedClass
+        Integer classId = (selectedClass != null) ? selectedClass.getId() : null;
 
 
         try (Connection conn = DBConnection.getConnection()) {
+
+            // Kiểm tra xem username đã tồn tại chưa
+            String checkUsernameSQL = "SELECT id FROM users WHERE username = ?";
+            PreparedStatement checkUsernamePst = conn.prepareStatement(checkUsernameSQL);
+            checkUsernamePst.setString(1, usernameValue);
+            ResultSet checkResult = checkUsernamePst.executeQuery();
+            if (checkResult.next()) {
+                Alerts.alertWarning("Warning", "Username already exists.");
+                return;
+            }
+
             conn.setAutoCommit(false);
 
             // 1. Thêm vào bảng users
@@ -129,11 +141,13 @@ public class AddStudentController implements Initializable {
             }
 
             // 3. Thêm vào bảng student_classes
-            String insertSC = "INSERT INTO student_classes(student_id, class_id) VALUES (?, ?)";
-            PreparedStatement pstSC = conn.prepareStatement(insertSC);
-            pstSC.setInt(1, studentId);
-            pstSC.setInt(2, classId);
-            pstSC.executeUpdate();
+            if (classId != null) {
+                String insertSC = "INSERT INTO student_classes(student_id, class_id) VALUES (?, ?)";
+                PreparedStatement pstSC = conn.prepareStatement(insertSC);
+                pstSC.setInt(1, studentId);
+                pstSC.setInt(2, classId);
+                pstSC.executeUpdate();
+            }
 
             conn.commit();
             showAlert(Alert.AlertType.INFORMATION, "Student added successfully.");

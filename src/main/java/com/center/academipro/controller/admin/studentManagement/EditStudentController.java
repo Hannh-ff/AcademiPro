@@ -33,7 +33,7 @@ public class EditStudentController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         courseListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//        loadClasses();
+        loadClasses();
     }
 
     public void setStudent(Student student) {
@@ -46,7 +46,7 @@ public class EditStudentController implements Initializable {
         birthday.setValue(student.getBirthday());
         phone.setText(student.getPhone());
 
-//        loadClasses();
+        loadClasses();
         for (Class c : className.getItems()) {
             if (c.getClassName().equals(student.getClassName())) { // so sánh tên lớp
                 className.setValue(c);
@@ -134,23 +134,23 @@ public class EditStudentController implements Initializable {
         return -1;
     }
 
-//    private void loadClasses() {
-//        try (Connection conn = DBConnection.getConnection();
-//             PreparedStatement pst = conn.prepareStatement("SELECT id, class_name FROM classes");
-//             ResultSet rs = pst.executeQuery()) {
-//
-//            while (rs.next()) {
-//                int id = rs.getInt("id");
-//                String name = rs.getString("class_name");
-//                Class c = new Class(id, name);
-//                className.getItems().add(c);
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            showAlert(Alert.AlertType.ERROR, "Could not load class list.");
-//        }
-//    }
+    private void loadClasses() {
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pst = conn.prepareStatement("SELECT id, class_name FROM classes");
+             ResultSet rs = pst.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("class_name");
+                Class c = new Class(id, name);
+                className.getItems().add(c);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert(Alert.AlertType.ERROR, "Could not load class list.");
+        }
+    }
 
     private void loadCourses() {
         try (Connection conn = DBConnection.getConnection();

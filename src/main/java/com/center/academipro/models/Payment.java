@@ -18,7 +18,15 @@ public class Payment {
    private SimpleDoubleProperty price;
    private SimpleObjectProperty<LocalDateTime> paymentDate;
 
-   public Payment(){}
+    public Payment() {
+        this.id = new SimpleIntegerProperty();
+        this.studentName = new SimpleStringProperty();
+        this.courseName = new SimpleStringProperty();
+        this.paymentMethod = new SimpleStringProperty();
+        this.paymentStatus = new SimpleStringProperty();
+        this.price = new SimpleDoubleProperty();
+        this.paymentDate = new SimpleObjectProperty<>();
+    }
 
     public Payment(SimpleIntegerProperty id, SimpleStringProperty studentName, SimpleStringProperty courseName, SimpleStringProperty paymentMethod, SimpleStringProperty paymentStatus, SimpleDoubleProperty price, SimpleObjectProperty<LocalDateTime> paymentDate) {
         this.id = id;
@@ -31,8 +39,12 @@ public class Payment {
     }
 
     public Payment(String studentName, String courseName, LocalDateTime date) {
+        this.id = new SimpleIntegerProperty();
         this.studentName = new SimpleStringProperty(studentName);
         this.courseName = new SimpleStringProperty(courseName);
+        this.paymentMethod = new SimpleStringProperty();
+        this.paymentStatus = new SimpleStringProperty();
+        this.price = new SimpleDoubleProperty();
         this.paymentDate = new SimpleObjectProperty<>(date);
     }
 

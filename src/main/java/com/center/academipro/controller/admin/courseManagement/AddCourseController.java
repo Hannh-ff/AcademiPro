@@ -52,14 +52,14 @@ public class AddCourseController {
 
     private boolean validateInput() {
         if (txtCourseName.getText().trim().isEmpty() || txtPrice.getText().trim().isEmpty()) {
-            showAlert(Alert.AlertType.WARNING, "Vui lòng nhập tên và giá.");
+            showAlert(Alert.AlertType.WARNING, "Please fill in all fields.");
             return false;
         }
 
         try {
             Double.parseDouble(txtPrice.getText().trim());
         } catch (NumberFormatException e) {
-            showAlert(Alert.AlertType.ERROR, "Giá không hợp lệ.");
+            showAlert(Alert.AlertType.ERROR, "Price must be a number.");
             return false;
         }
 
@@ -72,16 +72,40 @@ public class AddCourseController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg", "*.gif"));
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
-            txtImage.setText(file.getAbsolutePath());
-            loadImage(file.getAbsolutePath());
+            try {
+                File imagesDir = new File("images"); // thư mục ngoài src
+                if (!imagesDir.exists()) {
+                    imagesDir.mkdirs();
+                }
+
+                String uniqueFileName = System.currentTimeMillis() + "_" + file.getName();
+                File destFile = new File(imagesDir, uniqueFileName);
+
+                // copy ảnh vào thư mục images
+                try (InputStream in = new FileInputStream(file);
+                     OutputStream out = new FileOutputStream(destFile)) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = in.read(buffer)) > 0) {
+                        out.write(buffer, 0, length);
+                    }
+                }
+
+                txtImage.setText("images/" + uniqueFileName); // lưu đường dẫn tương đối
+                loadImage(destFile.getPath());
+
+            } catch (IOException e) {
+                showAlert(Alert.AlertType.ERROR, "Không thể lưu ảnh: " + e.getMessage());
+            }
         }
     }
+
 
     private void loadImage(String path) {
         try (FileInputStream input = new FileInputStream(path)) {
             imagePreview.setImage(new Image(input));
         } catch (IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Không thể tải hình ảnh.");
+            showAlert(Alert.AlertType.ERROR, "Cannot load image ");
         }
     }
 

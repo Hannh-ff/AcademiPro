@@ -52,7 +52,7 @@
                                 <TableColumn fx:id="studentPhone" prefWidth="131.0" text="Phone" />
                                 <TableColumn fx:id="studentCourse" prefWidth="148.0" text="Courses " />
                                 <TableColumn fx:id="studentClass" prefWidth="92.0" text="Class" />
-                                <TableColumn fx:id="studentAction" prefWidth="120.0" text="Actions" />
+                                <TableColumn fx:id="studentAction" prefWidth="180.0" text="Actions" />
                             </columns>
                         </TableView>
                     </children>

@@ -41,6 +41,7 @@ public class AttendanceController {
         studentTableView.setEditable(true);
 
         saveButton.setOnAction(e -> saveAttendance());
+        studentTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
     private void setupTableColumns() {
         studentNameColumn.setCellValueFactory(cellData ->
