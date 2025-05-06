@@ -99,7 +99,7 @@ public class MenuBarController {
     }
 
     public void historyAttendanceScene(ActionEvent actionEvent) {
-        FXMLLoader loader = SceneSwitch.loadView("view/teacher/history-attendance-view.fxml");
+        FXMLLoader loader = SceneSwitch.loadView("view/teacher/attendance-history-view.fxml");
         assert loader != null;
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
