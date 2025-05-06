@@ -2,11 +2,13 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -15,10 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.collections.FXCollections?>
-<?import com.center.academipro.models.PaymentHistory?>
-<?import com.center.academipro.models.Payment?>
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.student.course.PaymentController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.student.course.PaymentController" stylesheets="@../../../css/thao.css">
     <children>
         <AnchorPane prefHeight="200.0" prefWidth="200.0">
             <children>
@@ -34,17 +33,19 @@
                                 <Font name="System Bold" size="18.0" />
                             </font>
                         </Label>
-                        <Label layoutX="224.0" layoutY="58.0" text="Course name :">
+                        <Label layoutX="224.0" layoutY="58.0" text="Course name:">
                             <font>
                                 <Font size="14.0" />
                             </font>
                         </Label>
-                        <Label fx:id="courseName" layoutX="224.0" layoutY="85.0" prefHeight="20.0" prefWidth="274.0" text="Tiếng Anh Cơ Bản 6+">
+                        <Label fx:id="courseNameLabel" layoutX="294.0" layoutY="58.0" prefWidth="200.0">
                             <font>
                                 <Font name="System Bold" size="14.0" />
                             </font>
                         </Label>
-                        <Label layoutX="224.0" layoutY="119.0" text="Description :">
+                        <Label layoutX="224.0" layoutY="88.0" text="Course:" />
+                        <ComboBox fx:id="courseComboBox" layoutX="294.0" layoutY="84.0" prefWidth="274.0" onAction="#handleCourseSelection" />
+                        <Label layoutX="224.0" layoutY="119.0" text="Description:">
                             <font>
                                 <Font size="14.0" />
                             </font>
@@ -56,7 +57,7 @@
                         </AnchorPane>
                         <VBox layoutX="224.0" layoutY="147.0" prefHeight="153.0" prefWidth="250.0">
                             <children>
-                                <Text fx:id="descripCousre" strokeType="OUTSIDE" strokeWidth="0.0" text="Khóa học tiếng Anh cơ bản dành cho người mới bắt đầu, tập trung vào 4 kỹ năng nghe, nói, đọc, viết. Thời lượng: 30 buổi (2 tháng). Giáo viên: Nguyễn Văn A (8 năm kinh nghiệm)." wrappingWidth="250.0">
+                                <Text fx:id="descripCourse" strokeType="OUTSIDE" strokeWidth="0.0" text="Khóa học tiếng Anh cơ bản dành cho người mới bắt đầu, tập trung vào 4 kỹ năng nghe, nói, đọc, viết. Thời lượng: 30 buổi (2 tháng). Giáo viên: Nguyễn Văn A (8 năm kinh nghiệm)." wrappingWidth="250.0">
                                     <font>
                                         <Font size="14.0" />
                                     </font>
@@ -100,7 +101,11 @@
                                 <Font size="16.0" />
                             </font>
                         </Label>
-                        <Label fx:id="priceCourse" alignment="CENTER_RIGHT" layoutX="139.0" layoutY="294.0" prefHeight="25.0" prefWidth="127.0" text="2,500,000 VND">
+                        <Label layoutX="224.0" layoutY="58.0" text="Student ID:" />
+                        <TextField fx:id="userIdField" layoutX="294.0" layoutY="54.0" prefWidth="100.0" onKeyReleased="#handleUserIdInput" />
+                        <Label fx:id="studentNameLabel" layoutX="404.0" layoutY="58.0" prefWidth="200.0" style="-fx-text-fill: #2c3e50; -fx-font-weight: bold;" />
+
+                        <Label fx:id="priceCourse" alignment="CENTER_RIGHT" layoutX="139.0" layoutY="294.0" prefHeight="25.0" prefWidth="127.0">
                             <font>
                                 <Font size="16.0" />
                             </font>
@@ -120,7 +125,7 @@
                                 <Font name="System Bold" size="16.0" />
                             </font>
                         </Label>
-                        <Label fx:id="total" alignment="CENTER_RIGHT" layoutX="139.0" layoutY="352.0" prefHeight="25.0" prefWidth="127.0" text="2,500,000 VND" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;">
+                        <Label fx:id="total" alignment="CENTER_RIGHT" layoutX="139.0" layoutY="352.0" prefHeight="25.0" prefWidth="127.0" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;">
                             <font>
                                 <Font size="16.0" />
                             </font>
@@ -150,23 +155,6 @@
                                 <TableColumn fx:id="methodCol" prefWidth="100.0" text="Method" />
                                 <TableColumn fx:id="statusCol" prefWidth="100.0" text="Status" />
                             </columns>
-                            <!-- Dữ liệu mẫu sử dụng class Payment -->
-                            <items>
-                                <FXCollections fx:factory="observableArrayList">
-                                    <Payment id="1" userId="1" courseId="1" amount="2500000.0"
-                                             paymentMethod="VNPay" status="Completed"
-                                             transactionId="VNPAY123456789"
-                                             paymentDate="$now" />
-                                    <Payment id="2" userId="2" courseId="2" amount="3000000.0"
-                                             paymentMethod="Cash" status="Completed"
-                                             transactionId=""
-                                             paymentDate="$now.minusDays(1)" />
-                                    <Payment id="3" userId="1" courseId="3" amount="3500000.0"
-                                             paymentMethod="VNPay" status="Pending"
-                                             transactionId="VNPAY987654321"
-                                             paymentDate="" />
-                                </FXCollections>
-                            </items>
                         </TableView>
                     </children>
                 </AnchorPane>

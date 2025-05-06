@@ -1,8 +1,8 @@
 package com.center.academipro.controller.student.course;
 
 import com.center.academipro.controller.student.EventDAO;
-import com.center.academipro.models.SessionCourse;
 import com.center.academipro.models.Course;
+import com.center.academipro.session.SessionCourse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -49,47 +49,47 @@ public class ListCoursesController implements Initializable {
         allCourses.setAll(courses);
         setupSearchFilter();
     }
-    private void handleEnrollAction(Course course) {
-        try {
-            // Lưu thông tin khóa học vào session
-            SessionCourse.setCourseId(course.getId());
-            SessionCourse.setCourseName(course.getCourseName());
-            SessionCourse.setCoursePrice(course.getPrice());
-            SessionCourse.setCourseDescription(course.getDescription());
-            SessionCourse.setCourseImage(course.getImage());
-
-            // Load payment view
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/student/course/payment-views.fxml"));
-            Parent paymentView = loader.load();
-
-            // Lấy controller và set dữ liệu
-            PaymentController paymentController = loader.getController();
-            paymentController.setStudentAndCourse(
-                    SessionUser.getUserId(),
-                    SessionUser.getFullName(),
-                    SessionCourse.getCourseId()
-            );
-
-            paymentController.setCourseData(
-                    SessionCourse.getCourseName(),
-                    SessionCourse.getCourseDescription(),
-                    "/com/center/academipro/images/" + SessionCourse.getCourseImage(),
-                    SessionCourse.getCoursePrice()
-            );
-
-            // Chuyển sang view thanh toán
-            StackPane pane = (StackPane) ((Node) searchField).getScene().getRoot();
-            BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
-
-            if (mainPane != null) {
-                mainPane.setCenter(paymentView);
-            } else {
-                System.err.println("Cannot find #mainBorderPane");
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
+//    private void handleEnrollAction(Course course) {
+//        try {
+//            // Lưu thông tin khóa học vào session
+//            SessionCourse.setCourseId(course.getId());
+//            SessionCourse.setCourseName(course.getCourseName());
+//            SessionCourse.setCoursePrice(course.getPrice());
+//            SessionCourse.setCourseDescription(course.getDescription());
+//            SessionCourse.setCourseImage(course.getImage());
+//
+//            // Load payment view
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/student/course/payment-views.fxml"));
+//            Parent paymentView = loader.load();
+//
+//            // Lấy controller và set dữ liệu
+//            PaymentController paymentController = loader.getController();
+//            paymentController.setStudentAndCourse(
+//                    SessionUser.getUserId(),
+//                    SessionUser.getFullName(),
+//                    SessionCourse.getCourseId()
+//            );
+//
+//            paymentController.setCourseData(
+//                    SessionCourse.getCourseName(),
+//                    SessionCourse.getCourseDescription(),
+//                    "/com/center/academipro/images/" + SessionCourse.getCourseImage(),
+//                    SessionCourse.getCoursePrice()
+//            );
+//
+//            // Chuyển sang view thanh toán
+//            StackPane pane = (StackPane) ((Node) searchField).getScene().getRoot();
+//            BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
+//
+//            if (mainPane != null) {
+//                mainPane.setCenter(paymentView);
+//            } else {
+//                System.err.println("Cannot find #mainBorderPane");
+//            }
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
 
     private HBox createCourseCard(Course course) {
@@ -130,7 +130,25 @@ public class ListCoursesController implements Initializable {
         actionBox.setAlignment(Pos.TOP_RIGHT);
         HBox.setHgrow(info, Priority.ALWAYS);
 
-        enrollBtn.setOnAction(e -> handleEnrollAction(course));
+        enrollBtn.setOnAction(e -> {
+            SessionCourse.setCourseId(course.getId()); // Lưu courseId vào session
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/student/class/list-classes.fxml"));
+                Parent newView = loader.load(); // Load xong lấy root mới
+
+                StackPane pane = (StackPane) ((Node) e.getSource()).getScene().getRoot();
+                BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
+
+                if (mainPane != null) {
+                    mainPane.setCenter(newView); // Chỉ thay Center, không replace root
+                } else {
+                    System.err.println("Cannot find #mainBorderPane");
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
 
         card.getChildren().addAll(imageView, info, actionBox);
         return card;

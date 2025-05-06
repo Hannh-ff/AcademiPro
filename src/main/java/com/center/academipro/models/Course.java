@@ -3,19 +3,19 @@ package com.center.academipro.models;
 import javafx.beans.property.*;
 
 public class Course {
+    private final IntegerProperty id;
+    private final StringProperty courseName;
+    private final StringProperty description;
+    private final StringProperty image;
+    private final DoubleProperty price;
 
-    private  IntegerProperty id;
-    private  StringProperty courseName;
-    private  StringProperty description;
-    private  StringProperty image;
-    private  DoubleProperty price;
-
+    // Constructors
     public Course() {
-        this.id = new SimpleIntegerProperty();
-        this.courseName = new SimpleStringProperty();
-        this.description = new SimpleStringProperty();
-        this.image = new SimpleStringProperty();
-        this.price = new SimpleDoubleProperty();
+        this(0, "", "", "", 0.0);
+    }
+
+    public Course(int id, String courseName) {
+        this(id, courseName, "", "", 0.0);
     }
 
     public Course(int id, String courseName, String description, String image, double price) {
@@ -26,11 +26,7 @@ public class Course {
         this.price = new SimpleDoubleProperty(price);
     }
 
-    public Course(int id, String name) {
-        this.id = new SimpleIntegerProperty(id) ;
-        this.courseName = new SimpleStringProperty(name);
-    }
-
+    // Property getters
     public IntegerProperty idProperty() {
         return id;
     }
@@ -51,6 +47,7 @@ public class Course {
         return price;
     }
 
+    // Regular getters
     public int getId() {
         return id.get();
     }
@@ -71,28 +68,51 @@ public class Course {
         return price.get();
     }
 
+    // Regular setters with null checks
     public void setId(int id) {
         this.id.set(id);
     }
 
     public void setCourseName(String courseName) {
-        this.courseName.set(courseName);
+        this.courseName.set(courseName != null ? courseName : "");
     }
 
     public void setDescription(String description) {
-        this.description.set(description);
+        this.description.set(description != null ? description : "");
     }
 
     public void setImage(String image) {
-        this.image.set(image);
+        this.image.set(image != null ? image : "");
     }
 
     public void setPrice(double price) {
         this.price.set(price);
     }
 
+    // Utility methods
+    public boolean hasImage() {
+        return getImage() != null && !getImage().isEmpty();
+    }
+
+    public String getFormattedPrice() {
+        return String.format("%,.0f VND", getPrice());
+    }
+
     @Override
     public String toString() {
-        return this.getCourseName();
+        return getCourseName() + " (" + getFormattedPrice() + ")";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return getId() == course.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return getId();
     }
 }

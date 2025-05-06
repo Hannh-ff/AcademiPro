@@ -5,6 +5,7 @@ module com.center.academipro {
     requires jdk.security.auth;
     requires mysql.connector.j;
     requires java.desktop;
+    requires jdk.httpserver;
 
     opens com.center.academipro to javafx.fxml;
     opens com.center.academipro.view to javafx.fxml;
@@ -16,7 +17,6 @@ module com.center.academipro {
     opens com.center.academipro.controller.teacher to javafx.fxml;
     opens com.center.academipro.controller.admin.studentManagement to javafx.fxml;
     opens com.center.academipro.controller.admin.classManagement to javafx.fxml;
-
 
 
 
