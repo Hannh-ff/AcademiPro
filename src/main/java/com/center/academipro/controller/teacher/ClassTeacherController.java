@@ -126,42 +126,47 @@ public class ClassTeacherController {
         }
     }
 //    lọc bài học đã nộp dựa trên lớp dược chọn
-    private void loadSubmissionDataByClassId(int classId) {
-        ObservableList<Submission> submissions = FXCollections.observableArrayList();
+private void loadSubmissionDataByClassId(int classId) {
+    ObservableList<Submission> submissions = FXCollections.observableArrayList();
 
-        String sql = """
-            SELECT s.id, u.fullname, a.title AS assignment_title, 
-                   s.submitted_at, s.file_link, s.status, s.comment
-            FROM submissions s
-            LEFT JOIN students st ON s.student_id = st.id
-            LEFT JOIN users u ON st.user_id = u.id
-            LEFT JOIN assignments a ON s.assignment_id = a.id
-            WHERE a.class_id = ?
-            """;
+    String sql = """
+        SELECT s.id AS submission_id, u.fullname, a.title AS assignment_title,
+               s.submitted_at, s.file_link, s.status, s.comment
+        FROM students st
+        JOIN users u ON st.user_id = u.id
+        JOIN student_classes sc ON st.id = sc.student_id
+        JOIN classes c ON sc.class_id = c.id
+        LEFT JOIN assignments a ON a.class_id = c.id
+        LEFT JOIN submissions s ON s.assignment_id = a.id AND s.student_id = st.id
+        WHERE c.id = ?
+        ORDER BY u.fullname
+        """;
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, classId);
-            ResultSet rs = stmt.executeQuery();
+        stmt.setInt(1, classId);
+        ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                submissions.add(new Submission(
-                        rs.getInt("id"),
-                        rs.getString("fullname"),
-                        rs.getString("assignment_title"),
-                        rs.getString("submitted_at"),
-                        rs.getString("file_link"),
-                        rs.getString("status"),
-                        rs.getString("comment")
-                ));
-            }
-
-            tableViewSubmit.setItems(submissions);
-        } catch (Exception e) {
-            e.printStackTrace();
+        while (rs.next()) {
+            int submissionId = rs.getInt("submission_id");
+            submissions.add(new Submission(
+                    submissionId != 0 ? submissionId : -1, // -1 nếu chưa có submission
+                    rs.getString("fullname"),
+                    rs.getString("assignment_title") != null ? rs.getString("assignment_title") : "Chưa giao bài",
+                    rs.getString("submitted_at") != null ? rs.getString("submitted_at") : "Not done",
+                    rs.getString("file_link") != null ? rs.getString("file_link") : "Not found",
+                    rs.getString("status") != null ? rs.getString("status") : "Not done",
+                    rs.getString("comment") != null ? rs.getString("comment") : ""
+            ));
         }
+
+        tableViewSubmit.setItems(submissions);
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
+
 
     public void changeSceneAssignment(ActionEvent event) {
         FXMLLoader loader = SceneSwitch.loadView("view/teacher/assignment-view.fxml");
