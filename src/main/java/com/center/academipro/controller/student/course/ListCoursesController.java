@@ -59,14 +59,14 @@ public class ListCoursesController implements Initializable {
         card.setEffect(new DropShadow(5, Color.rgb(0, 0, 0, 0.1)));
 
         ImageView imageView = new ImageView();
-        File imgFile = new File("images/" + course.getImage());
+
+        File imgFile = new File(    course.getImage());
+        System.out.println("Tìm ảnh tại: " + imgFile.getAbsolutePath());
 
         if (imgFile.exists()) {
-            Image image = new Image(imgFile.toURI().toString());
-            imageView.setImage(image);
+            imageView.setImage(new Image(imgFile.toURI().toString()));
         } else {
-            System.out.println("Image not found: " + imgFile.getPath());
-            // Ảnh mặc định
+            System.out.println("Không tìm thấy ảnh: " + imgFile.getPath());
             InputStream fallback = getClass().getResourceAsStream("/com/center/academipro/images/1.png");
             if (fallback != null) {
                 imageView.setImage(new Image(fallback));
@@ -77,6 +77,7 @@ public class ListCoursesController implements Initializable {
         imageView.setFitHeight(100);
         imageView.setPreserveRatio(true);
         imageView.setSmooth(true);
+
 
 
 //        ImageView imageView = new ImageView();
