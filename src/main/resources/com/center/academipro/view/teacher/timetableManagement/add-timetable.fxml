@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="650.0" stylesheets="@../../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.teacher.EditTimetableController">
+<AnchorPane prefHeight="400.0" prefWidth="650.0" stylesheets="@../../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.teacher.AddTimetableController">
    <children>
       <AnchorPane layoutX="26.0" layoutY="88.0" prefHeight="284.0" prefWidth="375.0">
          <styleClass>
@@ -20,7 +20,7 @@
             <String fx:value="radius" />
          </styleClass>
          <children>
-            <ComboBox layoutX="151.0" layoutY="27.0" prefHeight="36.0" prefWidth="158.0" />
+            <ComboBox fx:id="classComboBox" layoutX="151.0" layoutY="27.0" prefHeight="36.0" prefWidth="158.0" />
             <Label layoutX="40.0" layoutY="32.0" prefHeight="25.0" prefWidth="61.0" styleClass="extra-text" text="Class:">
                <font>
                   <Font name="System Bold" size="16.0" />
@@ -31,19 +31,19 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <DatePicker layoutX="151.0" layoutY="82.0" prefHeight="36.0" prefWidth="158.0" />
+            <DatePicker fx:id="datePicker" layoutX="151.0" layoutY="82.0" prefHeight="36.0" prefWidth="158.0" />
             <Label layoutX="40.0" layoutY="147.0" prefHeight="25.0" prefWidth="90.0" styleClass="extra-text" text="Start Time :">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <TextField layoutX="151.0" layoutY="142.0" prefHeight="36.0" prefWidth="158.0" />
+            <TextField fx:id="startTimeField" layoutX="151.0" layoutY="142.0" prefHeight="36.0" prefWidth="158.0" />
             <Label layoutX="40.0" layoutY="207.0" prefHeight="25.0" prefWidth="90.0" styleClass="extra-text" text="End Time :">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <TextField layoutX="151.0" layoutY="202.0" prefHeight="36.0" prefWidth="158.0" />
+            <TextField fx:id="endTimeField" layoutX="151.0" layoutY="202.0" prefHeight="36.0" prefWidth="158.0" />
          </children>
       </AnchorPane>
       <Label layoutX="247.0" layoutY="31.0" styleClass="main-text" text=" Add Timetable">
@@ -64,8 +64,9 @@
                </font>
             </Label>
             <Separator layoutY="62.0" prefHeight="1.0" prefWidth="191.0" />
-            <Button layoutX="57.0" layoutY="103.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="78.0" styleClass="btn-add" text="Add" />
-            <Button layoutX="57.0" layoutY="167.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="78.0" styleClass="btn-clear" text="Clear" />
+            <Button fx:id="addButton" layoutX="57.0" layoutY="103.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="78.0" styleClass="btn-add" text="Add" onAction="#handleAdd" />
+            <Button fx:id="clearButton" layoutX="57.0" layoutY="167.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="78.0" styleClass="btn-clear" text="Clear" onAction="#handleClear" />
+            <Button fx:id="backButton" layoutX="57.0" layoutY="231.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="78.0" styleClass="btn-clear" text="Back" onAction="#handleBack" />
          </children>
       </AnchorPane>
    </children>
