@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.center.academipro.controller.student.assignment.SubmitAssignmentController"
+      spacing="20" alignment="CENTER" style="-fx-background-color: #f5f6fa;">
+
+    <Label fx:id="assignmentTitleLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+    <Label fx:id="assignmentDescriptionLabel" wrapText="true" maxWidth="500"/>
+    <Label fx:id="deadlineLabel" style="-fx-text-fill: red;"/>
+
+    <Button text="Chọn tệp để nộp" onAction="#handleChooseFile"/>
+    <Label fx:id="fileNameLabel" text="Chưa chọn tệp" />
+
+    <TextArea fx:id="commentField" promptText="Ghi chú (nếu có)" prefRowCount="4" maxWidth="500"/>
+
+    <Button text="Xác nhận nộp bài" onAction="#handleSubmit" style="-fx-background-color: #44bd32; -fx-text-fill: white;"/>
+</VBox>

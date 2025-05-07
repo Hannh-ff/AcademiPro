@@ -1,8 +1,10 @@
 package com.center.academipro.controller.student.course;
 
 import com.center.academipro.controller.student.EventDAO;
+import com.center.academipro.controller.student.PaymentController;
 import com.center.academipro.models.Course;
 import com.center.academipro.session.SessionCourse;
+import com.center.academipro.session.SessionManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -22,6 +24,7 @@ import javafx.scene.paint.Color;
 
 import javafx.scene.image.ImageView;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -98,21 +101,42 @@ public class ListCoursesController implements Initializable {
         card.setEffect(new DropShadow(5, Color.rgb(0, 0, 0, 0.1)));
 
         ImageView imageView = new ImageView();
-        InputStream imgStream = getClass().getResourceAsStream("/com/center/academipro/images/" + course.getImage());
-        if (imgStream == null) {
-            System.out.println("Image not found " + course.getImage());
-            imgStream = getClass().getResourceAsStream("/com/center/academipro/images/1.png");
-        }
-        if (imgStream != null) {
-            Image image = new Image(imgStream);
+        File imgFile = new File("images/" + course.getImage());
+
+        if (imgFile.exists()) {
+            Image image = new Image(imgFile.toURI().toString());
             imageView.setImage(image);
-            imageView.setFitWidth(100);
-            imageView.setFitHeight(100);
-            imageView.setPreserveRatio(true);
-            imageView.setSmooth(true);
         } else {
-            System.out.println("Image stream is null for " + course.getImage());
+            System.out.println("Image not found: " + imgFile.getPath());
+            // Ảnh mặc định
+            InputStream fallback = getClass().getResourceAsStream("/com/center/academipro/images/1.png");
+            if (fallback != null) {
+                imageView.setImage(new Image(fallback));
+            }
         }
+
+        imageView.setFitWidth(100);
+        imageView.setFitHeight(100);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+
+
+//        ImageView imageView = new ImageView();
+//        InputStream imgStream = getClass().getResourceAsStream("/com/center/academipro/images/" + course.getImage());
+//        if (imgStream == null) {
+//            System.out.println("Image not found " + course.getImage());
+//            imgStream = getClass().getResourceAsStream("/com/center/academipro/images/1.png");
+//        }
+//        if (imgStream != null) {
+//            Image image = new Image(imgStream);
+//            imageView.setImage(image);
+//            imageView.setFitWidth(100);
+//            imageView.setFitHeight(100);
+//            imageView.setPreserveRatio(true);
+//            imageView.setSmooth(true);
+//        } else {
+//            System.out.println("Image stream is null for " + course.getImage());
+//        }
 
         VBox info = new VBox(5);
         Label title = new Label(course.getCourseName());
@@ -134,8 +158,11 @@ public class ListCoursesController implements Initializable {
             SessionCourse.setCourseId(course.getId()); // Lưu courseId vào session
 
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/student/class/list-classes.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/student/payment-views.fxml"));
                 Parent newView = loader.load(); // Load xong lấy root mới
+
+                PaymentController controller = loader.getController();
+                controller.setStudentAndCourse(SessionManager.getInstance().getUserId(), course.getId());
 
                 StackPane pane = (StackPane) ((Node) e.getSource()).getScene().getRoot();
                 BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
@@ -193,9 +220,6 @@ public class ListCoursesController implements Initializable {
                 }
                 return match;
             });
-
-
-            System.out.println("Filtered Movies: " + filteredCourse.size());
             currentPage = 0;
             renderPage(currentPage);
         });

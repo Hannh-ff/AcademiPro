@@ -1,114 +1,134 @@
 package com.center.academipro.models;
 
-import java.time.LocalDateTime;
+
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Payment {
-    private final SimpleIntegerProperty id = new SimpleIntegerProperty();
-    private final SimpleIntegerProperty userId = new SimpleIntegerProperty();
-    private final SimpleIntegerProperty courseId = new SimpleIntegerProperty();
-    private final SimpleDoubleProperty amount = new SimpleDoubleProperty();
-    private final SimpleStringProperty paymentMethod = new SimpleStringProperty();
-    private final SimpleStringProperty status = new SimpleStringProperty();
-    private final SimpleStringProperty transactionId = new SimpleStringProperty();
-    private final SimpleObjectProperty<LocalDateTime> paymentDate = new SimpleObjectProperty<>();
+    private SimpleIntegerProperty id;
+    private SimpleStringProperty studentName;
+    private SimpleStringProperty courseName;
+    private SimpleStringProperty paymentMethod;
+    private SimpleStringProperty paymentStatus;
+    private SimpleDoubleProperty price;
+    private SimpleObjectProperty<LocalDateTime> paymentDate;
 
-
-    // Constructors
     public Payment() {
-        // Default constructor
+        this.id = new SimpleIntegerProperty();
+        this.studentName = new SimpleStringProperty();
+        this.courseName = new SimpleStringProperty();
+        this.paymentMethod = new SimpleStringProperty();
+        this.paymentStatus = new SimpleStringProperty();
+        this.price = new SimpleDoubleProperty();
+        this.paymentDate = new SimpleObjectProperty<>();
     }
 
-    // Constructor for creating new payments (without ID)
-    public Payment(int userId, int courseId, double amount, String paymentMethod,
-                   String status, String transactionId, LocalDateTime paymentDate) {
-        this.userId.set(userId);
-        this.courseId.set(courseId);
-        this.amount.set(amount);
-        this.paymentMethod.set(paymentMethod);
-        this.status.set(status);
-        this.transactionId.set(transactionId);
-        this.paymentDate.set(paymentDate);
+    public Payment(SimpleIntegerProperty id, SimpleStringProperty studentName, SimpleStringProperty courseName, SimpleStringProperty paymentMethod, SimpleStringProperty paymentStatus, SimpleDoubleProperty price, SimpleObjectProperty<LocalDateTime> paymentDate) {
+        this.id = id;
+        this.studentName = studentName;
+        this.courseName = courseName;
+        this.paymentMethod = paymentMethod;
+        this.paymentStatus = paymentStatus;
+        this.price = price;
+        this.paymentDate = paymentDate;
     }
 
-    // Constructor for existing payments (with ID)
-    // Constructor cho thông tin thanh toán cơ bản (không có ID, transactionId và paymentDate)
-    public Payment(int userId, int courseId, double amount, String paymentMethod, String status) {
-        this.userId.set(userId);
-        this.courseId.set(courseId);
-        this.amount.set(amount);
-        this.paymentMethod.set(paymentMethod);
-        this.status.set(status);
-        this.transactionId.set(""); // Mã giao dịch mặc định là rỗng
-        this.paymentDate.set(LocalDateTime.now()); // Mặc định là thời gian hiện tại
+    public Payment(String studentName, String courseName, LocalDateTime date) {
+        this.id = new SimpleIntegerProperty();
+        this.studentName = new SimpleStringProperty(studentName);
+        this.courseName = new SimpleStringProperty(courseName);
+        this.paymentMethod = new SimpleStringProperty();
+        this.paymentStatus = new SimpleStringProperty();
+        this.price = new SimpleDoubleProperty();
+        this.paymentDate = new SimpleObjectProperty<>(date);
     }
 
-    // Property getters
-    public SimpleIntegerProperty idProperty() { return id; }
-    public SimpleIntegerProperty userIdProperty() { return userId; }
-    public SimpleIntegerProperty courseIdProperty() { return courseId; }
-    public SimpleDoubleProperty amountProperty() { return amount; }
-    public SimpleStringProperty paymentMethodProperty() { return paymentMethod; }
-    public SimpleStringProperty statusProperty() { return status; }
-    public SimpleStringProperty transactionIdProperty() { return transactionId; }
-    public SimpleObjectProperty<LocalDateTime> paymentDateProperty() { return paymentDate; }
+    public int getId() {
+        return id.get();
+    }
 
-    // Regular getters and setters
-    public int getId() { return id.get(); }
-    public void setId(int id) { this.id.set(id); }
+    public SimpleIntegerProperty idProperty() {
+        return id;
+    }
 
-    public int getUserId() { return userId.get(); }
-    public void setUserId(int userId) { this.userId.set(userId); }
+    public void setId(int id) {
+        this.id.set(id);
+    }
 
-    public int getCourseId() { return courseId.get(); }
-    public void setCourseId(int courseId) { this.courseId.set(courseId); }
+    public String getStudentName() {
+        return studentName.get();
+    }
 
-    public double getAmount() { return amount.get(); }
-    public void setAmount(double amount) { this.amount.set(amount); }
+    public SimpleStringProperty studentNameProperty() {
+        return studentName;
+    }
 
-    public String getPaymentMethod() { return paymentMethod.get(); }
+    public void setStudentName(String studentName) {
+        this.studentName.set(studentName);
+    }
+
+    public String getCourseName() {
+        return courseName.get();
+    }
+
+    public SimpleStringProperty courseNameProperty() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName.set(courseName);
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod.get();
+    }
+
+    public SimpleStringProperty paymentMethodProperty() {
+        return paymentMethod;
+    }
+
     public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod.set(paymentMethod != null ? paymentMethod : "");
+        this.paymentMethod.set(paymentMethod);
     }
 
-    public String getStatus() { return status.get(); }
-    public void setStatus(String status) {
-        this.status.set(status != null ? status : "Pending");
+    public String getPaymentStatus() {
+        return paymentStatus.get();
     }
 
-    public String getTransactionId() { return transactionId.get(); }
-    public void setTransactionId(String transactionId) {
-        this.transactionId.set(transactionId != null ? transactionId : "");
+    public SimpleStringProperty paymentStatusProperty() {
+        return paymentStatus;
     }
 
-    public LocalDateTime getPaymentDate() { return paymentDate.get(); }
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus.set(paymentStatus);
+    }
+
+    public double getPrice() {
+        return price.get();
+    }
+
+    public SimpleDoubleProperty priceProperty() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price.set(price);
+    }
+
+    public LocalDateTime getPaymentDate() {
+        return paymentDate.get();
+    }
+
+    public SimpleObjectProperty<LocalDateTime> paymentDateProperty() {
+        return paymentDate;
+    }
+
     public void setPaymentDate(LocalDateTime paymentDate) {
-        this.paymentDate.set(paymentDate != null ? paymentDate : LocalDateTime.now());
-    }
-
-    // Utility methods
-    public boolean isCompleted() {
-        return "Completed".equalsIgnoreCase(getStatus());
-    }
-
-    public boolean isPending() {
-        return "Pending".equalsIgnoreCase(getStatus());
-    }
-
-    public boolean isFailed() {
-        return "Failed".equalsIgnoreCase(getStatus());
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "Payment{id=%d, userId=%d, courseId=%d, amount=%.2f, method='%s', status='%s', transactionId='%s', date=%s}",
-                getId(), getUserId(), getCourseId(), getAmount(),
-                getPaymentMethod(), getStatus(), getTransactionId(), getPaymentDate()
-        );
+        this.paymentDate.set(paymentDate);
     }
 }

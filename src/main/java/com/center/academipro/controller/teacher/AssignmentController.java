@@ -1,157 +1,135 @@
 package com.center.academipro.controller.teacher;
 
-import com.center.academipro.models.Assignment;
+import com.center.academipro.models.Class;
+import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.DBConnection;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import com.center.academipro.models.Assignment;
+import com.center.academipro.utils.SceneSwitch;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import java.sql.*;
+import javafx.event.ActionEvent;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class AssignmentController {
-    @FXML private ComboBox<String> classCombox;
-    @FXML private TextField title;
-    @FXML private TextArea description;
-    @FXML private DatePicker deadline;
 
     @FXML
-    public void initialize() {
-        loadClasses();
+    private TextField title;
+
+    @FXML
+    private TextArea description;
+
+    @FXML
+    private DatePicker deadline;
+
+    @FXML
+    private ComboBox<Class> classCombo;
+
+    private int teacherId = SessionManager.getInstance().getUserId();
+
+    @FXML
+    private void initialize() {
+        loadClassList();
+        System.out.println("Teacher ID: " + teacherId);
     }
 
-    private void loadClasses() {
-        try (Connection conn = DBConnection.getConn();
-             PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT class_name FROM classes ORDER BY class_name")) {
-
-            ResultSet rs = stmt.executeQuery();
-            classCombox.getItems().clear();
+    private void loadClassList() {
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "SELECT id, class_name FROM classes WHERE teacher_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, teacherId);
+            var rs = stmt.executeQuery();
             while (rs.next()) {
-                classCombox.getItems().add(rs.getString("class_name"));
+                int classId = rs.getInt("id");
+                String className = rs.getString("class_name");
+                Class c = new Class(classId, className);
+                classCombo.getItems().add(c);
             }
-        } catch (SQLException e) {
-            showAlert("Database Error", "Failed to load classes: " + e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @FXML
-    private void handleAddAssignment() {
-        String selectedClass = classCombox.getValue();
-        String assignmentTitle = title.getText();
-        String assignmentDesc = description.getText();
-        LocalDate dueDate = deadline.getValue();
 
-        if (selectedClass == null || assignmentTitle.isEmpty() || dueDate == null) {
-            showAlert("Validation Error", "Please fill all required fields");
+    public void handleAddAssignment() {
+        String titleText = title.getText();
+        String desc = description.getText();
+        LocalDate localDate = deadline.getValue();
+        Class selectedClass = classCombo.getValue();
+
+        if (titleText.isEmpty() || localDate == null || selectedClass == null) {
+            showAlert(Alert.AlertType.ERROR, "Please fill all required fields.");
             return;
         }
 
-        Connection conn = null;
-        try {
-            conn = DBConnection.getConn();
-            conn.setAutoCommit(false); // Bắt đầu transaction
+        int classId = selectedClass.getId();
+        Date deadlineDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-            // 1. Lấy class_id
-            int classId = getClassId(conn, selectedClass);
-            int teacherId = getCurrentTeacherId();
+        int userId = SessionManager.getInstance().getUserId();
+        Integer teacherId = getTeacherIdFromUserId(userId);
 
-            // 2. Tạo assignment
-            String query = "INSERT INTO assignments (class_id, teacher_id, title, description, deadline) " +
-                    "VALUES (?, ?, ?, ?, ?)";
+        if (teacherId == null) {
+            showAlert(Alert.AlertType.ERROR, "Cannot find teacher information for current user.");
+            return;
+        }
 
-            try (PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                stmt.setInt(1, classId);
-                stmt.setInt(2, teacherId);
-                stmt.setString(3, assignmentTitle);
-                stmt.setString(4, assignmentDesc);
-                stmt.setTimestamp(5, Timestamp.valueOf(dueDate.atStartOfDay()));
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "INSERT INTO assignments (class_id, teacher_id, title, description, deadline) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, classId);
+            stmt.setInt(2, teacherId);
+            stmt.setString(3, titleText);
+            stmt.setString(4, desc);
+            stmt.setTimestamp(5, new java.sql.Timestamp(deadlineDate.getTime()));
 
-                int affectedRows = stmt.executeUpdate();
-
-                if (affectedRows == 0) {
-                    throw new SQLException("Creating assignment failed, no rows affected.");
-                }
-
-                // 3. Tạo bản ghi submissions cho tất cả sinh viên
-                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        int assignmentId = generatedKeys.getInt(1);
-                        initializeSubmissions(conn, assignmentId, classId);
-                    } else {
-                        throw new SQLException("Creating assignment failed, no ID obtained.");
-                    }
-                }
-
-                conn.commit(); // Commit transaction nếu thành công
-                showAlert("Success", "Assignment created successfully");
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                showAlert(Alert.AlertType.INFORMATION, "Assignment added successfully!");
                 clearForm();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Failed to add assignment.");
             }
-        } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback(); // Rollback nếu có lỗi
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            showAlert("Database Error", "Failed to create assignment: " + e.getMessage());
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true); // Reset auto-commit
-                    conn.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+            showAlert(Alert.AlertType.ERROR, "Database error: " + e.getMessage());
         }
-    }
-    private int getClassId(Connection conn, String className) throws SQLException {
-        String sql = "SELECT id FROM classes WHERE class_name = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, className);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("id");
-                } else {
-                    throw new SQLException("Class not found: " + className);
-                }
-            }
-        }
-    }
-    private void initializeSubmissions(Connection conn, int assignmentId, int classId) throws SQLException {
-        String sql = "INSERT INTO submissions (assignment_id, student_id, status) " +
-                "SELECT ?, s.user_id, 'Not Submitted' " +
-                "FROM students s " +
-                "JOIN student_classes sc ON s.user_id = sc.student_id " +
-                "WHERE sc.class_id = ?";
-
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, assignmentId);
-            stmt.setInt(2, classId);
-            stmt.executeUpdate();
-        }
-    }
-    private int getCurrentTeacherId() {
-        // Implement your authentication logic here
-        return 1; // Temporary - replace with actual teacher ID from session
     }
 
-    private void clearForm() {
+    public void clearForm() {
         title.clear();
         description.clear();
         deadline.setValue(null);
+        classCombo.setValue(null);
+    }
+    private Integer getTeacherIdFromUserId(int userId) {
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "SELECT id FROM teachers WHERE user_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, userId);
+            var rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
+
+    private void showAlert(Alert.AlertType type, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(type.name());
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    public void handleBack(ActionEvent actionEvent) {
+        SceneSwitch.returnToView(actionEvent,"view/teacher/class-view.fxml");
     }
 }

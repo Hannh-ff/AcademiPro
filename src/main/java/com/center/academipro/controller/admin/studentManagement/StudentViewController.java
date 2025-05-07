@@ -33,18 +33,30 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class StudentViewController {
-    @FXML private TableView<Student> tableView_Student;
-    @FXML private TableColumn<Student, Integer> studentId;
-    @FXML private TableColumn<Student, String> studentName;
-    @FXML private TableColumn<Student, String> studentUser;
-    @FXML private TableColumn<Student, String> studentEmail;
-    @FXML private TableColumn<Student, LocalDate> studentBirth;
-    @FXML private TableColumn<Student, String> studentPhone;
-    @FXML private TableColumn<Student, String> studentCourse;
-    @FXML private TableColumn<Student, String> studentClass;
-    @FXML private TableColumn<Student, Void> studentAction;
-    @FXML private TextField searchField;
-    @FXML private Label pageIndicator;
+    @FXML
+    private TableView<Student> tableView_Student;
+    @FXML
+    private TableColumn<Student, Integer> studentId;
+    @FXML
+    private TableColumn<Student, String> studentName;
+    @FXML
+    private TableColumn<Student, String> studentUser;
+    @FXML
+    private TableColumn<Student, String> studentEmail;
+    @FXML
+    private TableColumn<Student, LocalDate> studentBirth;
+    @FXML
+    private TableColumn<Student, String> studentPhone;
+    @FXML
+    private TableColumn<Student, String> studentCourse;
+    @FXML
+    private TableColumn<Student, String> studentClass;
+    @FXML
+    private TableColumn<Student, Void> studentAction;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private Label pageIndicator;
 
     private final ObservableList<Student> studentList = FXCollections.observableArrayList();
     private FilteredList<Student> filteredStudent;
@@ -60,24 +72,26 @@ public class StudentViewController {
         studentBirth.setCellValueFactory(cellData -> cellData.getValue().birthdayProperty());
         studentPhone.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
         studentCourse.setCellValueFactory(cellData -> cellData.getValue().courseProperty());
-        studentClass.setCellValueFactory(cellData-> cellData.getValue().classNameProperty());
+        studentClass.setCellValueFactory(cellData -> cellData.getValue().classNameProperty());
 
         setUpActionColumn();
         loadStudent();
         setupSearchFilter();
+        tableView_Student.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
     private void loadStudent() {
         studentList.clear();
-        
+
         String sql = """
-            SELECT s.id, s.user_id, u.fullname, u.username, u.email, s.birthday, s.phone, c.course_name, cl.class_name
-            FROM students s
-            JOIN users u ON s.user_id = u.id
-            JOIN student_classes sc ON sc.student_id = s.id
-            JOIN classes cl ON sc.class_id = cl.id
-            JOIN courses c ON cl.course_id = c.id
-        """;
+                    SELECT s.id, s.user_id, u.fullname, u.username, u.email, s.birthday, s.phone,
+                           c.course_name, cl.class_name
+                    FROM students s
+                    JOIN users u ON s.user_id = u.id
+                    LEFT JOIN student_classes sc ON sc.student_id = s.id
+                    LEFT JOIN classes cl ON sc.class_id = cl.id
+                    LEFT JOIN courses c ON cl.course_id = c.id
+                """;
 
         try (Connection conn = DBConnection.getConn();
              Statement stmt = conn.createStatement();
@@ -108,7 +122,7 @@ public class StudentViewController {
             e.printStackTrace();
             showAlert("Error loading students: " + e.getMessage(), Alert.AlertType.ERROR);
         }
-        
+
     }
 
     private void setUpActionColumn() {
@@ -257,13 +271,13 @@ public class StudentViewController {
         loadStudent();
     }
 
-    private void setupSearchFilter(){
+    private void setupSearchFilter() {
 
         filteredStudent = new FilteredList<>(studentList, p -> true);
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             System.out.println("Search: " + newValue);
 
-            filteredStudent.setPredicate(student ->{
+            filteredStudent.setPredicate(student -> {
                 if (newValue == null || newValue.trim().isEmpty()) {
                     return true;
                 }

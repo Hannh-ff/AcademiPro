@@ -2,18 +2,20 @@ package com.center.academipro.controller.student.classs;
 
 import com.center.academipro.controller.student.EventDAO;
 import com.center.academipro.models.Class;
+import com.center.academipro.session.SessionManager;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class MyClassesController {
     private GridPane gridPane;
 
     private static final int COLUMN_COUNT = 4; // 4 cột
+    int studentId = SessionManager.getInstance().getUserId();
 
     @FXML
     public void initialize() {
@@ -64,8 +67,26 @@ public class MyClassesController {
         openButton.setStyle("-fx-background-color: #3a86ff; -fx-text-fill: white; -fx-background-radius: 8;");
         openButton.setMaxWidth(Double.MAX_VALUE);
         openButton.setOnAction(e -> {
-            // TODO: Xử lý mở lớp
             System.out.println("Mở lớp: " + joinedClass.getClassName());
+
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/student/class/my-class-details.fxml"));
+                Parent newView = loader.load(); // Load xong lấy root mới
+
+                MyClassDetailsController controller = loader.getController();
+                controller.setClassAndStudentId(joinedClass.getId(), studentId); // Truyền classId và studentId cho controller
+
+                StackPane pane = (StackPane) ((Node) e.getSource()).getScene().getRoot();
+                BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
+
+                if (mainPane != null) {
+                    mainPane.setCenter(newView); // Chỉ thay Center, không replace root
+                } else {
+                    System.err.println("Cannot find #mainBorderPane");
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         });
 
         Region spacer = new Region();
@@ -74,5 +95,6 @@ public class MyClassesController {
         card.getChildren().addAll(classNameLabel, courseNameLabel, teacherNameLabel, spacer, openButton);
         return card;
     }
+
 
 }

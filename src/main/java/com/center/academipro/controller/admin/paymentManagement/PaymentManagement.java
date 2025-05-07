@@ -1,94 +1,85 @@
 package com.center.academipro.controller.admin.paymentManagement;
 
 import com.center.academipro.models.Payment;
-import com.center.academipro.models.Student;
+import com.center.academipro.utils.DBConnection;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.Date;
+import java.sql.*;
 
 public class PaymentManagement {
-    @FXML
-    private TableColumn<Payment, String> CourseCol;
-
-    @FXML
-    private TableColumn<Payment, Integer> IdCol;
-
-    @FXML
-    private TableColumn<Payment, Void> actionCol;
-
-    @FXML
-    private TableColumn<Payment, Date> payDateCol;
-
-    @FXML
-    private TableColumn<Payment, String> paymethodCol;
-
-    @FXML
-    private TableColumn<Payment, String> paystatusCol;
-
-    @FXML
-    private TableColumn<Payment, Double> priceCol;
-
-    @FXML
-    private TableColumn<Payment, String> studentNameCol;
 
     @FXML
     private TableView<Payment> tableViewPayment;
+
     @FXML
+    private TableColumn<Payment, Integer> IdCol;
+    @FXML
+    private TableColumn<Payment, String> studentNameCol;
+    @FXML
+    private TableColumn<Payment, String> CourseCol;
+    @FXML
+    private TableColumn<Payment, Double> priceCol;
+    @FXML
+    private TableColumn<Payment, String> paymethodCol;
+    @FXML
+    private TableColumn<Payment, String> paystatusCol;
+    @FXML
+    private TableColumn<Payment, String> payDateCol;
+
+    private ObservableList<Payment> paymentList = FXCollections.observableArrayList();
+
     public void initialize() {
-        // Initialization logic here
+        IdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        studentNameCol.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+        CourseCol.setCellValueFactory(new PropertyValueFactory<>("courseName"));
+        priceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+        paymethodCol.setCellValueFactory(new PropertyValueFactory<>("paymentMethod"));
+        paystatusCol.setCellValueFactory(new PropertyValueFactory<>("paymentStatus"));
+        payDateCol.setCellValueFactory(new PropertyValueFactory<>("paymentDate"));
+
+        loadPaymentData();
+        tableViewPayment.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
-    private void loadPayment() {
-        // Load payment data from the database and populate the table
-    }
 
-    private void setUpActionColumn() {
-        actionCol.setCellFactory(param -> new TableCell<>() {
-            private final Button updateBtn = new Button("Update");
-            private final Button deleteBtn = new Button("Delete");
-            private final HBox btnBox = new HBox(10, updateBtn, deleteBtn);
+    private void loadPaymentData() {
+        String query = "SELECT p.id, u.fullname, c.course_name, c.price, p.payment_method, p.payment_status, p.payment_date " +
+                "FROM payments p " +
+                "JOIN users u ON p.student_id = u.id " +
+                "JOIN courses c ON p.course_id = c.id";
 
-//            {
-//                updateBtn.setOnAction(event -> {
-//                    Student student = getTableView().getItems().get(getIndex());
-//                    handleUpdate();
-//                });
-//
-//                deleteBtn.setOnAction(event -> {
-//                    Student student = getTableView().getItems().get(getIndex());
-//                    handleDelete(student);
-//                });
+        try (Connection conn = DBConnection.getConn();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
 
-//                updateBtn.setStyle("-fx-background-color: linear-gradient(to bottom right, #a18cd1, #fbc2eb); -fx-text-fill: white;");
-//                deleteBtn.setStyle("-fx-background-color: linear-gradient(to bottom right, #ff1e56, #ff4b2b); -fx-text-fill: white;");
-//            }
+            paymentList.clear();
+            while (rs.next()) {
+                Payment payment = new Payment(
+                        new SimpleIntegerProperty(rs.getInt("id")),
+                        new SimpleStringProperty(rs.getString("fullname")),
+                        new SimpleStringProperty(rs.getString("course_name")),
+                        new SimpleStringProperty(rs.getString("payment_method")),
+                        new SimpleStringProperty(rs.getString("payment_status")),
+                        new SimpleDoubleProperty(rs.getDouble("price")),
+                        new SimpleObjectProperty<>(rs.getTimestamp("payment_date").toLocalDateTime())
+                );
 
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(btnBox);
-                }
+                paymentList.add(payment);
             }
-        });
-    }
-    private void handleUpdate(Payment payment) {
-        // Handle update action
-    }
-    private void handleDelete(Payment payment) {
-        // Handle delete action
-    }
-    private void showAlert(String message, Alert.AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(type.name());
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 
+            tableViewPayment.setItems(paymentList);
 
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

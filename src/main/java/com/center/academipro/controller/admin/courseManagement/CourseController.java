@@ -84,6 +84,8 @@ public class CourseController {
         addActionColumn();
         loadCoursesFromDatabase();
         setupSearchFilter();
+        tableCourse.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
 
     public void reloadCourseTable() {
@@ -212,6 +214,7 @@ public class CourseController {
         if (result.isPresent() && result.get() == ButtonType.YES) {
             Integer id = course.getId();
 
+            String deleteClassesSql = "DELETE FROM classes WHERE course_id = ?";
             String deleteTeacherCoursesSql = "DELETE FROM teacher_courses WHERE course_id = ?";
             String checkPurchaseSql = "SELECT COUNT(*) FROM purchase_history WHERE course_id = ?";
             String deletePurchaseSql = "DELETE FROM purchase_history WHERE course_id = ?";
@@ -250,6 +253,11 @@ public class CourseController {
                 try (PreparedStatement stmt1 = conn.prepareStatement(deleteTeacherCoursesSql)) {
                     stmt1.setInt(1, id);
                     stmt1.executeUpdate();
+                }
+
+                try (PreparedStatement deleteClassesStmt = conn.prepareStatement(deleteClassesSql)) {
+                    deleteClassesStmt.setInt(1, id);
+                    deleteClassesStmt.executeUpdate();
                 }
 
                 try (PreparedStatement deleteCourseStmt = conn.prepareStatement(deleteCourseSql)) {

@@ -3,34 +3,46 @@
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.MenuBarController">
     <children>
-        <BorderPane prefHeight="200.0" prefWidth="200.0" fx:id="mainBorderPane" >
+        <BorderPane fx:id="mainBorderPane" prefHeight="200.0" prefWidth="200.0">
             <center>
                 <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
             </center>
             <left>
                 <AnchorPane prefHeight="560.0" prefWidth="218.0" styleClass="main-bg" stylesheets="@../../css/thao.css" BorderPane.alignment="CENTER">
                     <children>
-                        <Label layoutX="57.0" layoutY="88.0" text="Welcome Admin" textFill="WHITE">
+                        <Label layoutX="56.0" layoutY="110.0" text="Welcome Teacher" textFill="WHITE">
                             <font>
                                 <Font size="14.0" />
                             </font>
                         </Label>
-                        <Button  fx:id="btnDashboard" onAction="#dashboardScene" layoutX="8.0" layoutY="150.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Dashboard" textFill="WHITE" />
-                        <Button  fx:id="btnTeacher" onAction="#teacherScene" layoutX="8.0" layoutY="205.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Teacher" textFill="WHITE" />
-                        <Button  fx:id="btnCourse" onAction="#courseScene" layoutX="8.0" layoutY="259.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Course" textFill="WHITE" />
-                        <Button  fx:id="btnClass" onAction="#classScene" layoutX="8.0" layoutY="314.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Class" textFill="WHITE" />
-                        <Button  fx:id="btnPayment" onAction="#paymentScene" layoutX="9.0" layoutY="370.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Payment" textFill="WHITE" />
-                        <Button  fx:id="btnStudent" onAction="#studentScene" layoutX="9.0" layoutY="425.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Student" textFill="WHITE" />
+                        <Button fx:id="btnAttendance" layoutX="8.0" layoutY="150.0" mnemonicParsing="false" onAction="#attendanceScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Attendance" textFill="WHITE" />
+                        <Button fx:id="btnHistory" layoutX="8.0" layoutY="205.0" mnemonicParsing="false" onAction="#historyAttendanceScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="History Attendance" textFill="WHITE" />
+                        <Button fx:id="btnMyClassTeacher" layoutX="8.0" layoutY="259.0" mnemonicParsing="false" onAction="#myClassTeacherScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="My Class" textFill="WHITE" />
                         <Line endX="100.0" layoutX="109.0" layoutY="125.0" startX="-100.0" stroke="WHITE" />
+                        <Button fx:id="btnTimetable" layoutX="8.0" layoutY="314.0" mnemonicParsing="false" onAction="#timeTableScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Timetable" textFill="WHITE" />
+                        <Button fx:id="btnHistory" layoutX="8.0" layoutY="205.0" mnemonicParsing="false" onAction="#historyAttendanceScene" prefHeight="53.0" prefWidth="206.0" styleClass="nav-btn" text="History Attendance" textFill="WHITE" />
+                        <Button fx:id="btnMyClassTeacher" layoutX="8.0" layoutY="259.0" mnemonicParsing="false" onAction="#myClassTeacherScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="👩🏻‍🏫 My Class" textFill="WHITE" />
+                        <Line endX="100.0" layoutX="108.0" layoutY="141.0" startX="-100.0" stroke="WHITE" />
+                        <Button layoutX="50.0" layoutY="650.0" onAction="#handleLogout" prefHeight="30.0" prefWidth="118.0" style="-fx-background-color: #EE0000;" text="Log Out" textFill="WHITE">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+                        <ImageView fitHeight="143.0" fitWidth="164.0" layoutX="37.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../images/logo_remove.png" />
+                            </image>
+                        </ImageView>
                     </children>
                 </AnchorPane>
             </left>
@@ -42,7 +54,7 @@
                         <String fx:value="main-bg" />
                     </styleClass>
                     <children>
-                        <Label layoutX="14.0" layoutY="9.0" text="Dashboard Form" textFill="WHITE">
+                        <Label layoutX="14.0" layoutY="9.0" textFill="WHITE">
                             <font>
                                 <Font size="15.0" />
                             </font>

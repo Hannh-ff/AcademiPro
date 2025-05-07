@@ -94,19 +94,6 @@ public class EventDAO {
         return classes;
     }
 
-    public static void cancelCourse(int courseId) {
-        int userId = SessionManager.getInstance().getUserId();
-        String sql = "DELETE FROM purchase_history WHERE user_id = ? AND course_id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, userId);
-            stmt.setInt(2, courseId);
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public static List<Class> getJoinedClassesByUserId() {
         ObservableList<Class> joinedClasses = FXCollections.observableArrayList();
         int userId = SessionManager.getInstance().getUserId();
@@ -145,4 +132,19 @@ public class EventDAO {
 
         return joinedClasses;
     }
+
+    public static void cancelCourse(int courseId) {
+        int userId = SessionManager.getInstance().getUserId();
+        String sql = "DELETE FROM purchase_history WHERE user_id = ? AND course_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            stmt.setInt(2, courseId);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

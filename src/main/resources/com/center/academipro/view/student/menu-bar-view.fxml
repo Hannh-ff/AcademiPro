@@ -3,6 +3,8 @@
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.StackPane?>
@@ -18,15 +20,25 @@
             <left>
                 <AnchorPane prefHeight="560.0" prefWidth="218.0" styleClass="main-bg" stylesheets="@../../css/thao.css" BorderPane.alignment="CENTER">
                     <children>
-                        <Label layoutX="57.0" layoutY="88.0" text="Welcome Student" textFill="WHITE">
+                        <Label layoutX="54.0" layoutY="114.0" text="Welcome Student" textFill="WHITE">
                             <font>
                                 <Font size="14.0" />
                             </font>
                         </Label>
                         <Button fx:id="btnListCourses" layoutX="9.0" layoutY="235.0" mnemonicParsing="false" onAction="#listCoursesScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="List Courses" textFill="WHITE" />
                         <Button fx:id="btnHistory" layoutX="9.0" layoutY="165.0" mnemonicParsing="false" onAction="#historyScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Purchased Course" textFill="WHITE" />
-                        <Line endX="100.0" layoutX="109.0" layoutY="125.0" startX="-100.0" stroke="WHITE" />
+                        <Line endX="100.0" layoutX="109.0" layoutY="147.0" startX="-100.0" stroke="WHITE" />
                         <Button layoutX="9.0" layoutY="305.0" mnemonicParsing="false" onAction="#myClassScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="My Class" textFill="WHITE" />
+                        <Button layoutX="50.0" layoutY="650.0" onAction="#handleLogout" prefHeight="30.0" prefWidth="118.0" style="-fx-background-color: #EE0000;" text="Log Out" textFill="WHITE">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+                        <ImageView fitHeight="143.0" fitWidth="164.0" layoutX="38.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../images/logo_remove.png" />
+                            </image>
+                        </ImageView>
                     </children>
                 </AnchorPane>
             </left>
