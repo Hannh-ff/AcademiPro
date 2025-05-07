@@ -95,7 +95,7 @@ public class PaymentController {
                 descripCousre.setText(rs.getString("description"));
                 String imagePath = rs.getString("image");
                 if (imagePath != null && !imagePath.isEmpty()) {
-                    imageCourse.setImage(new Image(imagePath));
+                    imageCourse.setImage(new Image("file:" + imagePath));
                 }
             }
         } catch (SQLException e) {
