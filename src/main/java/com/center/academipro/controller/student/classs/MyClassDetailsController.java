@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,7 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
 public class MyClassDetailsController implements Initializable {
-
 
     @FXML
     public Label courseNameLabel;
@@ -36,12 +36,26 @@ public class MyClassDetailsController implements Initializable {
     public VBox assignmentListVBox;
 
     private int classId = SessionCourse.getClassId();
+    private int studentId = -1;
 
-    private int studentId = SessionManager.getInstance().getUserId();
+    private void fetchStudentId() {
+        int userId = SessionManager.getInstance().getUserId();
+        String sql = "SELECT id FROM students WHERE user_id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                studentId = rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-    public void setClassAndStudentId(int classId, int studentId) {
+    public void setClassAndStudentId(int classId, int userId) {
         this.classId = classId;
-        this.studentId = studentId;
+        fetchStudentId();
 
         System.out.println("Đã gán classId: " + classId + ", studentId: " + studentId);
 
@@ -85,7 +99,7 @@ public class MyClassDetailsController implements Initializable {
         }
     }
 
-    private void loadAssignments() {
+    public void loadAssignments() {
         String sql = "SELECT a.id, a.title, a.description, a.deadline, \n" +
                 "               s.status \n" +
                 "        FROM assignments a\n" +
@@ -113,6 +127,7 @@ public class MyClassDetailsController implements Initializable {
                         rs.getTimestamp("deadline"),
                         rs.getString("status")
                 );
+                System.out.println("Status trong DB: " + rs.getString("status"));
                 assignmentListVBox.getChildren().add(assignmentItem);
             }
 
@@ -147,8 +162,14 @@ public class MyClassDetailsController implements Initializable {
 
         Button submitBtn = new Button("Submit");
         submitBtn.setStyle("-fx-background-color: #00a8ff; -fx-text-fill: white; -fx-padding: 8 16; -fx-background-radius: 6;");
-        submitBtn.setOnAction(e -> handleSubmitAssignment(assignmentId));
 
+        if (status != null && status.toLowerCase().startsWith("done")) {
+            submitBtn.setDisable(true);
+            submitBtn.setText("Submitted");
+            submitBtn.setStyle("-fx-background-color: #dcdde1; -fx-text-fill: #636e72; -fx-padding: 8 16; -fx-background-radius: 6;");
+        } else {
+            submitBtn.setOnAction(e -> handleSubmitAssignment(assignmentId));
+        }
         HBox itemBox = new HBox(infoBox, submitBtn);
         itemBox.setSpacing(20);
         itemBox.setPadding(new Insets(15));
@@ -166,6 +187,7 @@ public class MyClassDetailsController implements Initializable {
             // Truyền dữ liệu cho controller
             SubmitAssignmentController controller = loader.getController();
             controller.setAssignmentData(assignmentId, "Đang tải...", "Mô tả...", Timestamp.valueOf("2000-01-01 00:00:00"));
+            controller.setParentController(this);
 
             // Lấy thông tin thật từ DB
             try (Connection conn = DBConnection.getConnection();
@@ -184,9 +206,13 @@ public class MyClassDetailsController implements Initializable {
                 }
             }
             Stage stage = new Stage();
-            stage.setTitle("Submit Assignment");
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.initModality(Modality.APPLICATION_MODAL); // chặn tương tác cửa sổ chính
+            stage.setTitle("Submit Assignment");
+            stage.showAndWait(); // ⚠️ Sử dụng showAndWait để đảm bảo code phía sau đợi nộp xong mới chạy
+
+            // Optional: load lại sau khi cửa sổ submit đóng (dự phòng nếu controller chưa cập nhật)
+            loadAssignments();
 
         } catch (IOException | SQLException e) {
             e.printStackTrace();

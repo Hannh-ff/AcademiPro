@@ -1,0 +1,78 @@
+/* Áp dụng chung cho VBox */
+.root {
+    -fx-background-color: #f5f6fa;
+    -fx-padding: 30;
+    -fx-spacing: 20;
+    -fx-alignment: center;
+}
+
+/* Tiêu đề bài tập */
+#assignmentTitleLabel {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2f3640;
+}
+
+/* Mô tả bài tập */
+#assignmentDescriptionLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: #353b48;
+}
+
+/* Deadline */
+#deadlineLabel {
+    -fx-font-size: 13px;
+    -fx-text-fill: #e84118;
+    -fx-font-weight: bold;
+}
+
+/* Nhãn tên file */
+#fileNameLabel {
+    -fx-font-size: 13px;
+    -fx-text-fill: #718093;
+    -fx-font-style: italic;
+}
+
+/* TextArea (ghi chú) */
+#commentField {
+    -fx-font-size: 13px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #dcdde1;
+    -fx-border-width: 1;
+    -fx-padding: 8;
+}
+
+/* Nút chọn tệp */
+.button {
+    -fx-background-color: #00a8ff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #0097e6;
+}
+
+/* Nút nộp bài */
+.button:focused {
+    -fx-border-color: transparent;
+}
+
+.button:last-child {
+    -fx-background-color: #44bd32;
+}
+
+.button:last-child:hover {
+    -fx-background-color: #4cd137;
+}
+
+#assignmentDescriptionLabel {
+    -fx-font-size: 14px;
+    -fx-text-fill: #353b48;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}
