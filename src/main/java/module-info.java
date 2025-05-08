@@ -1,11 +1,10 @@
 module com.center.academipro {
-    requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
     requires jdk.security.auth;
     requires mysql.connector.j;
-    requires java.desktop;
     requires jdk.httpserver;
+    requires javafx.web;
 
     opens com.center.academipro.models to javafx.base;
 

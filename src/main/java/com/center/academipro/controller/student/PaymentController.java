@@ -17,8 +17,18 @@ import javafx.scene.text.Text;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert.AlertType;
 
+import com.center.academipro.controller.service.PaymentService;
+
+import javafx.scene.web.WebView;
+
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+
+
+import javafx.scene.control.Alert;
+
 
 public class PaymentController {
 
@@ -53,6 +63,8 @@ public class PaymentController {
 
     @FXML
     private Text descripCousre;
+    @FXML
+    private WebView webView;
 
     private ToggleGroup paymentMethodGroup;
     // ID của học sinh và khóa học - bạn phải truyền giá trị này vào trước khi thanh toán(hoàng nhớ truyen vào)
@@ -64,6 +76,7 @@ public class PaymentController {
         paymentMethodGroup = new ToggleGroup();
         cashPayment.setToggleGroup(paymentMethodGroup);
         onlinePayment.setToggleGroup(paymentMethodGroup);
+        webView.setVisible(false);
 
         studenNameCol.setCellValueFactory(cell -> cell.getValue().studentNameProperty());
         courseNameCol.setCellValueFactory(cell -> cell.getValue().courseNameProperty());
@@ -238,9 +251,115 @@ public class PaymentController {
     }
 
     private void payOnline() {
-        showAlert(AlertType.INFORMATION, "Coming Soon", "Online payment not implemented yet.");
+        try {
+            double amount = Double.parseDouble(total.getText());
+            String orderInfo = "Payment for course: " + courseName.getText();
+            String ipAddress = "127.0.0.1"; // Trong thực tế nên lấy IP thật
+
+            // Lưu thanh toán với trạng thái Pending trước
+//            boolean paymentSaved = PaymentService.savePayment(
+//                    studentId,
+//                    courseId,
+//                    amount,
+//                    "VNPay",
+//                    "Pending",
+//                    "VNP-" + System.currentTimeMillis()
+//            );
+
+//            if (!paymentSaved) {
+//                showAlert(AlertType.ERROR, "Error", "Failed to initialize payment");
+//                return;
+//            }
+
+            // Lấy ID của payment vừa tạo
+            int paymentId = PaymentService.getLastInsertedPaymentId();
+
+            if (paymentId == -1) {
+                showAlert(AlertType.ERROR, "Error", "Failed to get payment ID");
+                return;
+            }
+
+            // Tạo URL thanh toán VNPay với paymentId trong orderInfo
+            orderInfo += " (PaymentID: " + paymentId + ")";
+            String paymentUrl = PaymentService.createVnpayPayment(amount, orderInfo, ipAddress);
+
+            if (paymentUrl == null) {
+                showAlert(AlertType.ERROR, "Error", "Failed to create payment URL");
+                return;
+            }
+
+            // Hiển thị WebView
+            webView.setVisible(true);
+            webView.getEngine().load(paymentUrl);
+
+            // Lắng nghe kết quả trả về
+            webView.getEngine().locationProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != null && newVal.contains("vnp_ResponseCode")) {
+                    handleVnpayResponse(newVal, paymentId);
+                }
+            });
+
+        } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Error", "Failed to process online payment: " + e.getMessage());
+        }
     }
 
+    private void handleVnpayResponse(String returnUrl, int paymentId) {
+        try {
+            Map<String, String> params = extractParamsFromUrl(returnUrl);
+            String responseCode = params.get("vnp_ResponseCode");
+
+            // Cập nhật thông tin thanh toán
+            boolean updated = PaymentService.updateVnpayPayment(paymentId, params);
+
+            if (updated && "00".equals(responseCode)) {
+                // Thanh toán thành công
+                enrollStudent();
+                showAlert(AlertType.INFORMATION, "Success", "Online payment completed successfully!");
+            } else {
+                showAlert(AlertType.ERROR, "Payment Failed", "Online payment failed. Response code: " + responseCode);
+            }
+
+            // Ẩn WebView sau khi xử lý
+            webView.setVisible(false);
+
+        } catch (Exception e) {
+            showAlert(AlertType.ERROR, "Error", "Failed to process payment response: " + e.getMessage());
+        }
+    }
+
+    private void enrollStudent() {
+        String sql = "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)";
+
+        try (Connection conn = DBConnection.getConn();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, studentId);
+            stmt.setInt(2, courseId);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            // Nếu đã đăng ký rồi thì bỏ qua
+            if (!e.getMessage().contains("Duplicate entry")) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private Map<String, String> extractParamsFromUrl(String url) {
+        Map<String, String> params = new HashMap<>();
+        String[] parts = url.split("\\?");
+        if (parts.length > 1) {
+            String[] keyValuePairs = parts[1].split("&");
+            for (String pair : keyValuePairs) {
+                String[] keyValue = pair.split("=");
+                if (keyValue.length == 2) {
+                    params.put(keyValue[0], keyValue[1]);
+                }
+            }
+        }
+        return params;
+    }
     private void showAlert(AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);
         alert.setTitle(title);

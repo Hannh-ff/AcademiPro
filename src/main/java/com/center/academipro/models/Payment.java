@@ -1,33 +1,22 @@
 package com.center.academipro.models;
 
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Payment {
-    private SimpleIntegerProperty id;
-    private SimpleStringProperty studentName;
-    private SimpleStringProperty courseName;
-    private SimpleStringProperty paymentMethod;
-    private SimpleStringProperty paymentStatus;
-    private SimpleDoubleProperty price;
-    private SimpleObjectProperty<LocalDateTime> paymentDate;
+    private IntegerProperty id = new SimpleIntegerProperty();
+    private StringProperty studentName = new SimpleStringProperty();
+    private StringProperty courseName = new SimpleStringProperty();
+    private StringProperty paymentMethod = new SimpleStringProperty();
+    private StringProperty paymentStatus = new SimpleStringProperty();
+    private final DoubleProperty amount = new SimpleDoubleProperty();
+    private DoubleProperty price = new SimpleDoubleProperty();
+    private ObjectProperty<LocalDateTime> paymentDate = new SimpleObjectProperty<>();
+    private final StringProperty transactionId = new SimpleStringProperty();
 
-    public Payment() {
-        this.id = new SimpleIntegerProperty();
-        this.studentName = new SimpleStringProperty();
-        this.courseName = new SimpleStringProperty();
-        this.paymentMethod = new SimpleStringProperty();
-        this.paymentStatus = new SimpleStringProperty();
-        this.price = new SimpleDoubleProperty();
-        this.paymentDate = new SimpleObjectProperty<>();
-    }
-
+    public Payment() {}
     public Payment(SimpleIntegerProperty id, SimpleStringProperty studentName, SimpleStringProperty courseName, SimpleStringProperty paymentMethod, SimpleStringProperty paymentStatus, SimpleDoubleProperty price, SimpleObjectProperty<LocalDateTime> paymentDate) {
         this.id = id;
         this.studentName = studentName;
@@ -38,97 +27,52 @@ public class Payment {
         this.paymentDate = paymentDate;
     }
 
-    public Payment(String studentName, String courseName, LocalDateTime date) {
-        this.id = new SimpleIntegerProperty();
-        this.studentName = new SimpleStringProperty(studentName);
-        this.courseName = new SimpleStringProperty(courseName);
-        this.paymentMethod = new SimpleStringProperty();
-        this.paymentStatus = new SimpleStringProperty();
-        this.price = new SimpleDoubleProperty();
-        this.paymentDate = new SimpleObjectProperty<>(date);
+
+    public Payment(String studentName, String courseName, LocalDateTime paymentDate) {
+        setStudentName(studentName);
+        setCourseName(courseName);
+        setPaymentDate(paymentDate);
     }
 
-    public int getId() {
-        return id.get();
-    }
+    // Getter và Setter cho id
+    public int getId() { return id.get(); }
+    public void setId(int value) { id.set(value); }
+    public IntegerProperty idProperty() { return id; }
 
-    public SimpleIntegerProperty idProperty() {
-        return id;
-    }
+    // Getter và Setter cho studentName
+    public String getStudentName() { return studentName.get(); }
+    public void setStudentName(String value) { studentName.set(value); }
+    public StringProperty studentNameProperty() { return studentName; }
 
-    public void setId(int id) {
-        this.id.set(id);
-    }
+    // Getter và Setter cho courseName
+    public String getCourseName() { return courseName.get(); }
+    public void setCourseName(String value) { courseName.set(value); }
+    public StringProperty courseNameProperty() { return courseName; }
 
-    public String getStudentName() {
-        return studentName.get();
-    }
+    // Getter và Setter cho paymentMethod
+    public String getPaymentMethod() { return paymentMethod.get(); }
+    public void setPaymentMethod(String value) { paymentMethod.set(value); }
+    public StringProperty paymentMethodProperty() { return paymentMethod; }
 
-    public SimpleStringProperty studentNameProperty() {
-        return studentName;
-    }
+    // Getter và Setter cho paymentStatus
+    public String getPaymentStatus() { return paymentStatus.get(); }
+    public void setPaymentStatus(String value) { paymentStatus.set(value); }
+    public StringProperty paymentStatusProperty() { return paymentStatus; }
 
-    public void setStudentName(String studentName) {
-        this.studentName.set(studentName);
-    }
+    // Getter và Setter cho amount
+    public double getAmount() { return amount.get(); }
+    public void setAmount(double value) { amount.set(value); }
+    public DoubleProperty amountProperty() { return amount; }
 
-    public String getCourseName() {
-        return courseName.get();
-    }
+    // Getter và Setter cho paymentDate
+    public LocalDateTime getPaymentDate() { return paymentDate.get(); }
+    public void setPaymentDate(LocalDateTime value) { paymentDate.set(value); }
+    public ObjectProperty<LocalDateTime> paymentDateProperty() { return paymentDate; }
 
-    public SimpleStringProperty courseNameProperty() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName.set(courseName);
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod.get();
-    }
-
-    public SimpleStringProperty paymentMethodProperty() {
-        return paymentMethod;
-    }
-
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod.set(paymentMethod);
-    }
-
-    public String getPaymentStatus() {
-        return paymentStatus.get();
-    }
-
-    public SimpleStringProperty paymentStatusProperty() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus.set(paymentStatus);
-    }
-
-    public double getPrice() {
-        return price.get();
-    }
-
-    public SimpleDoubleProperty priceProperty() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price.set(price);
-    }
-
-    public LocalDateTime getPaymentDate() {
-        return paymentDate.get();
-    }
-
-    public SimpleObjectProperty<LocalDateTime> paymentDateProperty() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDateTime paymentDate) {
-        this.paymentDate.set(paymentDate);
-    }
+    // Getter và Setter cho transactionId
+    public String getTransactionId() { return transactionId.get(); }
+    public void setTransactionId(String value) { transactionId.set(value); }
+    public StringProperty transactionIdProperty() { return transactionId; }
 }
+
+

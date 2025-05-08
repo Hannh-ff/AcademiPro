@@ -2,159 +2,123 @@ package com.center.academipro.controller.service;
 
 import com.center.academipro.models.Payment;
 import com.center.academipro.utils.DBConnection;
+import com.center.academipro.utils.VnpayUtil;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PaymentService {
 
-    // Thêm payment mới
-    public boolean createPayment(Payment payment) {
-        String sql = "INSERT INTO payments (user_id, course_id, amount, payment_method, status, transaction_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-            pstmt.setInt(1, payment.getUserId());
-            pstmt.setInt(2, payment.getCourseId());
-            pstmt.setDouble(3, payment.getAmount());
-            pstmt.setString(4, payment.getPaymentMethod());
-            pstmt.setString(5, payment.getStatus());
-            pstmt.setString(6, payment.getTransactionId());
-
-            int affectedRows = pstmt.executeUpdate();
-
-            if (affectedRows > 0) {
-                try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        payment.setId(rs.getInt(1));
-                        return true;
-                    }
-                }
-            }
-        } catch (SQLException e) {
+    public static String createVnpayPayment(double amount, String orderInfo, String ipAddress) {
+        try {
+            return VnpayUtil.createPaymentUrl(amount, orderInfo, ipAddress);
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+            return null;
         }
-        return false;
     }
 
-    // Cập nhật trạng thái payment
-    public boolean updatePaymentStatus(String transactionId, String status, String vnpTransactionNo) {
-        String sql = "UPDATE payments SET status = ?, transaction_id = ? WHERE transaction_id = ?";
+//    public static boolean savePayment(int studentId, int courseId, double amount,
+//                                      String paymentMethod, String paymentStatus,
+//                                      String transactionId) {
+//        String sql = "INSERT INTO payments (user_id, course_id, amount, payment_method, payment_status, payment_date) " +
+//                "VALUES (?, ?, ?, ?, ?, ?)";
+//
+//        try (Connection conn = DBConnection.getConn();
+//             PreparedStatement stmt = conn.prepareStatement(sql)) {
+//
+//            stmt.setInt(1, studentId);
+//            stmt.setInt(2, courseId);
+//            stmt.setDouble(3, amount);
+//            stmt.setString(4, paymentMethod);
+//            stmt.setString(5, paymentStatus);
+//            stmt.setTimestamp(6, Timestamp.valueOf(LocalDateTime.now()));
+//
+//            return stmt.executeUpdate() > 0;
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return false;
+//        }
+//    }
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    public static boolean updateVnpayPayment(int paymentId, Map<String, String> vnpParams) {
+        String sql = "UPDATE payments SET " +
+                "transaction_id = ?, " +
+                "payment_status = ? " +
+                "WHERE id = ?";
 
-            pstmt.setString(1, status);
-            pstmt.setString(2, vnpTransactionNo);
-            pstmt.setString(3, transactionId);
+        try (Connection conn = DBConnection.getConn();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            return pstmt.executeUpdate() > 0;
+            stmt.setString(1, vnpParams.get("vnp_TransactionNo"));
+            stmt.setString(2, "00".equals(vnpParams.get("vnp_ResponseCode")) ? "Completed" : "Failed");
+            stmt.setInt(3, paymentId);
+
+            return stmt.executeUpdate() > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-    // Lấy payment bằng transactionId
-    public Payment getPaymentByTransactionId(String transactionId) {
-        String sql = "SELECT * FROM payments WHERE transaction_id = ?";
+    public static ObservableList<Payment> getPaymentsByStudent(int studentId) {
+        ObservableList<Payment> payments = FXCollections.observableArrayList();
+        String sql = "SELECT p.*, u.fullname AS student_name, c.course_name " +
+                "FROM payments p " +
+                "JOIN students s ON p.student_id = s.id " +
+                "JOIN users u ON s.user_id = u.id " +
+                "JOIN courses c ON p.course_id = c.id " +
+                "WHERE p.student_id = ? " +
+                "ORDER BY p.payment_date DESC";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConn();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, transactionId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToPayment(rs);
-                }
+            stmt.setInt(1, studentId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Payment payment = new Payment(
+                        rs.getString("student_name"),
+                        rs.getString("course_name"),
+                        rs.getTimestamp("payment_date").toLocalDateTime()
+                );
+                payment.setId(rs.getInt("id"));
+                payment.setAmount(rs.getDouble("amount"));
+                payment.setPaymentMethod(rs.getString("payment_method"));
+                payment.setPaymentStatus(rs.getString("payment_status"));
+                payment.setTransactionId(rs.getString("transaction_id"));
+
+                payments.add(payment);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
-    }
 
-    // Lấy tất cả payments của user
-    public List<Payment> getPaymentsByUserId(int userId) {
-        List<Payment> payments = new ArrayList<>();
-        String sql = "SELECT * FROM payments WHERE user_id = ? ORDER BY payment_date DESC";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, userId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    payments.add(mapResultSetToPayment(rs));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return payments;
     }
 
-    // Lấy payments theo trạng thái
-    public List<Payment> getPaymentsByStatus(String status) {
-        List<Payment> payments = new ArrayList<>();
-        String sql = "SELECT * FROM payments WHERE status = ? ORDER BY payment_date DESC";
+    public static int getLastInsertedPaymentId() {
+        String sql = "SELECT LAST_INSERT_ID() as last_id";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConn();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-            pstmt.setString(1, status);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    payments.add(mapResultSetToPayment(rs));
-                }
+            if (rs.next()) {
+                return rs.getInt("last_id");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return payments;
-    }
 
-    // Hàm hỗ trợ chuyển ResultSet thành Payment object
-    private Payment mapResultSetToPayment(ResultSet rs) throws SQLException {
-        Payment payment = new Payment();
-        payment.setId(rs.getInt("id"));
-        payment.setUserId(rs.getInt("user_id"));
-        payment.setCourseId(rs.getInt("course_id"));
-        payment.setAmount(rs.getDouble("amount"));
-        payment.setPaymentMethod(rs.getString("payment_method"));
-        payment.setStatus(rs.getString("status"));
-        payment.setTransactionId(rs.getString("transaction_id"));
-
-        Timestamp timestamp = rs.getTimestamp("payment_date");
-        if (timestamp != null) {
-            payment.setPaymentDate(timestamp.toLocalDateTime());
-        }
-
-        return payment;
-    }
-
-    // Kiểm tra xem user đã thanh toán course chưa
-    public boolean hasUserPaidForCourse(int userId, int courseId) {
-        String sql = "SELECT COUNT(*) FROM payments WHERE user_id = ? AND course_id = ? AND status = 'Completed'";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setInt(1, userId);
-            pstmt.setInt(2, courseId);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt(1) > 0;
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return -1;
     }
 }
