@@ -1,50 +1,51 @@
 package com.center.academipro.controller.teacher;
 
-import com.center.academipro.controller.admin.studentManagement.EditStudentController;
-import com.center.academipro.models.Student;
+import com.center.academipro.models.Class;
 import com.center.academipro.models.Timetable;
 import com.center.academipro.utils.DBConnection;
 import com.center.academipro.utils.SceneSwitch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
+import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class TimetableController {
 
-    @FXML
-    private TableView<Timetable> timetableTable;
-    @FXML
-    private TableColumn<Timetable, Integer> idColumn;
-    @FXML
-    private TableColumn<Timetable, String> classColumn;
-    @FXML
-    private TableColumn<Timetable, LocalDate> dateColumn;
-    @FXML
-    private TableColumn<Timetable, LocalTime> startTimeCol;
-    @FXML
-    private TableColumn<Timetable, LocalTime> endTimeCol;
-    @FXML
-    private TableColumn<Timetable, Void> actionColumn;
+    @FXML private TableView<Timetable> timetableTable;
+    @FXML private TableColumn<Timetable, Integer> idColumn;
+    @FXML private TableColumn<Timetable, String> classColumn;
+    @FXML private TableColumn<Timetable, LocalDate> dateColumn;
+    @FXML private TableColumn<Timetable, LocalTime> startTimeCol;
+    @FXML private TableColumn<Timetable, LocalTime> endTimeCol;
+    @FXML private TableColumn<Timetable, Void> actionColumn;
+    @FXML private TextField searchField;
+
     private ObservableList<Timetable> timetableList = FXCollections.observableArrayList();
+    private FilteredList<Timetable> filteredData;
 
     public void initialize() {
         setupTableColumns();
         loadTimetables();
         setUpActionColumn();
+        setupSearchFilter();
     }
 
     private void setupTableColumns() {
@@ -60,8 +61,8 @@ public class TimetableController {
 
         String sql = "SELECT t.id, c.class_name, t.date, t.start_time, t.end_time " +
                 "FROM timetable t " +
-                "JOIN classes c ON t.class_id = c.id";
-
+                "JOIN classes c ON t.class_id = c.id " +
+                "ORDER BY t.date, t.start_time";
 
         try (Connection conn = DBConnection.getConn();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -78,12 +79,42 @@ public class TimetableController {
                 timetableList.add(t);
             }
 
+            timetableTable.setItems(timetableList);
         } catch (SQLException e) {
             e.printStackTrace();
+            showAlert("Database error: " + e.getMessage(), Alert.AlertType.ERROR);
         }
-
-        timetableTable.setItems(timetableList);
     }
+
+    private void setupSearchFilter() {
+        filteredData = new FilteredList<>(timetableList, p -> true);
+
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filteredData.setPredicate(timetable -> {
+                if (newValue == null || newValue.isEmpty()) {
+                    return true;
+                }
+
+                String lowerCaseFilter = newValue.toLowerCase();
+
+                if (timetable.getClassName().toLowerCase().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (timetable.getDate().toString().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (timetable.getStartTime().toString().contains(lowerCaseFilter)) {
+                    return true;
+                } else if (timetable.getEndTime().toString().contains(lowerCaseFilter)) {
+                    return true;
+                }
+                return false;
+            });
+        });
+
+        SortedList<Timetable> sortedData = new SortedList<>(filteredData);
+        sortedData.comparatorProperty().bind(timetableTable.comparatorProperty());
+        timetableTable.setItems(sortedData);
+    }
+
     private void setUpActionColumn() {
         actionColumn.setCellFactory(param -> new TableCell<>() {
             private final Button updateBtn = new Button("Update");
@@ -97,7 +128,7 @@ public class TimetableController {
                 });
 
                 deleteBtn.setOnAction(event -> {
-                    Timetable timetable= getTableView().getItems().get(getIndex());
+                    Timetable timetable = getTableView().getItems().get(getIndex());
                     handleDelete(timetable);
                 });
 
@@ -117,51 +148,91 @@ public class TimetableController {
             }
         });
     }
+
+    @FXML
     private void handleUpdate(Timetable timetable) {
-        if (timetable == null) {
-            System.out.println("Student is null. Cannot open update view.");
-            return;
-        }
-
         try {
-            FXMLLoader loader = SceneSwitch.loadView("view/admin/studentManagement/edit-student-view.fxml");
-            if (loader != null) {
-//                EditStudentController controller = loader.getController();
-//                controller.setStudent(student); // Truyền dữ liệu ghế cần chỉnh sửa
-//
-//                Parent newView = loader.getRoot();
-//                StackPane pane = (StackPane) tableView_Student.getScene().getRoot();
-//                BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
-//
-//                if (mainPane != null) {
-//                    mainPane.setCenter(newView);
-//                } else {
-//                    System.err.println("BorderPane with ID 'mainBorderPane' not found");
-//                }
+            // Load the edit-timetable view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/teacher/timetableManagement/edit-timetable-view.fxml"));
+            Parent root = loader.load();
+
+            // Get the controller and pass the timetable data
+            EditTimetableController controller = loader.getController();
+            controller.setTimetable(timetable);
+
+            // Get reference to main BorderPane
+            BorderPane mainBorderPane = (BorderPane) timetableTable.getScene().lookup("#mainBorderPane");
+            if (mainBorderPane != null) {
+                mainBorderPane.setCenter(root);
             } else {
-                System.err.println("Could not load edit-seat.fxml");
+                // Alternative approach if BorderPane isn't found
+                Scene currentScene = timetableTable.getScene();
+                currentScene.setRoot(root);
             }
-
-            // Sau khi đóng form update, reload lại danh sách
-            loadTimetables();
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            showAlert("Error loading edit form: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
     private void handleDelete(Timetable timetable) {
         Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
         confirm.setTitle("Delete Confirmation");
         confirm.setHeaderText(null);
-        confirm.setContentText("Are you sure you want to delete this student?");
+        confirm.setContentText("Are you sure you want to delete this timetable entry?");
 
         confirm.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
+                String sql = "DELETE FROM timetable WHERE id = ?";
 
+                try (Connection conn = DBConnection.getConn();
+                     PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+                    stmt.setInt(1, timetable.getId());
+                    int affectedRows = stmt.executeUpdate();
+
+                    if (affectedRows > 0) {
+                        showAlert("Timetable deleted successfully", Alert.AlertType.INFORMATION);
+                        loadTimetables(); // Refresh the table
+                    } else {
+                        showAlert("Failed to delete timetable", Alert.AlertType.ERROR);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    showAlert("Database error: " + e.getMessage(), Alert.AlertType.ERROR);
+                }
             }
         });
     }
 
+    @FXML
+    private void handleReload() {
+        loadTimetables();
+        searchField.clear();
+    }
+    @FXML
+    private void changeSceneAdd(ActionEvent event) {
+        try {
+            // Load the add-timetable view
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/teacher/timetableManagement/add-timetable.fxml"));
+            Parent root = loader.load();
+
+            // Get reference to main BorderPane (assuming your main layout uses BorderPane)
+            BorderPane mainBorderPane = (BorderPane) ((Node) event.getSource()).getScene().lookup("#mainBorderPane");
+
+            if (mainBorderPane != null) {
+                mainBorderPane.setCenter(root);
+            } else {
+                // Alternative approach if BorderPane isn't found
+                Scene currentScene = ((Node) event.getSource()).getScene();
+                currentScene.setRoot(root);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Error loading add timetable form: " + e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
     private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(type.name());
@@ -169,18 +240,4 @@ public class TimetableController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    public void changeSceneAdd(ActionEvent event) {
-        FXMLLoader loader = SceneSwitch.loadView("view/teacher/timetableManagement/add-timetable.fxml");
-        if (loader != null) {
-            Parent newView = loader.getRoot(); // Lấy Root từ FXMLLoader
-            StackPane pane = (StackPane) ((Node) event.getSource()).getScene().getRoot();
-            BorderPane mainPane = (BorderPane) pane.lookup("#mainBorderPane");
-            mainPane.setCenter(newView); // Thay đổi nội dung của center
-        } else {
-            System.err.println("Failed to load addnew-user.fxml");
-        }
-
-    }
-
-
 }

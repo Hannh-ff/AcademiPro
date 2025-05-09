@@ -1,47 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-        <?import javafx.geometry.Insets?>
-        <?import javafx.scene.control.*?>
-        <?import javafx.scene.layout.*?>
-        <?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.center.academipro.controller.teacher.AttendanceController"
-      spacing="15" prefHeight="600" prefWidth="900" stylesheets="@../../css/thao.css">
+<VBox prefHeight="600" prefWidth="900" spacing="15" stylesheets="@../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.teacher.AttendanceController">
 
     <padding>
-        <Insets top="15" right="15" bottom="15" left="15"/>
+        <Insets bottom="15" left="15" right="15" top="15" />
     </padding>
 
-    <Label text="Attendance Management">
+    <Label alignment="TOP_LEFT" styleClass="main-text" text="Attendance Management">
         <font>
-            <Font name="System Bold" size="20"/>
+            <Font name="System Bold" size="20" />
         </font>
     </Label>
 
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Class:"/>
-        <ComboBox fx:id="classCombox" prefWidth="200"/>
-        <Label text="Date:"/>
-        <DatePicker fx:id="datePicker" prefWidth="150"/>
+    <HBox alignment="CENTER" spacing="10">
+        <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="108.0" text="Class:">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font></Label>
+        <ComboBox fx:id="classCombox" prefWidth="200" />
+        <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="147.0" text="Date:">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font></Label>
+        <DatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="192.0" />
 <!--        <Button fx:id="refreshButton" text="Refresh" onAction="#refreshData"/>-->
     </HBox>
 
     <TableView fx:id="studentTableView" prefHeight="400">
         <columns>
-            <TableColumn fx:id="studentCodeColumn" text="Student ID" prefWidth="100"/>
-            <TableColumn fx:id="studentNameColumn" text="Student Name" prefWidth="250"/>
-            <TableColumn fx:id="presentColumn" text="Present" prefWidth="80"/>
-            <TableColumn fx:id="absentColumn" text="Absent" prefWidth="80"/>
-            <TableColumn fx:id="lateColumn" text="Late" prefWidth="80"/>
-            <TableColumn fx:id="excusedColumn" text="Excused" prefWidth="80"/>
-            <TableColumn fx:id="notesColumn" text="Notes" prefWidth="200"/>
+            <TableColumn fx:id="studentNameColumn" prefWidth="250" text="Student Name" />
+            <TableColumn fx:id="presentColumn" prefWidth="80" text="Present" />
+            <TableColumn fx:id="absentColumn" prefWidth="80" text="Absent" />
+            <TableColumn fx:id="lateColumn" prefWidth="80" text="Late" />
+            <TableColumn fx:id="excusedColumn" prefWidth="80" text="Excused" />
+            <TableColumn fx:id="notesColumn" prefWidth="200" text="Notes" />
         </columns>
     </TableView>
 
-    <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Label fx:id="statusLabel" style="-fx-text-fill: red; -fx-padding: 5 0 5 0;"/>
-        <Button fx:id="saveButton" text="Save Attendance"/>
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Label fx:id="statusLabel" style="-fx-text-fill: red; -fx-padding: 5 0 5 0;" />
+        <Button fx:id="saveButton" prefHeight="43.0" prefWidth="125.0" styleClass="btn-add" text="Save Attendance" />
     </HBox>
 
 </VBox>
