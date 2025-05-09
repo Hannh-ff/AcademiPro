@@ -20,7 +20,6 @@ public class Timetable {
         this.endTime = new SimpleObjectProperty<>(endTime);
     }
 
-    // Getters
     public int getId() {
         return id.get();
     }
@@ -62,7 +61,6 @@ public class Timetable {
         return endTime;
     }
 
-    // Setters
     public void setId(int id) {
         this.id.set(id);
     }

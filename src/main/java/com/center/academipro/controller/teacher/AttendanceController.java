@@ -1,6 +1,7 @@
 package com.center.academipro.controller.teacher;
 
 import com.center.academipro.models.Attendance;
+import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.DBConnection;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -31,9 +32,12 @@ public class AttendanceController {
     @FXML private Label statusLabel;
 
     private ObservableList<Attendance> attendanceList = FXCollections.observableArrayList();
+    private int currentTeacherId;
 
     @FXML
     public void initialize() {
+        currentTeacherId = SessionManager.getInstance().getUserId();
+
         setupTableColumns();
         loadClasses();
         setupDatePicker();
@@ -69,12 +73,17 @@ public class AttendanceController {
                     + "' to '" + event.getNewValue() + "'");
             event.getRowValue().setNotes(event.getNewValue());
         });
-    }    private void loadClasses() {
+    }
+    private void loadClasses() {
         try (Connection conn = DBConnection.getConn();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT class_name FROM classes ORDER BY class_name")) {
+                     "SELECT class_name FROM classes " +
+                             "WHERE teacher_id = ? " +
+                             "ORDER BY class_name")) {
 
+            stmt.setInt(1, currentTeacherId);
             ResultSet rs = stmt.executeQuery();
+
             classCombox.getItems().clear();
             while (rs.next()) {
                 classCombox.getItems().add(rs.getString("class_name"));
@@ -88,6 +97,7 @@ public class AttendanceController {
             e.printStackTrace();
         }
     }
+
 
     private void setupDatePicker() {
         datePicker.setDayCellFactory(picker -> new DateCell() {

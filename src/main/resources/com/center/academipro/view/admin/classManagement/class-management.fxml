@@ -46,8 +46,8 @@
                             <columns>
                                 <TableColumn fx:id="colClassId" prefWidth="50.0" text="ID" />
                                 <TableColumn fx:id="colClassName" prefWidth="129.0" text="Class Name" />
-                                <TableColumn fx:id="colCourseName" prefWidth="171.0" text="Teacher Name" />
-                                <TableColumn fx:id="colTeacherName" prefWidth="190.0" text="Course Name" />
+                                <TableColumn fx:id="colTeacherName" prefWidth="171.0" text="Teacher Name" />
+                                <TableColumn fx:id="colCourseName" prefWidth="190.0" text="Course Name" />
                                 <TableColumn fx:id="colStudentCount" prefWidth="104.0" text="Student" />
                                 <TableColumn fx:id="colAction" prefWidth="175.0" text="Actions" />
                             </columns>

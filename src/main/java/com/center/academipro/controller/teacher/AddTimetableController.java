@@ -4,17 +4,19 @@ package com.center.academipro.controller.teacher;
 import com.center.academipro.models.Class;
 import com.center.academipro.models.Timetable;
 import com.center.academipro.utils.DBConnection;
+import com.center.academipro.utils.SceneSwitch;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.BorderPane;
-
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.event.ActionEvent;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -27,47 +29,25 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ResourceBundle;
 
-public class EditTimetableController implements Initializable {
+public class AddTimetableController implements Initializable {
 
     @FXML private ComboBox<Class> classComboBox;
     @FXML private DatePicker datePicker;
     @FXML private TextField startTimeField;
     @FXML private TextField endTimeField;
-    @FXML private Button updateButton;
+    @FXML private Button addButton;
     @FXML private Button clearButton;
-    @FXML private Button backButton;
 
 
-    private Timetable timetableToEdit;
     private ObservableList<Class> classList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadClasses();
         setupTimeFields();
-    }
-
-    public void setTimetable(Timetable timetable) {
-        this.timetableToEdit = timetable;
-        populateFields();
-    }
-
-    private void populateFields() {
-        if (timetableToEdit != null) {
-            // Find and select the class in the combobox
-            classComboBox.getItems().stream()
-                    .filter(c -> c.getClassName().equals(timetableToEdit.getClassName()))
-                    .findFirst()
-                    .ifPresent(c -> classComboBox.getSelectionModel().select(c));
-
-            datePicker.setValue(timetableToEdit.getDate());
-            startTimeField.setText(timetableToEdit.getStartTime().toString());
-            endTimeField.setText(timetableToEdit.getEndTime().toString());
-        }
     }
 
     private void loadClasses() {
@@ -114,13 +94,18 @@ public class EditTimetableController implements Initializable {
         }
     }
 
-
     private void setupTimeFields() {
-        // Set prompt text for time fields
+        // Kiểm tra null trước khi sử dụng
+        if (startTimeField == null || endTimeField == null) {
+            System.err.println("Lỗi: Các trường thời gian chưa được khởi tạo!");
+            return;
+        }
+
+        // Thiết lập prompt text
         startTimeField.setPromptText("HH:mm");
         endTimeField.setPromptText("HH:mm");
 
-        // Add listeners to validate time format
+        // Thêm listener để validate định dạng thời gian
         startTimeField.textProperty().addListener((obs, oldVal, newVal) -> {
             if (!newVal.matches("^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$") && !newVal.isEmpty()) {
                 startTimeField.setStyle("-fx-border-color: red;");
@@ -137,10 +122,8 @@ public class EditTimetableController implements Initializable {
             }
         });
     }
-
-
     @FXML
-    private void handleUpdate() {
+    private void handleAdd() {
         if (validateInput()) {
             try {
                 Class selectedClass = classComboBox.getValue();
@@ -153,7 +136,7 @@ public class EditTimetableController implements Initializable {
                     return;
                 }
 
-                String sql = "UPDATE timetable SET class_id = ?, date = ?, start_time = ?, end_time = ? WHERE id = ?";
+                String sql = "INSERT INTO timetable (class_id, date, start_time, end_time) VALUES (?, ?, ?, ?)";
 
                 try (Connection conn = DBConnection.getConn();
                      PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -162,14 +145,14 @@ public class EditTimetableController implements Initializable {
                     stmt.setDate(2, Date.valueOf(date));
                     stmt.setTime(3, Time.valueOf(startTime));
                     stmt.setTime(4, Time.valueOf(endTime));
-                    stmt.setInt(5, timetableToEdit.getId());
 
                     int affectedRows = stmt.executeUpdate();
 
                     if (affectedRows > 0) {
-                        showAlert("Timetable updated successfully!", Alert.AlertType.INFORMATION);
+                        showAlert("Timetable added successfully!", Alert.AlertType.INFORMATION);
+                        clearFields();
                     } else {
-                        showAlert("Failed to update timetable", Alert.AlertType.ERROR);
+                        showAlert("Failed to add timetable", Alert.AlertType.ERROR);
                     }
                 }
             } catch (SQLException e) {
@@ -183,7 +166,7 @@ public class EditTimetableController implements Initializable {
 
     @FXML
     private void handleClear() {
-        populateFields(); // Reset to original values
+        clearFields();
     }
 
     private boolean validateInput() {
@@ -209,19 +192,28 @@ public class EditTimetableController implements Initializable {
 
         return true;
     }
+
+    public void clearFields() {
+        classComboBox.getSelectionModel().clearSelection();
+        datePicker.setValue(null);
+        startTimeField.clear();
+        endTimeField.clear();
+    }
     @FXML
-    private void handleBack() {
+    private void handleBack(ActionEvent event) {
         try {
+            // Load the timetable view
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/center/academipro/view/teacher/timetableManagement/timetable-view.fxml"));
             Parent root = loader.load();
 
             // Get reference to main BorderPane
-            BorderPane mainBorderPane = (BorderPane) backButton.getScene().lookup("#mainBorderPane");
+            BorderPane mainBorderPane = (BorderPane) ((Node) event.getSource()).getScene().lookup("#mainBorderPane");
 
             if (mainBorderPane != null) {
                 mainBorderPane.setCenter(root);
             } else {
-                Scene currentScene = backButton.getScene();
+                // Alternative approach if BorderPane isn't found
+                Scene currentScene = ((Node) event.getSource()).getScene();
                 currentScene.setRoot(root);
             }
         } catch (IOException e) {
@@ -229,7 +221,6 @@ public class EditTimetableController implements Initializable {
             showAlert("Error loading timetable view: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
-
 
     private void showAlert(String message, Alert.AlertType type) {
         Alert alert = new Alert(type);

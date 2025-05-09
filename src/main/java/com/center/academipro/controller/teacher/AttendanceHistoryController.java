@@ -1,6 +1,7 @@
 package com.center.academipro.controller.teacher;
 
 import com.center.academipro.models.Attendance;
+import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,9 +30,11 @@ public class AttendanceHistoryController {
 
     private ObservableList<Attendance> originalData = FXCollections.observableArrayList();
     private FilteredList<Attendance> filteredData;
+    private int currentTeacherId;
 
     @FXML
     public void initialize() {
+        currentTeacherId = SessionManager.getInstance().getUserId();
         setupTableColumns();
         loadClasses();
         setupStatusFilter();
@@ -63,12 +66,18 @@ public class AttendanceHistoryController {
     private void loadClasses() {
         try (Connection conn = DBConnection.getConn();
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT class_name FROM classes ORDER BY class_name")) {
+                     "SELECT class_name FROM classes WHERE teacher_id = ? ORDER BY class_name")) {
 
+            stmt.setInt(1, currentTeacherId);
             ResultSet rs = stmt.executeQuery();
+
             classCombox.getItems().clear();
             while (rs.next()) {
                 classCombox.getItems().add(rs.getString("class_name"));
+            }
+
+            if (classCombox.getItems().isEmpty()) {
+                statusLabel.setText("You don't have any assigned classes");
             }
         } catch (SQLException e) {
             showAlert("Database Error", "Failed to load classes: " + e.getMessage());
