@@ -55,9 +55,13 @@ public class EditStudentController implements Initializable {
         }
 
         loadCourses();
-        for (Course c : courseListView.getItems()) {
-            if (student.getCourse().contains(c.getCourseName())) {
-                courseListView.getSelectionModel().select(c);
+
+        String studentCourses = student.getCourse();
+        if (studentCourses != null) {
+            for (Course c : courseListView.getItems()) {
+                if (studentCourses.contains(c.getCourseName())) {
+                    courseListView.getSelectionModel().select(c);
+                }
             }
         }
     }
@@ -90,26 +94,34 @@ public class EditStudentController implements Initializable {
             try (PreparedStatement ps = conn.prepareStatement(sqlStudent)) {
                 ps.setDate(1, birthdayVal != null ? Date.valueOf(birthdayVal) : null);
                 ps.setString(2, phoneStr);
-                ps.setInt(3, selectedClassObj.getId()); // class_id từ Class object
+                if (selectedClassObj != null) {
+                    ps.setInt(3, selectedClassObj.getId());
+                } else {
+                    ps.setNull(3, java.sql.Types.INTEGER); // Nếu không chọn lớp, set NULL
+                }
                 ps.setInt(4, userId);
                 ps.executeUpdate();
             }
 
             // Cập nhật bảng student_courses
             int studentId = getStudentIdByUserId(conn, userId);
+
             try (PreparedStatement ps = conn.prepareStatement("DELETE FROM student_courses WHERE student_id = ?")) {
                 ps.setInt(1, studentId);
                 ps.executeUpdate();
             }
 
-            String insertSQL = "INSERT INTO student_courses (student_id, course_id) VALUES (?, ?)";
-            try (PreparedStatement ps = conn.prepareStatement(insertSQL)) {
-                for (Course c : selectedCourses) {
-                    ps.setInt(1, studentId);
-                    ps.setInt(2, c.getId());
-                    ps.addBatch();
+            // Chỉ thêm lại nếu có chọn khóa học
+            if (selectedCourses != null && !selectedCourses.isEmpty()) {
+                String insertSQL = "INSERT INTO student_courses (student_id, course_id) VALUES (?, ?)";
+                try (PreparedStatement ps = conn.prepareStatement(insertSQL)) {
+                    for (Course c : selectedCourses) {
+                        ps.setInt(1, studentId);
+                        ps.setInt(2, c.getId());
+                        ps.addBatch();
+                    }
+                    ps.executeBatch();
                 }
-                ps.executeBatch();
             }
 
             conn.commit();
