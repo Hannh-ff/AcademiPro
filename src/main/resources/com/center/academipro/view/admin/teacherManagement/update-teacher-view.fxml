@@ -86,8 +86,7 @@
                                                 </Label>
                                             </children>
                                         </AnchorPane>
-
-                                        <AnchorPane layoutX="0.0" layoutY="0.0" prefHeight="109.0" prefWidth="285.0">
+                                        <AnchorPane layoutX="0.0" layoutY="0.0" prefHeight="166.0" prefWidth="299.0">
                                             <styleClass>
                                                 <String fx:value="white-bg" />
                                                 <String fx:value="shadow" />
@@ -99,12 +98,12 @@
                                                         <Font name="System Bold" size="14.0" />
                                                     </font>
                                                 </Label>
-                                                <Separator layoutY="31.0" prefHeight="5.0" prefWidth="292.0" />
-                                                <Button fx:id="btnSave" layoutX="15.0" layoutY="50.0" mnemonicParsing="false" onAction="#addStudent" prefHeight="50.0" prefWidth="120.0" styleClass="btn-add" text="Save" />
-                                                <Button fx:id="btnClear" layoutX="165.0" layoutY="50.0" mnemonicParsing="false" onAction="#clearStudent" prefHeight="50.0" prefWidth="120.0" styleClass="btn-clear" text="Clear" />
+                                                <Separator layoutY="31.0" prefHeight="10.0" prefWidth="315.0" />
+                                                <Button fx:id="btnSave" layoutX="22.0" layoutY="49.0" mnemonicParsing="false" onAction="#addStudent" prefHeight="50.0" prefWidth="111.0" styleClass="btn-add" text="Save" />
+                                                <Button fx:id="btnClear" layoutX="180.0" layoutY="49.0" mnemonicParsing="false" onAction="#clearStudent" prefHeight="50.0" prefWidth="111.0" styleClass="btn-clear" text="Clear" />
             
                                             <!-- Cancel Button -->
-                                            <Button fx:id="btnCancel" layoutX="35.0" layoutY="114.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="37.0" prefWidth="222.0" styleClass="btn-delete" text="Cancel" />
+                                            <Button fx:id="btnCancel" layoutX="69.0" layoutY="113.0" mnemonicParsing="false" onAction="#handleCancel" prefHeight="42.0" prefWidth="178.0" styleClass="btn-delete" text="Cancel" />
                                             </children>
                                         </AnchorPane>
                                     </children>
