@@ -11,6 +11,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.Hyperlink?>
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.MenuBarController">
     <children>
         <BorderPane fx:id="mainBorderPane" prefHeight="200.0" prefWidth="200.0">
@@ -20,6 +21,11 @@
             <left>
                 <AnchorPane prefHeight="527.0" prefWidth="218.0" styleClass="main-bg" stylesheets="@../../css/thao.css" BorderPane.alignment="CENTER">
                     <children>
+                        <Hyperlink layoutX="50.0" layoutY="615.0" onAction="#changePasswordScene" styleClass=".hyperlink" text="Change Password" textFill="WHITE">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Hyperlink>
                         <Label layoutX="38.0" layoutY="115.0" prefHeight="32.0" prefWidth="142.0" text="Welcome Student" textFill="WHITE">
                             <font>
                                 <Font size="18.0" />
