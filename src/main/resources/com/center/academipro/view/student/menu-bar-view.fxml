@@ -39,7 +39,7 @@
                                 <Image url="@../../images/logo_remove.png" />
                             </image>
                         </ImageView>
-<!--                  <Button layoutX="10.0" layoutY="367.0" mnemonicParsing="false" onAction="#myTimetableScence" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Timetable" textFill="WHITE" />-->
+                  <Button layoutX="10.0" layoutY="367.0" mnemonicParsing="false" onAction="#myTimetableScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="Timetable" textFill="WHITE" />
                     </children>
                 </AnchorPane>
             </left>
