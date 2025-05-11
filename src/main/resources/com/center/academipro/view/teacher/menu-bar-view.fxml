@@ -33,7 +33,7 @@
 <!--                        <Button fx:id="btnHistory" layoutX="8.0" layoutY="205.0" mnemonicParsing="false" onAction="#historyAttendanceScene" prefHeight="53.0" prefWidth="206.0" styleClass="nav-btn" text="History Attendance" textFill="WHITE" />-->
 <!--                        <Button fx:id="btnMyClassTeacher" layoutX="8.0" layoutY="259.0" mnemonicParsing="false" onAction="#myClassTeacherScene" prefHeight="40.0" prefWidth="200.0" styleClass="nav-btn" text="👩🏻‍🏫 My Class" textFill="WHITE" />-->
 <!--                        <Line endX="100.0" layoutX="108.0" layoutY="141.0" startX="-100.0" stroke="WHITE" />-->
-                        <Button layoutX="50.0" layoutY="650.0" onAction="#handleLogout" prefHeight="30.0" prefWidth="118.0" style="-fx-background-color: #EE0000;" text="Log Out" textFill="WHITE">
+                        <Button layoutX="49.0" layoutY="512.0" onAction="#handleLogout" prefHeight="30.0" prefWidth="118.0" style="-fx-background-color: #EE0000;" text="Log Out" textFill="WHITE" AnchorPane.bottomAnchor="30.0">
                             <font>
                                 <Font size="14.0" />
                             </font>

@@ -117,6 +117,12 @@ public class MenuBarController {
         Parent newView = loader.getRoot();
         mainBorderPane.setCenter(newView);
     }
+    public void myTimetableScene(ActionEvent actionEvent) {
+        FXMLLoader loader = SceneSwitch.loadView("view/student/student-timetable.fxml");
+        assert loader != null;
+        Parent newView = loader.getRoot();
+        mainBorderPane.setCenter(newView);
+    }
 
     @FXML
     private void handleLogout(ActionEvent event) {
