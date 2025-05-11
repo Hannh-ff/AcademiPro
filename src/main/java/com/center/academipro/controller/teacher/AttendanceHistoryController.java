@@ -44,6 +44,8 @@ public class AttendanceHistoryController {
 
         filteredData = new FilteredList<>(originalData, p -> true);
         attendanceTableView.setItems(originalData);
+        attendanceTableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
 
     private void setupTableColumns() {

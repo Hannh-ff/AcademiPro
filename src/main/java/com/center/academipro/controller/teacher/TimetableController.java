@@ -46,6 +46,8 @@ public class TimetableController {
         loadTimetables();
         setUpActionColumn();
         setupSearchFilter();
+        timetableTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
 
     private void setupTableColumns() {
