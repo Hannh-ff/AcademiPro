@@ -22,49 +22,57 @@
                   <Font name="System Bold Italic" size="20.0" />
                </font>
             </Label>
-                <StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="615.0" style="-fx-border-color: black; -fx-border-radius: 15px; -fx-padding: 20;">
+                <StackPane fx:id="root" layoutX="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="620.0" style="-fx-border-color: black; -fx-border-radius: 15px; -fx-padding: 20;">
                     <children>
 
                         <!-- Hidden input -->
                         <TextField fx:id="txtImage" visible="false" />
-                        <HBox fx:id="mainContainer" alignment="CENTER" spacing="20" styleClass="group-box">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-radius: 10px;" />
+                        <HBox fx:id="mainContainer" alignment="CENTER" prefWidth="588.0" spacing="20" styleClass="group-box">
                             <children>
 
-                                <!-- Image section -->
+                                                              <!-- Image section -->
                                 <VBox alignment="CENTER" spacing="10">
                                     <children>
-                                        <ImageView fx:id="imagePreview" fitHeight="160.0" fitWidth="172.0" pickOnBounds="true" preserveRatio="true" styleClass="radius" />
+                                        <ImageView fx:id="imagePreview" fitHeight="241.0" fitWidth="228.0" pickOnBounds="true" preserveRatio="true" styleClass="radius" />
                                         <Button fx:id="btnImportImage" onAction="#importImage" prefHeight="28.0" prefWidth="120.0" styleClass="btn" text="Import" />
                                     </children>
                                 </VBox>
 
-                                <!-- Input section -->
+                                                        <!-- Input section -->
                                 <VBox alignment="CENTER_LEFT" spacing="8">
                                     <children>
                                         <Label text="Course Name:">
-                                            <font><Font name="System Bold" size="14.0" /></font>
+                                            <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
                                         </Label>
                                         <TextField fx:id="txtCourseName" prefWidth="200.0" promptText="Course name" />
 
-                                        <Label text="Price:">
-                                            <font><Font name="System Bold" size="14.0" /></font>
+                                                                <Label text="Price:">
+                                            <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
                                         </Label>
                                         <TextField fx:id="txtPrice" prefWidth="200.0" promptText="Price" />
 
-                                        <Label text="Description:">
-                                            <font><Font name="System Bold" size="14.0" /></font>
+                                                                <Label text="Description:">
+                                            <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
                                         </Label>
                                         <TextArea fx:id="txtDescription" prefHeight="80.0" prefWidth="420.0" promptText="Description" />
-
-                                        <!-- Action buttons -->
-                                        <HBox spacing="8">
-                                            <children>
-                                                <Button fx:id="btnAdd" onAction="#addCourse" prefHeight="32.0" prefWidth="60.0" styleClass="btn-add" text="Add" />
-                                                <Button fx:id="btnClear" onAction="#clearForm" prefHeight="32.0" prefWidth="60.0" styleClass="btn-add btn-clear" text="Clear" />
-                                            </children>
-                                        </HBox>
-
-                                        <Button fx:id="btnCancel" onAction="#handleCancel" prefHeight="32.0" prefWidth="120.0" styleClass="btn-delete" text="Cancel" />
+                              <AnchorPane prefHeight="82.0" prefWidth="338.0">
+                                 <children>
+                                                <Button fx:id="btnClear" layoutX="196.0" layoutY="-2.0" onAction="#clearForm" prefHeight="32.0" prefWidth="142.0" styleClass="btn-add btn-clear" text="Clear" />
+      
+                                                                      <!-- Action buttons -->
+                                              <HBox spacing="8" />
+                                                <Button fx:id="btnAdd" layoutY="-2.0" onAction="#addCourse" prefHeight="32.0" prefWidth="120.0" styleClass="btn-add" text="Add" />
+      
+                                                                      <Button fx:id="btnCancel" layoutX="109.0" layoutY="41.0" onAction="#handleCancel" prefHeight="38.0" prefWidth="120.0" styleClass="btn-delete" text="Cancel" />
+                                 </children>
+                              </AnchorPane>
                                     </children>
                                 </VBox>
                             </children>
