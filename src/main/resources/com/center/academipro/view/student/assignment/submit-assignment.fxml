@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.center.academipro.controller.student.assignment.SubmitAssignmentController"
-      spacing="20" alignment="CENTER" style="-fx-background-color: #f5f6fa;">
+<VBox alignment="CENTER" spacing="20" style="-fx-background-color: #f5f6fa;" stylesheets="@../../../css/submit.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.student.assignment.SubmitAssignmentController">
 
-    <Label fx:id="assignmentTitleLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-    <Label fx:id="assignmentDescriptionLabel" wrapText="true" maxWidth="500"/>
-    <Label fx:id="deadlineLabel" style="-fx-text-fill: red;"/>
+    <Label fx:id="assignmentTitleLabel" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+    <Label fx:id="assignmentDescriptionLabel" maxWidth="500" wrapText="true" />
+    <Label fx:id="deadlineLabel" style="-fx-text-fill: red;" />
 
-    <Button text="Chọn tệp để nộp" onAction="#handleChooseFile"/>
+    <Button onAction="#handleChooseFile" text="Chọn tệp để nộp" />
     <Label fx:id="fileNameLabel" text="Chưa chọn tệp" />
 
-    <TextArea fx:id="commentField" promptText="Ghi chú (nếu có)" prefRowCount="4" maxWidth="500"/>
+    <TextArea fx:id="commentField" maxWidth="500" prefRowCount="4" promptText="Ghi chú (nếu có)" />
 
-    <Button text="Xác nhận nộp bài" onAction="#handleSubmit" style="-fx-background-color: #44bd32; -fx-text-fill: white;"/>
+    <Button onAction="#handleSubmit" style="-fx-background-color: #44bd32; -fx-text-fill: white;" text="Xác nhận nộp bài" />
 </VBox>

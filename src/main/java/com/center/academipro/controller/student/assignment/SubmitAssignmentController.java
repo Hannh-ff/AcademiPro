@@ -1,5 +1,6 @@
 package com.center.academipro.controller.student.assignment;
 
+import com.center.academipro.controller.student.classs.MyClassDetailsController;
 import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.Alerts;
 import com.center.academipro.utils.DBConnection;
@@ -28,6 +29,7 @@ public class SubmitAssignmentController implements Initializable {
     private int assignmentId;
     private File selectedFile;
     private Timestamp deadline;
+    private MyClassDetailsController parentController;
 
     public void setAssignmentData(int assignmentId, String title, String description, Timestamp deadline) {
         this.assignmentId = assignmentId;
@@ -35,6 +37,10 @@ public class SubmitAssignmentController implements Initializable {
         assignmentTitleLabel.setText(title);
         assignmentDescriptionLabel.setText(description);
         deadlineLabel.setText("Hạn chót: " + deadline.toString());
+    }
+
+    public void setParentController(MyClassDetailsController controller) {
+        this.parentController = controller;
     }
 
     @Override
@@ -57,6 +63,9 @@ public class SubmitAssignmentController implements Initializable {
 
     @FXML
     private void handleSubmit() {
+        System.out.println("assignmentId = " + assignmentId);
+        System.out.println("userId = " + SessionManager.getInstance().getUserId());
+
         if (selectedFile == null) {
             Alerts.alertError("Error", "Please select a file to submit.");
             return;
@@ -103,6 +112,15 @@ public class SubmitAssignmentController implements Initializable {
 
                 stmt.executeUpdate();
                 Alerts.alertInfo("Successfully", "The assignment has been submitted successfully.");
+
+                // Gọi lại loadAssignments() từ controller cha để cập nhật UI
+                if (parentController != null) {
+                    parentController.loadAssignments();
+                }
+
+                // Đóng cửa sổ submit
+                Stage stage = (Stage) assignmentTitleLabel.getScene().getWindow();
+                stage.close();
             }
 
         } catch (SQLException e) {
