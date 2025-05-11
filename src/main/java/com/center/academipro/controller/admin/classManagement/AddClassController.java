@@ -72,11 +72,17 @@ public class AddClassController {
         try (Connection conn = DBConnection.getConn()) {
             // Lấy ID của khóa học
             int courseId = courseName.getValue().getId();
-
             // Lấy ID của giáo viên từ bảng users
             int teacherId = getTeacherIdByName(conn, selectedTeacherName);
+
             if (teacherId == -1) {
                 showAlert(Alert.AlertType.ERROR, "Error", "Teacher not found or not valid.");
+                return;
+            }
+
+            // Kiểm tra trùng tên lớp
+            if (isClassNameExists(conn, className)) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Class name already exists.");
                 return;
             }
 
@@ -92,6 +98,20 @@ public class AddClassController {
             e.printStackTrace();
             showAlert(Alert.AlertType.ERROR, "Error", "Database error occurred.");
         }
+    }
+
+    // ✅ Hàm kiểm tra tên lớp đã tồn tại hay chưa
+    private boolean isClassNameExists(Connection conn, String className) throws SQLException {
+        String query = "SELECT COUNT(*) FROM classes WHERE class_name = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setString(1, className);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        }
+        return false;
     }
 
     /**
