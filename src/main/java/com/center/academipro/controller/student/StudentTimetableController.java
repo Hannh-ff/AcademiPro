@@ -31,6 +31,8 @@ public class StudentTimetableController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setupTableColumns();
         loadTimetable();
+        timetableTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
 
     private void setupTableColumns() {
