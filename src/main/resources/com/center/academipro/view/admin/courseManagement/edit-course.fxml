@@ -55,7 +55,7 @@
                                         <HBox spacing="8">
                                             <children>
                                                 <Button fx:id="btnAdd" onAction="#updateCourse" prefHeight="32.0" prefWidth="80.0" styleClass="btn-add" text="Update" />
-                                                <Button fx:id="btnClear" onAction="#clearForm" prefHeight="32.0" prefWidth="60.0" styleClass="btn-add btn-clear" text="Clear" />
+                                                <Button fx:id="btnClear" onAction="#clearForm" prefHeight="32.0" prefWidth="60.0" styleClass="btn-clear" text="Clear" />
                                             </children>
                                         </HBox>
 

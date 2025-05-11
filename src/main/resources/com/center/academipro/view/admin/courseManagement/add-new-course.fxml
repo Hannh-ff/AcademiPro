@@ -64,7 +64,7 @@
                                         <TextArea fx:id="txtDescription" prefHeight="80.0" prefWidth="420.0" promptText="Description" />
                               <AnchorPane prefHeight="82.0" prefWidth="338.0">
                                  <children>
-                                                <Button fx:id="btnClear" layoutX="196.0" layoutY="-2.0" onAction="#clearForm" prefHeight="32.0" prefWidth="142.0" styleClass="btn-add btn-clear" text="Clear" />
+                                                <Button fx:id="btnClear" layoutX="196.0" layoutY="-2.0" onAction="#clearForm" prefHeight="32.0" prefWidth="142.0" styleClass="btn-clear" text="Clear" />
       
                                                                       <!-- Action buttons -->
                                               <HBox spacing="8" />
