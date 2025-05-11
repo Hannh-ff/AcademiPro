@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -21,36 +20,37 @@
                     </font>
                 </Label>
 
-                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="505.0" prefWidth="615.0" style="-fx-border-color: black; -fx-border-radius: 15px; -fx-padding: 20;">
+                <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="615.0" style="-fx-border-color: black; -fx-border-radius: 15px; -fx-padding: 20;">
                     <children>
-                        <VBox alignment="CENTER_LEFT" spacing="15">
-                            <children>
+                  <AnchorPane>
+                     <children>
+                                  <Button fx:id="btnClear" layoutX="355.0" layoutY="156.0" onAction="#clearForm" prefHeight="36.0" prefWidth="80.0" styleClass="btn-add btn-clear" text="Clear" />
 
-                                <Label text="Course:">
-                                    <font><Font name="System Bold" size="14.0" /></font>
+                                            <Button fx:id="btnCancel" layoutX="381.0" layoutY="214.0" onAction="#handleCancel" prefHeight="36.0" prefWidth="153.0" styleClass="btn-delete" text="Cancel" />
+
+                                            <Label layoutY="48.0" text="Course:">
+                                    <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
                                 </Label>
-                                <ComboBox fx:id="courseName" prefHeight="36.0" prefWidth="300.0" />
+                                <ComboBox fx:id="courseName" layoutY="75.0" prefHeight="36.0" prefWidth="300.0" />
 
-                                <Label text="Class Name:">
-                                    <font><Font name="System Bold" size="14.0" /></font>
+                                            <Label layoutY="127.0" text="Class Name:">
+                                    <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
                                 </Label>
-                                <TextField fx:id="txtClassName" prefHeight="36.0" prefWidth="300.0" promptText="Class name" />
+                                <TextField fx:id="txtClassName" layoutY="155.0" prefHeight="36.0" prefWidth="300.0" promptText="Class name" />
 
-                                <Label text="Teacher Name:">
-                                    <font><Font name="System Bold" size="14.0" /></font>
+                                            <Label layoutY="212.0" text="Teacher Name:">
+                                    <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
                                 </Label>
-                                <ComboBox fx:id="teacherName" prefHeight="36.0" prefWidth="300.0" />
-
-                                <HBox spacing="10">
-                                    <children>
-                                        <Button fx:id="btnAdd" onAction="#addClass" prefWidth="80.0" styleClass="btn-add" text="Add" />
-                                        <Button fx:id="btnClear" onAction="#clearForm" prefWidth="80.0" styleClass="btn-add btn-clear" text="Clear" />
-                                    </children>
-                                </HBox>
-
-                                <Button fx:id="btnCancel" onAction="#handleCancel" prefWidth="150.0" styleClass="btn-delete" text="Cancel" />
-                            </children>
-                        </VBox>
+                                <ComboBox fx:id="teacherName" layoutX="6.0" layoutY="241.0" prefHeight="36.0" prefWidth="300.0" />
+                                  <Button fx:id="btnAdd" layoutX="472.0" layoutY="156.0" onAction="#addClass" prefHeight="36.0" prefWidth="80.0" styleClass="btn-add" text="Add" />
+                     </children>
+                  </AnchorPane>
                     </children>
                 </StackPane>
             </children>
