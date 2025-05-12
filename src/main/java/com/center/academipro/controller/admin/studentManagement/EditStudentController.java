@@ -103,17 +103,17 @@ public class EditStudentController implements Initializable {
                 ps.executeUpdate();
             }
 
-            // Cập nhật bảng student_courses
+            // Cập nhật bảng enrollments
             int studentId = getStudentIdByUserId(conn, userId);
 
-            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM student_courses WHERE student_id = ?")) {
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM enrollments WHERE student_id = ?")) {
                 ps.setInt(1, studentId);
                 ps.executeUpdate();
             }
 
             // Chỉ thêm lại nếu có chọn khóa học
             if (selectedCourses != null && !selectedCourses.isEmpty()) {
-                String insertSQL = "INSERT INTO student_courses (student_id, course_id) VALUES (?, ?)";
+                String insertSQL = "INSERT INTO enrollments (student_id, course_id) VALUES (?, ?)";
                 try (PreparedStatement ps = conn.prepareStatement(insertSQL)) {
                     for (Course c : selectedCourses) {
                         ps.setInt(1, studentId);
