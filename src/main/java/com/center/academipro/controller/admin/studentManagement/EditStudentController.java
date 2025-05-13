@@ -90,21 +90,23 @@ public class EditStudentController implements Initializable {
             }
 
             // Cập nhật bảng students
-            String sqlStudent = "UPDATE students SET birthday = ?, phone = ?, class_id = ? WHERE user_id = ?";
+            String sqlStudent = "UPDATE students SET birthday = ?, phone = ? WHERE user_id = ?";
             try (PreparedStatement ps = conn.prepareStatement(sqlStudent)) {
                 ps.setDate(1, birthdayVal != null ? Date.valueOf(birthdayVal) : null);
                 ps.setString(2, phoneStr);
-                if (selectedClassObj != null) {
-                    ps.setInt(3, selectedClassObj.getId());
-                } else {
-                    ps.setNull(3, java.sql.Types.INTEGER); // Nếu không chọn lớp, set NULL
-                }
-                ps.setInt(4, userId);
+                ps.setInt(3, userId);
                 ps.executeUpdate();
             }
 
-            // Cập nhật bảng student_courses
             int studentId = getStudentIdByUserId(conn, userId);
+
+            if (selectedClassObj != null) {
+                try (PreparedStatement ps = conn.prepareStatement("INSERT INTO student_classes (student_id, class_id) VALUES (?, ?)")) {
+                    ps.setInt(1, studentId);
+                    ps.setInt(2, selectedClassObj.getId());
+                    ps.executeUpdate();
+                }
+            }
 
             try (PreparedStatement ps = conn.prepareStatement("DELETE FROM student_courses WHERE student_id = ?")) {
                 ps.setInt(1, studentId);
