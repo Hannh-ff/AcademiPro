@@ -55,7 +55,6 @@ public class PaymentController {
     private Text descripCousre;
 
     private ToggleGroup paymentMethodGroup;
-    // ID của học sinh và khóa học - bạn phải truyền giá trị này vào trước khi thanh toán(hoàng nhớ truyen vào)
     private int studentId;
     private int courseId;
     ObservableList<Payment> info = FXCollections.observableArrayList();
