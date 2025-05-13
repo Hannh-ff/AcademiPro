@@ -3,6 +3,7 @@ package com.center.academipro.controller.admin.studentManagement;
 import com.center.academipro.controller.admin.teacherManagement.EditTeacherController;
 import com.center.academipro.models.Student;
 import com.center.academipro.models.Teacher;
+import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.DBConnection;
 import com.center.academipro.utils.SceneSwitch;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -59,6 +60,7 @@ public class StudentViewController {
     private Label pageIndicator;
 
     private final ObservableList<Student> studentList = FXCollections.observableArrayList();
+    private int selectedStudentId= SessionManager.getInstance().getUserId();
     private FilteredList<Student> filteredStudent;
     private static final int ITEMS_PER_PAGE = 4;
     private int currentPage = 0;
