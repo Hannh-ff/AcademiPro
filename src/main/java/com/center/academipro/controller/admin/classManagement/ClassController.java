@@ -94,8 +94,8 @@ public class ClassController {
                 Class classItem = new Class(
                         rs.getInt("class_id"),
                         rs.getString("class_name"),
-                        rs.getString("course_name"),
                         rs.getString("teacher_name"),
+                        rs.getString("course_name"),
                         rs.getInt("student_count")
                 );
                 classList.add(classItem);

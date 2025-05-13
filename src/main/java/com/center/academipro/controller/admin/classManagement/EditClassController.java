@@ -31,7 +31,7 @@ public class EditClassController implements Initializable {
     }
 
     private void loadTeachers() {
-        String query = "SELECT t.id, u.fullname " +
+        String query = "SELECT t.user_id AS id, u.fullname " +
                 "FROM teachers t " +
                 "JOIN users u ON t.user_id = u.id";
         try (Connection conn = DBConnection.getConn();
@@ -48,6 +48,7 @@ public class EditClassController implements Initializable {
             e.printStackTrace();
         }
     }
+
 
     private void loadCourses() {
         try (Connection conn = DBConnection.getConn();
