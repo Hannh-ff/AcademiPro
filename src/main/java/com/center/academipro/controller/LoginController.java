@@ -54,7 +54,6 @@ public class LoginController {
                     System.out.println("DB password: " + dbPassword);
                 }
 
-                // Nếu không tìm thấy người dùng hoặc mật khẩu không khớp
                 return null;
             } catch (NoSuchAlgorithmException e) {
                 throw new RuntimeException(e);
@@ -72,26 +71,23 @@ public class LoginController {
 //            SessionManager.getInstance().setRole(user.getRole());
             switch (user.getRole()) {
                 case "Admin":
-                    // chuyển đến giao diện admin
                     System.out.println("Login successful with role: Admin");
                     Stage currentStage1 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                     SceneSwitch.switchTo(currentStage1, "view/admin/menu-bar-view.fxml");
                     break;
                 case "Teacher":
-                    // chuyển đến giao diện giáo viên
                     System.out.println("Login successful with role: Teacher");
                     Stage currentStage2 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                     SceneSwitch.switchTo(currentStage2, "view/teacher/menu-bar-view.fxml");
                     break;
                 case "Student":
-                    // chuyển đến giao diện học viên
+
                     System.out.println("Login successful with role: Student");
                     Stage currentStage3 = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                     SceneSwitch.switchTo(currentStage3, "view/student/menu-bar-view.fxml");
                     break;
                 default:
                     System.out.println("Role not recognized");
-                    // Hiển thị thông báo lỗi cho người dùng
                     Alerts.alertError("Login Error", "Role not recognized");
                     break;
             }
