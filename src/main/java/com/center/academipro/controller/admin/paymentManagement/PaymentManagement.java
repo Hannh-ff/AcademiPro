@@ -52,7 +52,7 @@ public class PaymentManagement {
     }
 
     private void loadPaymentData() {
-        String query = "SELECT p.id, u.fullname, c.course_name, c.price, p.payment_method, p.payment_status, p.payment_date " +
+        String query = "SELECT p.id, u.fullname, c.course_name, p.price, p.payment_method, p.payment_status, p.payment_date " +
                 "FROM payments p " +
                 "JOIN users u ON p.student_id = u.id " +
                 "JOIN courses c ON p.course_id = c.id";
