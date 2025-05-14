@@ -26,6 +26,7 @@
                         <TableColumn fx:id="dateColumn" prefWidth="115.0" text="Date" />
                         <TableColumn fx:id="startTimeCol" prefWidth="131.0" text="Start Time" />
                         <TableColumn fx:id="endTimeCol" prefWidth="114.0" text="End Time" />
+                        <TableColumn fx:id="statusColumn" prefWidth="100.0" text="Status" />
                     </columns>
                 </TableView>
             </children>

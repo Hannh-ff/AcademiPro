@@ -193,7 +193,8 @@ public class AddTimetableController implements Initializable {
         return true;
     }
 
-    public void clearFields() {
+    @FXML
+    private void clearFields() {
         classComboBox.getSelectionModel().clearSelection();
         datePicker.setValue(null);
         startTimeField.clear();

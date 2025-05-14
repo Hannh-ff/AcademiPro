@@ -2,6 +2,7 @@ package com.center.academipro.controller.teacher;
 
 import com.center.academipro.models.Class;
 import com.center.academipro.models.Timetable;
+import com.center.academipro.session.SessionManager;
 import com.center.academipro.utils.DBConnection;
 import com.center.academipro.utils.SceneSwitch;
 import javafx.collections.FXCollections;
@@ -42,6 +43,7 @@ public class TimetableController {
     private FilteredList<Timetable> filteredData;
 
     public void initialize() {
+
         setupTableColumns();
         loadTimetables();
         setUpActionColumn();
