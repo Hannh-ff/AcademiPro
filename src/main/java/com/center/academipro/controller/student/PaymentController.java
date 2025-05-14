@@ -192,7 +192,7 @@ public class PaymentController {
             }
 
             // Thực hiện thanh toán
-            String paymentSql = "INSERT INTO payments (student_id, course_id, amount, payment_method, payment_status, payment_date) VALUES (?, ?, ?, ?, ?, ?)";
+            String paymentSql = "INSERT INTO payments (student_id, course_id, price , payment_method, payment_status, payment_date) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement paymentStmt = conn.prepareStatement(paymentSql);
             paymentStmt.setInt(1, studentId);
             paymentStmt.setInt(2, courseId);
