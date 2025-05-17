@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
 <?import java.lang.String?>
-<AnchorPane prefHeight="400.0" prefWidth="650.0" stylesheets="@../../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.teacher.EditTimetableController">
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="700.0" stylesheets="@../../../css/thao.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.center.academipro.controller.teacher.EditTimetableController">
     <children>
         <Label layoutX="247.0" layoutY="31.0" styleClass="main-text" text="Edit Timetable">
             <font>
@@ -50,7 +55,7 @@
             </children>
         </AnchorPane>
 
-        <AnchorPane layoutX="437.0" layoutY="91.0" prefHeight="277.0" prefWidth="182.0">
+        <AnchorPane layoutX="437.0" layoutY="91.0" prefHeight="277.0" prefWidth="240.0">
             <styleClass>
                 <String fx:value="white-bg" />
                 <String fx:value="shadow" />
@@ -62,11 +67,11 @@
                         <Font name="System Bold Italic" size="16.0" />
                     </font>
                 </Label>
-                <Separator layoutY="62.0" prefHeight="1.0" prefWidth="191.0" />
+                <Separator layoutY="62.0" prefHeight="0.0" prefWidth="240.0" />
 
-                <Button fx:id="updateButton" layoutX="57.0" layoutY="103.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="78.0" styleClass="btn-add" text="Update" onAction="#handleUpdate" />
-                <Button fx:id="clearButton" layoutX="57.0" layoutY="167.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="78.0" styleClass="btn-clear" text="Reset" onAction="#handleClear" />
-                <Button fx:id="backButton" layoutX="57.0" layoutY="231.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="78.0" styleClass="btn-clear" text="Back" onAction="#handleBack" />
+                <Button fx:id="updateButton" layoutX="18.0" layoutY="114.0" mnemonicParsing="false" onAction="#handleUpdate" prefHeight="36.0" prefWidth="90.0" styleClass="btn-update" text="Update" />
+                <Button fx:id="clearButton" layoutX="135.0" layoutY="114.0" mnemonicParsing="false" onAction="#handleClear" prefHeight="36.0" prefWidth="84.0" styleClass="btn-clear" text="Clear" />
+                <Button fx:id="backButton" layoutX="20.0" layoutY="187.0" mnemonicParsing="false" onAction="#handleBack" prefHeight="36.0" prefWidth="198.0" styleClass="btn-back" text="Back" />
             </children>
         </AnchorPane>
     </children>
